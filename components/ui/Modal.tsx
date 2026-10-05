@@ -46,17 +46,17 @@ export function Modal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" 
+        className="fixed inset-0 bg-[#142921]/45 backdrop-blur-sm transition-opacity"
         onClick={onClose} 
       />
 
       {/* Modal Dialog */}
-      <div className={`relative w-full ${maxWidthStyles[maxWidth]} bg-white rounded-2xl shadow-2xl border border-slate-100 z-10 my-8 overflow-hidden animate-in fade-in zoom-in-95 duration-200`}>
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
+      <div className={`relative w-full ${maxWidthStyles[maxWidth]} bg-white rounded-3xl shadow-[0_24px_80px_rgba(20,41,33,.2)] border border-slate-100 z-10 my-8 overflow-hidden animate-in fade-in zoom-in-95 duration-200`}>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-[#fbfcfb]">
           <h2 className="text-lg font-semibold text-slate-800">{title}</h2>
           <button
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 rounded-lg transition-colors"
+            className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-colors"
           >
             <X className="w-5 h-5" />
           </button>

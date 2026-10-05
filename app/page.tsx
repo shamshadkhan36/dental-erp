@@ -5,6 +5,7 @@ import Link from 'next/link';
 import {
   ArrowRight, BarChart3, CalendarDays,
   CheckCircle2, Clock3, FileText, MessageCircle, PenLine, Sparkles,
+  Instagram, Facebook, Clock,
 } from 'lucide-react';
 import { useERPStore } from '../lib/store';
 import { Card } from '../components/ui/Card';
@@ -110,26 +111,32 @@ export default function DashboardOverview() {
           </div>
         </Card>
 
-        <Card className="p-5 sm:p-6">
+        <Card className="p-5 sm:p-6 overflow-hidden relative">
+          <div className="absolute -right-12 -top-16 w-40 h-40 rounded-full bg-[#eef7f2]" />
           <div className="flex items-start justify-between gap-4">
-            <div>
+            <div className="relative">
               <h3 className="text-sm font-semibold text-[#27423b]">Channel mix</h3>
               <p className="text-xs text-[#8a9994] mt-1">Share of activity by platform</p>
             </div>
-            <span className="text-[10px] font-medium text-[#748780] bg-[#f4f8f6] border border-[#e8efeb] rounded-lg px-2.5 py-1">All time</span>
+            <span className="relative text-[10px] font-medium text-[#748780] bg-white border border-[#e8efeb] rounded-full px-2.5 py-1">All time</span>
           </div>
-          <div className="space-y-5 pt-7">
-            {[{ name: 'Instagram', value: analytics.platformSplit.instagram, color: '#36866e' }, { name: 'Facebook', value: analytics.platformSplit.facebook, color: '#83b9a2' }].map((channel) => {
-              return <div key={channel.name}>
-                <div className="flex justify-between text-xs mb-2"><span className="text-[#647873]">{channel.name}</span><span className="font-semibold text-[#334c46]">{channel.value}%</span></div>
-                <div className="h-2 rounded-full bg-[#edf3f0] overflow-hidden"><div className="h-full rounded-full" style={{ width: `${Math.max(channel.value, 3)}%`, background: channel.color }} /></div>
+          <div className="space-y-3 pt-5 relative">
+            {[{ name: 'Instagram', value: analytics.platformSplit.instagram, icon: Instagram, color: '#b95883', tint: '#fbf0f5', label: 'Primary channel' }, { name: 'Facebook', value: analytics.platformSplit.facebook, icon: Facebook, color: '#4e75b9', tint: '#eff3fb', label: 'Community reach' }].map((channel) => {
+              const ChannelIcon = channel.icon;
+              return <div key={channel.name} className="rounded-2xl border border-[#e9efec] bg-white p-3.5">
+                <div className="flex items-center gap-3">
+                  <span className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: channel.tint, color: channel.color }}><ChannelIcon className="w-[18px] h-[18px]" /></span>
+                  <div className="flex-1 min-w-0"><div className="text-xs font-semibold text-[#3b554d]">{channel.name}</div><div className="text-[10px] text-[#93a19b] mt-0.5">{channel.label}</div></div>
+                  <div className="text-[22px] leading-none font-semibold tracking-tight text-[#304a43] tabular-nums">{channel.value}<span className="text-xs text-[#7c9288]">%</span></div>
+                </div>
+                <div className="mt-3 h-1.5 rounded-full bg-[#edf3f0] overflow-hidden"><div className="h-full rounded-full transition-all" style={{ width: `${Math.max(channel.value, 3)}%`, background: channel.color }} /></div>
               </div>;
             })}
           </div>
-          <div className="mt-7 pt-4 border-t border-[#edf2ef] flex items-center justify-between text-xs">
-            <span className="text-[#82928c]">Published posts</span><span className="font-semibold text-[#334c46]">{published.length}</span>
+          <div className="mt-4 px-1 flex items-center justify-between text-[11px]">
+            <span className="text-[#82928c]">Posts published</span><span className="font-semibold text-[#3f6256]">{published.length}</span>
           </div>
-          <Link href="/analytics" className="mt-4 w-full text-xs font-medium text-[#32836e] hover:text-[#1c6655] flex justify-between items-center">See analytics <ArrowRight className="w-3.5 h-3.5" /></Link>
+          <Link href="/analytics" className="mt-4 pt-3 border-t border-[#edf2ef] w-full text-xs font-semibold text-[#32836e] hover:text-[#1c6655] flex justify-between items-center">Explore analytics <ArrowRight className="w-3.5 h-3.5" /></Link>
         </Card>
       </section>
 
@@ -149,17 +156,29 @@ export default function DashboardOverview() {
             ))}
           </div>
         </Card>
-        <Card className="p-5 sm:p-6 bg-[#f4f8f6] border-[#e5eeea]">
+        <Card className="p-5 sm:p-6 bg-gradient-to-br from-[#f5faf7] to-[#edf5f1] border-[#e3eee8] overflow-hidden relative">
+          <div className="absolute -right-8 -bottom-12 w-36 h-36 rounded-full border-[22px] border-white/45" />
           <div className="flex items-center justify-between gap-3">
             <div><h3 className="text-sm font-semibold text-[#27423b]">Up next on your calendar</h3><p className="text-xs text-[#8a9994] mt-1">Your next planned post</p></div>
-            <CalendarDays className="w-4 h-4 text-[#4c927c]" />
+            <span className="w-9 h-9 rounded-xl bg-white text-[#4c927c] flex items-center justify-center shadow-sm"><CalendarDays className="w-4 h-4" /></span>
           </div>
-          {nextCalendarItem ? <div className="mt-5 rounded-xl bg-white border border-[#e6eeea] p-4">
-            <div className="text-[10px] font-semibold uppercase tracking-[.1em] text-[#4a927c]">{nextCalendarItem.dayOfWeek} · {nextCalendarItem.date}</div>
-            <div className="mt-2 text-sm font-semibold text-[#334c46]">{nextCalendarItem.topic}</div>
-            <div className="mt-1 text-xs text-[#82928c]">{nextCalendarItem.pillar} · {nextCalendarItem.format}</div>
-            <Link href="/calendar" className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[#32836e] hover:text-[#1c6655]">Open calendar <ArrowRight className="w-3 h-3" /></Link>
-          </div> : <div className="mt-5 rounded-xl bg-white border border-[#e6eeea] p-4 text-xs text-[#82928c]">No upcoming posts planned yet. Add one to your calendar to get started.</div>}
+          {nextCalendarItem ? <div className="mt-5 rounded-2xl bg-white/90 border border-white p-4 shadow-[0_8px_24px_rgba(41,92,72,.06)] relative">
+            <div className="flex gap-3.5">
+              <div className="w-[54px] h-[62px] rounded-xl bg-[#eaf5ef] flex flex-col items-center justify-center text-[#317d67] shrink-0">
+                <span className="text-[9px] font-bold uppercase tracking-[.12em]">{nextCalendarItem.dayOfWeek.slice(0, 3)}</span>
+                <span className="text-[22px] leading-none font-semibold mt-1">{new Date(`${nextCalendarItem.date}T00:00:00`).getDate()}</span>
+              </div>
+              <div className="min-w-0 flex-1 pt-0.5">
+                <div className="flex items-center gap-1 text-[10px] font-medium text-[#85968f]"><Clock className="w-3 h-3" />{nextCalendarItem.date}</div>
+                <div className="mt-1.5 text-sm font-semibold leading-snug text-[#304a43] line-clamp-2">{nextCalendarItem.topic}</div>
+              </div>
+            </div>
+            <div className="mt-4 flex items-center justify-between gap-2">
+              <span className="px-2.5 py-1 rounded-full bg-[#f1f7f3] text-[10px] font-medium text-[#54806e]">{nextCalendarItem.pillar}</span>
+              <span className="text-[10px] font-medium uppercase tracking-wide text-[#8b9a94]">{nextCalendarItem.format}</span>
+            </div>
+            <Link href="/calendar" className="mt-4 pt-3 border-t border-[#edf2ef] flex items-center justify-between text-xs font-semibold text-[#32836e] hover:text-[#1c6655]">Open content calendar <ArrowRight className="w-3.5 h-3.5" /></Link>
+          </div> : <div className="mt-5 rounded-2xl bg-white/90 border border-white p-4 text-xs leading-relaxed text-[#82928c] relative">No upcoming posts planned yet. Add a post to your calendar to see it here.<Link href="/calendar" className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-[#32836e] hover:text-[#1c6655]">Plan a post <ArrowRight className="w-3 h-3" /></Link></div>}
         </Card>
       </section>
     </div>

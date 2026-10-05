@@ -45,7 +45,7 @@ export function FlyerEditor({
       contactNumber: brand.phone,
       clinicAddress: brand.address,
       templateStyle: "modern_clinical",
-      accentColor: "#0284c7",
+      accentColor: "#137c70",
       status: "draft",
       createdAt: new Date().toISOString()
     }
@@ -172,10 +172,10 @@ export function FlyerEditor({
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {[
-                { id: 'modern_clinical', name: 'Clinical Blue', color: '#0284c7' },
-                { id: 'premium_aesthetic', name: 'Teal Luxury', color: '#0d9488' },
-                { id: 'family_friendly', name: 'Navy Trust', color: '#1e293b' },
-                { id: 'urgent_care', name: 'Rose Emergency', color: '#e11d48' },
+                { id: 'modern_clinical', name: 'Clinical Teal', color: '#137c70' },
+                { id: 'premium_aesthetic', name: 'Warm Sand', color: '#a88762' },
+                { id: 'family_friendly', name: 'Garden Green', color: '#568d72' },
+                { id: 'urgent_care', name: 'Coral Notice', color: '#c9695d' },
               ].map(tpl => (
                 <button
                   key={tpl.id}

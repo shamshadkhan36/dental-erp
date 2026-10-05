@@ -21,10 +21,10 @@ export const defaultBrandProfile: BrandProfile = {
     "Discount dentistry",
     "Drill and fill"
   ],
-  primaryColor: "#0284c7", // Sky blue
-  secondaryColor: "#0f172a", // Slate navy
-  accentColor: "#0d9488", // Teal
-  fontFamily: "Inter, sans-serif",
+  primaryColor: "#137c70", // Calm dental teal
+  secondaryColor: "#183b34", // Deep botanical green
+  accentColor: "#68b49a", // Soft mint accent
+  fontFamily: "Inter, Segoe UI Variable, Segoe UI, sans-serif",
   logoUrl: "https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=200&auto=format&fit=crop&q=80",
   gdriveRootFolder: "https://drive.google.com/drive/folders/1ApexDental_MarketingAssets_2026",
   icpProfiles: [
@@ -475,7 +475,7 @@ export const defaultFlyers: FlyerRecord[] = [
     contactNumber: "(555) 382-7645",
     clinicAddress: "742 Medical Arts Pavilion, Suite 400, New York, NY",
     templateStyle: "family_friendly",
-    accentColor: "#0284c7",
+    accentColor: "#137c70",
     status: "approved",
     downloadUrl: "/flyers/sample-health-camp.pdf",
     createdAt: "2026-10-04T12:00:00Z"
