@@ -18,18 +18,18 @@ export function Button({
   ...props
 }: ButtonProps) {
   const variantStyles = {
-    primary: 'bg-sky-600 hover:bg-sky-700 text-white shadow-sm focus-visible:ring-sky-500',
-    secondary: 'bg-slate-900 hover:bg-slate-800 text-white shadow-sm focus-visible:ring-slate-700',
-    outline: 'border border-slate-300 hover:bg-slate-50 text-slate-700 focus-visible:ring-slate-400',
-    ghost: 'hover:bg-slate-100 text-slate-700 focus-visible:ring-slate-400',
+    primary: 'bg-[#137c70] hover:bg-[#0c665d] text-white shadow-sm focus-visible:ring-emerald-600',
+    secondary: 'bg-[#18312f] hover:bg-[#244641] text-white shadow-sm focus-visible:ring-slate-700',
+    outline: 'border border-[#d5e2dd] hover:bg-[#f3f8f6] text-[#34514c] focus-visible:ring-emerald-500',
+    ghost: 'hover:bg-[#eef5f2] text-[#34514c] focus-visible:ring-emerald-500',
     danger: 'bg-rose-600 hover:bg-rose-700 text-white shadow-sm focus-visible:ring-rose-500',
-    success: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm focus-visible:ring-emerald-500',
+    success: 'bg-[#218768] hover:bg-[#176e53] text-white shadow-sm focus-visible:ring-emerald-500',
   };
 
   const sizeStyles = {
-    sm: 'text-xs px-2.5 py-1.5 rounded-md gap-1.5 font-medium',
-    md: 'text-sm px-4 py-2 rounded-lg gap-2 font-medium',
-    lg: 'text-base px-5 py-2.5 rounded-lg gap-2.5 font-semibold',
+    sm: 'text-xs px-3 py-1.5 rounded-lg gap-1.5 font-medium',
+    md: 'text-sm px-4 py-2.5 rounded-xl gap-2 font-medium',
+    lg: 'text-base px-5 py-3 rounded-xl gap-2.5 font-semibold',
   };
 
   return (

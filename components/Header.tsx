@@ -38,10 +38,10 @@ export function Header() {
   const { title, subtitle } = getPageTitle();
 
   return (
-    <header className="bg-white border-b border-slate-200/80 sticky top-0 z-30 px-8 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <header className="bg-white/90 backdrop-blur-xl border-b border-[#e2ebe8] sticky top-0 z-30 px-8 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-[0_2px_12px_rgba(22,58,51,.025)]">
       <div>
         <div className="flex items-center gap-2.5">
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight">{title}</h1>
+          <h1 className="text-xl font-bold text-[#18312f] tracking-tight">{title}</h1>
           <Badge variant="primary" size="sm" className="hidden sm:inline-flex">
             ERP Module
           </Badge>
@@ -51,7 +51,7 @@ export function Header() {
 
       <div className="flex items-center gap-3 shrink-0">
         {/* Connected Channels indicator */}
-        <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-600">
+        <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 bg-[#f5f9f7] border border-[#e2ebe8] rounded-lg text-xs text-slate-600">
           <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
           <span className="font-semibold text-slate-700">Meta (IG + FB)</span>
           <span className="text-slate-300">|</span>
@@ -64,7 +64,7 @@ export function Header() {
           size="sm"
           variant="primary"
           onClick={() => router.push('/copywriter')}
-          className="shadow-sm"
+          className="shadow-sm shadow-emerald-900/10"
         >
           <Sparkles className="w-3.5 h-3.5 mr-1 text-sky-200" />
           AI Generator

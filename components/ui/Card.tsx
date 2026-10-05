@@ -16,8 +16,8 @@ export function Card({
     <div
       className={twMerge(
         clsx(
-          'bg-white rounded-xl border border-slate-200/80 shadow-sm p-5 transition-all',
-          hoverEffect && 'hover:shadow-md hover:border-slate-300',
+          'bg-white rounded-2xl border border-[#e2ebe8] shadow-[0_3px_14px_rgba(22,58,51,.035)] p-5 transition-all',
+          hoverEffect && 'hover:shadow-[0_10px_26px_rgba(22,58,51,.09)] hover:border-[#c8ddd5] hover:-translate-y-0.5',
           className
         )
       )}
@@ -34,7 +34,7 @@ export function CardHeader({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={twMerge(clsx('flex items-center justify-between pb-3 mb-4 border-b border-slate-100', className))} {...props}>
+    <div className={twMerge(clsx('flex items-center justify-between pb-3 mb-4 border-b border-[#edf2f0]', className))} {...props}>
       {children}
     </div>
   );

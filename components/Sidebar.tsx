@@ -85,21 +85,21 @@ export function Sidebar() {
   ];
 
   return (
-    <aside className="w-72 bg-slate-900 text-slate-300 flex flex-col min-h-screen border-r border-slate-800 shrink-0">
+    <aside className="w-72 bg-[#123b38] text-slate-300 flex flex-col min-h-screen border-r border-[#204944] shrink-0">
       {/* Clinic Logo Header */}
-      <div className="p-5 border-b border-slate-800/80 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-teal-400 flex items-center justify-center text-white shadow-lg shadow-sky-500/20">
+      <div className="p-5 border-b border-white/10 flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#36a995] to-[#8bd6bd] flex items-center justify-center text-white shadow-lg shadow-emerald-950/30">
           <Sparkles className="w-5 h-5" />
         </div>
         <div>
           <h1 className="font-bold text-white text-sm tracking-wide">Apex Smile Studio</h1>
-          <p className="text-[11px] text-sky-400 font-medium tracking-tight">Dental ERP • Creative Ops</p>
+          <p className="text-[11px] text-[#8bd6bd] font-medium tracking-tight">Dental ERP • Creative Ops</p>
         </div>
       </div>
 
       {/* Navigation Links */}
       <nav className="flex-1 px-3 py-4 space-y-1.5 overflow-y-auto">
-        <div className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+        <div className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-[.16em] text-[#91b1a9]">
           Core Operations Module
         </div>
         {navItems.map((item) => {
@@ -112,15 +112,15 @@ export function Sidebar() {
               href={item.href}
               className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all group ${
                 isActive
-                  ? 'bg-sky-600 text-white font-semibold shadow-md shadow-sky-600/30'
-                  : 'hover:bg-slate-800/90 text-slate-300 hover:text-white'
+                  ? 'bg-[#1d756b] text-white font-semibold shadow-md shadow-black/20 ring-1 ring-white/10'
+                  : 'hover:bg-white/[.07] text-[#d0dfda] hover:text-white'
               }`}
             >
               <div className="flex items-center gap-3 truncate">
-                <Icon className={`w-4 h-4 shrink-0 transition-transform group-hover:scale-110 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-sky-400'}`} />
+                <Icon className={`w-4 h-4 shrink-0 transition-transform group-hover:scale-110 ${isActive ? 'text-white' : 'text-[#91b1a9] group-hover:text-[#8bd6bd]'}`} />
                 <div className="truncate text-left">
                   <div className="truncate leading-snug">{item.name}</div>
-                  <div className={`text-[10px] font-normal truncate ${isActive ? 'text-sky-100' : 'text-slate-400'}`}>
+                  <div className={`text-[10px] font-normal truncate ${isActive ? 'text-[#d2f4e9]' : 'text-[#91b1a9]'}`}>
                     {item.description}
                   </div>
                 </div>
@@ -138,15 +138,15 @@ export function Sidebar() {
       </nav>
 
       {/* Google Drive Status Footer */}
-      <div className="p-4 border-t border-slate-800/80 bg-slate-950/40">
-        <div className="flex items-center justify-between text-xs text-slate-400 mb-1.5">
-          <span className="flex items-center gap-1.5 text-emerald-400">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+      <div className="p-4 border-t border-white/10 bg-black/10">
+        <div className="flex items-center justify-between text-xs text-[#91b1a9] mb-1.5">
+          <span className="flex items-center gap-1.5 text-[#8bd6bd]">
+            <span className="w-2 h-2 rounded-full bg-[#66c9a8] animate-pulse"></span>
             GDrive Sync Active
           </span>
-          <span className="text-[10px] text-slate-400">v2.4.0</span>
+          <span className="text-[10px] text-[#91b1a9]">v2.4.0</span>
         </div>
-        <div className="text-[11px] text-slate-400 truncate">
+        <div className="text-[11px] text-[#91b1a9] truncate">
           Folder: /MarketingAssets_2026
         </div>
       </div>

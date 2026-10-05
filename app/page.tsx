@@ -36,31 +36,32 @@ export default function DashboardOverview() {
   return (
     <div className="space-y-8">
       {/* Top Banner: Clinic Status */}
-      <div className="bg-gradient-to-r from-slate-900 via-sky-950 to-slate-900 text-white rounded-2xl p-6 shadow-xl relative overflow-hidden border border-slate-800">
-        <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl"></div>
+      <div className="bg-gradient-to-br from-[#153f3a] via-[#155a51] to-[#137c70] text-white rounded-[1.6rem] p-7 shadow-xl shadow-emerald-950/10 relative overflow-hidden border border-[#276d62]">
+        <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-72 h-72 bg-[#8bd6bd]/15 rounded-full blur-3xl"></div>
+        <div className="absolute right-40 bottom-[-7rem] w-56 h-56 border border-white/10 rounded-full"></div>
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-300 text-xs font-semibold border border-sky-500/30">
+              <span className="px-2.5 py-1 rounded-full bg-white/10 text-[#b8f0dc] text-xs font-semibold border border-white/15">
                 Active Clinic Workspace
               </span>
-              <span className="text-xs text-slate-400">• New York Practice</span>
+              <span className="text-xs text-emerald-100/70">• New York Practice</span>
             </div>
             <h2 className="text-2xl font-extrabold tracking-tight text-white">{brand.clinicName}</h2>
-            <p className="text-xs text-slate-300 max-w-xl leading-relaxed">
+            <p className="text-sm text-emerald-50/80 max-w-xl leading-relaxed">
               Automated social media engine & creative operations pipeline. Empowering clinical staff with on-brand AI copywriting, scheduled meta publishing, and doctor-approved compliance.
             </p>
           </div>
 
           <div className="flex items-center gap-3 shrink-0">
             <Link href="/copywriter">
-              <Button variant="primary" size="md" className="shadow-lg shadow-sky-600/30">
+              <Button variant="primary" size="md" className="!bg-white !text-[#145b51] hover:!bg-[#e8f7f1] shadow-lg shadow-black/10">
                 <Sparkles className="w-4 h-4 mr-2" />
                 Launch AI Generator
               </Button>
             </Link>
             <Link href="/calendar">
-              <Button variant="outline" size="md" className="bg-white/10 hover:bg-white/20 text-white border-white/20">
+              <Button variant="outline" size="md" className="!bg-white/10 hover:!bg-white/20 !text-white !border-white/20">
                 <CalendarIcon className="w-4 h-4 mr-2" />
                 View Calendar
               </Button>
