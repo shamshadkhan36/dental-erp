@@ -85,22 +85,22 @@ export function Sidebar() {
   ];
 
   return (
-    <aside className="w-72 bg-[#123b38] text-slate-300 flex flex-col min-h-screen border-r border-[#204944] shrink-0">
+    <aside className="w-[248px] bg-white text-[#647873] flex flex-col min-h-screen border-r border-[#e7eeeb] shrink-0">
       {/* Clinic Logo Header */}
-      <div className="p-5 border-b border-white/10 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#36a995] to-[#8bd6bd] flex items-center justify-center text-white shadow-lg shadow-emerald-950/30">
+      <div className="px-5 py-5 border-b border-[#edf2ef] flex items-center gap-3">
+        <div className="w-9 h-9 rounded-xl bg-[#e6f4ed] flex items-center justify-center text-[#20836d]">
           <Sparkles className="w-5 h-5" />
         </div>
         <div>
-          <h1 className="font-bold text-white text-sm tracking-wide">Apex Smile Studio</h1>
-          <p className="text-[11px] text-[#8bd6bd] font-medium tracking-tight">Dental ERP • Creative Ops</p>
+          <h1 className="font-semibold text-[#28443d] text-sm tracking-tight">Apex Smile Studio</h1>
+          <p className="text-[10px] text-[#879891] font-medium tracking-tight">Dental content workspace</p>
         </div>
       </div>
 
       {/* Navigation Links */}
-      <nav className="flex-1 px-3 py-4 space-y-1.5 overflow-y-auto">
-        <div className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-[.16em] text-[#91b1a9]">
-          Core Operations Module
+      <nav className="flex-1 px-3 py-5 space-y-1 overflow-y-auto">
+        <div className="px-3 pb-2.5 text-[10px] font-semibold uppercase tracking-[.14em] text-[#9aa9a3]">
+          Workspace
         </div>
         {navItems.map((item) => {
           const isActive = pathname === item.href;
@@ -112,22 +112,17 @@ export function Sidebar() {
               href={item.href}
               className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all group ${
                 isActive
-                  ? 'bg-[#1d756b] text-white font-semibold shadow-md shadow-black/20 ring-1 ring-white/10'
-                  : 'hover:bg-white/[.07] text-[#d0dfda] hover:text-white'
+                  ? 'bg-[#eaf5ef] text-[#1b735f] font-semibold'
+                  : 'hover:bg-[#f5f8f6] text-[#677b74] hover:text-[#28443d]'
               }`}
             >
               <div className="flex items-center gap-3 truncate">
-                <Icon className={`w-4 h-4 shrink-0 transition-transform group-hover:scale-110 ${isActive ? 'text-white' : 'text-[#91b1a9] group-hover:text-[#8bd6bd]'}`} />
-                <div className="truncate text-left">
-                  <div className="truncate leading-snug">{item.name}</div>
-                  <div className={`text-[10px] font-normal truncate ${isActive ? 'text-[#d2f4e9]' : 'text-[#91b1a9]'}`}>
-                    {item.description}
-                  </div>
-                </div>
+                <Icon className={`w-[17px] h-[17px] shrink-0 transition-transform group-hover:scale-105 ${isActive ? 'text-[#23816a]' : 'text-[#91a19a] group-hover:text-[#398673]'}`} />
+                <div className="truncate text-left leading-snug">{item.name}</div>
               </div>
               {item.badge !== undefined && (
                 <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold shrink-0 ${
-                  isActive ? 'bg-white text-sky-700' : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                  isActive ? 'bg-white text-[#1b735f]' : 'bg-[#fbf2df] text-[#a16f26] border border-[#f1e1bd]'
                 }`}>
                   {item.badge}
                 </span>
@@ -138,15 +133,15 @@ export function Sidebar() {
       </nav>
 
       {/* Google Drive Status Footer */}
-      <div className="p-4 border-t border-white/10 bg-black/10">
-        <div className="flex items-center justify-between text-xs text-[#91b1a9] mb-1.5">
-          <span className="flex items-center gap-1.5 text-[#8bd6bd]">
-            <span className="w-2 h-2 rounded-full bg-[#66c9a8] animate-pulse"></span>
-            GDrive Sync Active
+      <div className="p-4 border-t border-[#edf2ef] bg-[#fbfcfb]">
+        <div className="flex items-center justify-between text-xs text-[#82928c] mb-1.5">
+          <span className="flex items-center gap-1.5 text-[#35866f]">
+            <span className="w-2 h-2 rounded-full bg-[#55ae86]"></span>
+            Drive connected
           </span>
-          <span className="text-[10px] text-[#91b1a9]">v2.4.0</span>
+          <span className="text-[10px] text-[#9aa9a3]">v2.4.0</span>
         </div>
-        <div className="text-[11px] text-[#91b1a9] truncate">
+        <div className="text-[10px] text-[#9aa9a3] truncate">
           Folder: /MarketingAssets_2026
         </div>
       </div>

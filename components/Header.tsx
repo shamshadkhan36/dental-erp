@@ -2,27 +2,18 @@
 
 import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { 
-  Building2, 
-  Sparkles, 
-  RotateCcw, 
-  Plus, 
-  Share2, 
-  Bell, 
-  FolderGit2 
-} from 'lucide-react';
+import { Sparkles, RotateCcw, Plus } from 'lucide-react';
 import { Button } from './ui/Button';
-import { Badge } from './ui/Badge';
 import { useERPStore } from '../lib/store';
 
 export function Header() {
   const router = useRouter();
   const pathname = usePathname();
-  const { brand, resetToDefaults } = useERPStore();
+  const { resetToDefaults } = useERPStore();
 
   const getPageTitle = () => {
     switch (pathname) {
-      case '/': return { title: 'Social Media & Creative Operations', subtitle: 'Executive command center for dental patient acquisition and brand visibility' };
+      case '/': return { title: 'Dashboard', subtitle: 'A clear view of your practice content and performance' };
       case '/brand-intake': return { title: 'Client & Brand Intake', subtitle: 'Formulate brand voice, patient personas, clinical treatment USPs, and system prompts' };
       case '/calendar': return { title: 'Content Calendar Planner', subtitle: 'Manage monthly content pillars, topics, formats, and scheduled publication slots' };
       case '/copywriter': return { title: 'AI Copywriter Studio', subtitle: 'Generate high-converting hooks, medical captions, carousels, and video reel scripts' };
@@ -38,15 +29,12 @@ export function Header() {
   const { title, subtitle } = getPageTitle();
 
   return (
-    <header className="bg-white/90 backdrop-blur-xl border-b border-[#e2ebe8] sticky top-0 z-30 px-8 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-[0_2px_12px_rgba(22,58,51,.025)]">
+    <header className="bg-white border-b border-[#e8eeeb] sticky top-0 z-30 px-7 py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3">
       <div>
         <div className="flex items-center gap-2.5">
-          <h1 className="text-xl font-bold text-[#18312f] tracking-tight">{title}</h1>
-          <Badge variant="primary" size="sm" className="hidden sm:inline-flex">
-            ERP Module
-          </Badge>
+          <h1 className="text-[15px] font-semibold text-[#304a43] tracking-tight">{title}</h1>
         </div>
-        <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>
+        <p className="text-[11px] text-[#879790] mt-0.5">{subtitle}</p>
       </div>
 
       <div className="flex items-center gap-3 shrink-0">
