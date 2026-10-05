@@ -38,6 +38,12 @@ body {
 
 ::selection { background: #bce7dd; color: #103d38; }
 
+/* Raise the smallest interface labels for comfortable reading. */
+.text-xs { font-size: .8125rem; line-height: 1.35rem; }
+.text-sm { font-size: .9375rem; line-height: 1.45rem; }
+[class~="text-[10px]"] { font-size: .75rem; line-height: 1.25rem; }
+[class~="text-[11px]"] { font-size: .8125rem; line-height: 1.3rem; }
+
 button, input, select, textarea { font: inherit; }
 
 input, select, textarea {
