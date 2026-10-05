@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { useERPStore } from '../../lib/store';
 import { Card, CardHeader, CardTitle } from '../../components/ui/Card';
+import { PageBanner } from '../../components/ui/PageBanner';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { Modal } from '../../components/ui/Modal';
@@ -63,20 +64,13 @@ export default function ApprovalsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Top Banner */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <h2 className="text-lg font-bold text-slate-900">Quality Check & Approvals Queue</h2>
-            <Badge variant="warning">{pendingPosts.length + pendingFlyers.length} Awaiting Doctor Sign-Off</Badge>
-          </div>
-          <p className="text-xs text-slate-500">
-            Verify automated quality checks (dimensions, medical accuracy, logo, colors) and sign off on posts.
-          </p>
-        </div>
+      <PageBanner eyebrow="Clinical review" title="Quality Check & Approvals" description="Review brand, format, and clinical checks before content goes live." icon={ShieldCheck} action={
+        <>
+          <Badge variant="warning">{pendingPosts.length + pendingFlyers.length} awaiting sign-off</Badge>
+        </>
+      } />
 
-        {/* Filter Tabs */}
-        <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl text-xs">
+      <div className="flex w-fit max-w-full overflow-x-auto items-center gap-1.5 p-1.5 bg-white border border-slate-200 rounded-2xl shadow-sm text-xs">
           <button
             onClick={() => setActiveFilter('pending')}
             className={`px-3 py-1.5 font-semibold rounded-lg transition-all ${
@@ -108,7 +102,6 @@ export default function ApprovalsPage() {
             Needs Revision ({changesPosts.length})
           </button>
         </div>
-      </div>
 
       {/* Pending Flyers Section (if on pending tab) */}
       {activeFilter === 'pending' && pendingFlyers.length > 0 && (

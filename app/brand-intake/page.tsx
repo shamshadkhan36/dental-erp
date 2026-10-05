@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { useERPStore } from '../../lib/store';
 import { Card, CardHeader, CardTitle } from '../../components/ui/Card';
+import { PageBanner } from '../../components/ui/PageBanner';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { compileSystemPrompt } from '../../lib/ai-prompts';
@@ -44,15 +45,7 @@ export default function BrandIntakePage() {
 
   return (
     <div className="space-y-6">
-      {/* Header bar with Save button */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-        <div>
-          <h2 className="text-lg font-bold text-slate-900">Brand Intake & Knowledge Base</h2>
-          <p className="text-xs text-slate-500">
-            Define your practice voice, treatments, target patient personas, and visual guidelines.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
+      <PageBanner eyebrow="Practice profile" title="Brand Intake & Knowledge Base" description="Define your practice voice, treatments, target patient personas, and visual guidelines." icon={Sliders} action={
           <Button variant="primary" size="md" onClick={handleSave}>
             {saved ? (
               <>
@@ -66,11 +59,10 @@ export default function BrandIntakePage() {
               </>
             )}
           </Button>
-        </div>
-      </div>
+        } />
 
       {/* Navigation Tabs */}
-      <div className="flex overflow-x-auto gap-2 border-b border-slate-200 pb-2">
+      <div className="flex w-fit max-w-full overflow-x-auto gap-1.5 rounded-2xl border border-slate-200 bg-white p-1.5 shadow-sm">
         {[
           { id: 'profile', label: '1. Clinic Identity & Voice', icon: Sliders },
           { id: 'icp', label: '2. Patient Personas (ICP)', icon: UserCheck },
@@ -85,7 +77,7 @@ export default function BrandIntakePage() {
               onClick={() => setActiveTab(tab.id as any)}
               className={`flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-xl whitespace-nowrap transition-all ${
                 activeTab === tab.id
-                  ? 'bg-sky-600 text-white shadow-sm'
+                  ? 'bg-[#237a60] text-white shadow-sm'
                   : 'text-slate-600 hover:bg-slate-100'
               }`}
             >

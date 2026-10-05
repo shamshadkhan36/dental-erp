@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useERPStore } from '../../lib/store';
 import { Card, CardHeader, CardTitle } from '../../components/ui/Card';
+import { PageBanner } from '../../components/ui/PageBanner';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { Modal } from '../../components/ui/Modal';
@@ -98,33 +99,18 @@ export default function ContentCalendarPage() {
 
   return (
     <div className="space-y-6">
-      {/* Calendar Header with Controls */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center font-bold">
-            <CalendarIcon className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-lg font-bold text-slate-900">October 2026 Content Schedule</h2>
-              <Badge variant="primary" size="sm">Monthly Cadence</Badge>
-            </div>
-            <p className="text-xs text-slate-500">
-              Coordinated cross-platform content strategy across 6 clinical pillars.
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2.5">
-          <Button variant="primary" size="md" onClick={() => setIsModalOpen(true)}>
+      <PageBanner eyebrow="Content planning" title="October 2026 Content Schedule" description="Coordinate posts across your clinical pillars and social channels." icon={CalendarIcon} action={
+          <>
+            <Badge variant="primary" size="sm">Monthly cadence</Badge>
+            <Button variant="primary" size="md" onClick={() => setIsModalOpen(true)}>
             <Plus className="w-4 h-4 mr-1.5" />
             Plan New Topic
-          </Button>
-        </div>
-      </div>
+            </Button>
+          </>
+        } />
 
       {/* Filter by Content Pillar */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+      <div className="flex items-center gap-2 overflow-x-auto rounded-2xl border border-slate-200 bg-white px-3 py-3 shadow-sm text-xs">
         <span className="text-slate-400 font-bold uppercase text-[10px] flex items-center gap-1 shrink-0 mr-1">
           <Filter className="w-3 h-3" /> Filter Pillar:
         </span>

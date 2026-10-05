@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { useERPStore } from '../../lib/store';
 import { Card, CardHeader, CardTitle } from '../../components/ui/Card';
+import { PageBanner } from '../../components/ui/PageBanner';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { MockPostPreview } from '../../components/MockPostPreview';
@@ -134,17 +135,8 @@ function CopywriterContent() {
 
   return (
     <div className="space-y-6">
-      {/* Top Banner: Frequency Selection */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-lg font-bold text-slate-900">AI Copywriter & Creative Studio</h2>
-          <p className="text-xs text-slate-500">
-            Generate high-converting dental hooks, captions, carousel slides, and reel scripts.
-          </p>
-        </div>
-
-        {/* Frequency Modes per Spreadsheet */}
-        <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl">
+      <PageBanner eyebrow="AI content studio" title="AI Copywriter & Creative Studio" description="Create on-brand dental posts, educational captions, carousels, and short-form video scripts." icon={Sparkles} action={
+        <div className="flex items-center gap-1.5 p-1 bg-white/80 border border-slate-200 rounded-xl">
           <span className="text-[10px] font-bold uppercase text-slate-400 px-2">Frequency:</span>
           {(['weekly', 'monthly', 'on_request'] as ProductionFrequency[]).map((mode) => (
             <button
@@ -160,7 +152,7 @@ function CopywriterContent() {
             </button>
           ))}
         </div>
-      </div>
+      } />
 
       {/* Main 2-Column Studio */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">

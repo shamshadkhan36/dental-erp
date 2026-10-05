@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { useERPStore } from '../../lib/store';
 import { Card, CardHeader, CardTitle } from '../../components/ui/Card';
+import { PageBanner } from '../../components/ui/PageBanner';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { FlyerEditor } from '../../components/FlyerEditor';
@@ -61,17 +62,8 @@ function CreativeContent() {
 
   return (
     <div className="space-y-6">
-      {/* Top Banner with Tab Switching */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-lg font-bold text-slate-900">Creative Production & Flyer Studio</h2>
-          <p className="text-xs text-slate-500">
-            Generate and assemble graphics using clinic brand standards linked to Google Drive.
-          </p>
-        </div>
-
-        {/* Tab navigation */}
-        <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl">
+      <PageBanner eyebrow="Creative workspace" title="Creative Production & Flyer Studio" description="Build clinic-branded social graphics and printable flyers from one workspace." icon={ImageIcon} action={
+        <div className="flex items-center gap-1.5 p-1 bg-white/80 border border-slate-200 rounded-xl">
           <button
             onClick={() => setActiveTab('social')}
             className={`flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg transition-all ${
@@ -95,7 +87,7 @@ function CreativeContent() {
             Dental Flyers & Posters
           </button>
         </div>
-      </div>
+      } />
 
       {/* TAB 1: Social Media Graphics & Google Drive */}
       {activeTab === 'social' && (

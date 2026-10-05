@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { useERPStore } from '../../lib/store';
 import { Card, CardHeader, CardTitle } from '../../components/ui/Card';
+import { PageBanner } from '../../components/ui/PageBanner';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 
@@ -41,19 +42,10 @@ export default function IntegrationsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Top Banner */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <h2 className="text-lg font-bold text-slate-900">Integrations, DM Automations & Roadmap</h2>
-            <Badge variant="primary">Module Expansion</Badge>
-          </div>
-          <p className="text-xs text-slate-500">
-            Configure external channel webhooks, Google Drive asset sync, WhatsApp routing, and DM bots.
-          </p>
-        </div>
-
-        <Button size="md" variant="primary" onClick={handleSave}>
+      <PageBanner eyebrow="Connected tools" title="Integrations & Automations" description="Manage publishing channels, asset storage, and patient message workflows." icon={Bot} action={
+        <>
+          <Badge variant="primary">Module roadmap</Badge>
+          <Button size="md" variant="primary" onClick={handleSave}>
           {savedNote ? (
             <>
               <Check className="w-4 h-4 mr-1 text-emerald-300" />
@@ -62,8 +54,9 @@ export default function IntegrationsPage() {
           ) : (
             'Save Configuration'
           )}
-        </Button>
-      </div>
+          </Button>
+        </>
+      } />
 
       {/* Connected Channel Integrations Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { useERPStore } from '../../lib/store';
 import { Card, CardHeader, CardTitle } from '../../components/ui/Card';
+import { PageBanner } from '../../components/ui/PageBanner';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 
@@ -27,27 +28,17 @@ export default function AnalyticsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Top Banner */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <h2 className="text-lg font-bold text-slate-900">Analytics & Practice Growth Dashboard</h2>
-            <Badge variant="success">Learning Loop Active</Badge>
-          </div>
-          <p className="text-xs text-slate-500">
-            Real-time attribution between social content performance, treatment inquiries, and clinical revenue.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2">
+      <PageBanner eyebrow="Practice insights" title="Analytics & Growth Dashboard" description="Understand how social performance connects to treatment interest and practice growth." icon={BarChart3} action={
+        <>
+          <Badge variant="success">Learning loop active</Badge>
           <Link href="/calendar">
             <Button size="sm" variant="primary">
               <CalendarIcon className="w-3.5 h-3.5 mr-1 text-sky-200" />
-              Apply Insights to Calendar
+              Use insights
             </Button>
           </Link>
-        </div>
-      </div>
+        </>
+      } />
 
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

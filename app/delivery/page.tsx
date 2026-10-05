@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { useERPStore } from '../../lib/store';
 import { Card, CardHeader, CardTitle } from '../../components/ui/Card';
+import { PageBanner } from '../../components/ui/PageBanner';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { Modal } from '../../components/ui/Modal';
@@ -70,20 +71,9 @@ export default function DeliveryPage() {
 
   return (
     <div className="space-y-6">
-      {/* Top Banner */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <h2 className="text-lg font-bold text-slate-900">Delivery & Meta Scheduling</h2>
-            <Badge variant="success">Meta Connected (FB & IG)</Badge>
-          </div>
-          <p className="text-xs text-slate-500">
-            Export approved copy, download visual assets, and schedule automated publishing.
-          </p>
-        </div>
+      <PageBanner eyebrow="Publishing workspace" title="Delivery & Meta Scheduling" description="Prepare approved content, download creative assets, and manage your publishing queue." icon={Send} action={<Badge variant="success">Meta connected · FB & IG</Badge>} />
 
-        {/* Tab switcher */}
-        <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl text-xs">
+      <div className="flex w-fit max-w-full overflow-x-auto items-center gap-1.5 p-1.5 bg-white border border-slate-200 rounded-2xl shadow-sm text-xs">
           <button
             onClick={() => setActiveTab('bank')}
             className={`px-4 py-2 font-semibold rounded-lg transition-all ${
@@ -105,7 +95,6 @@ export default function DeliveryPage() {
             Scheduled Meta Queue ({scheduledRecords.length})
           </button>
         </div>
-      </div>
 
       {/* TAB 1: Approved Content Bank */}
       {activeTab === 'bank' && (
