@@ -1,4 +1,13 @@
-import { BrandProfile, CalendarItem, ContentRecord, FlyerRecord, AnalyticsSummary } from '../types';
+import { BrandProfile, CalendarItem, ContentRecord, FlyerRecord, AnalyticsSummary, CreditUsage } from '../types';
+
+export const defaultCreditUsage: CreditUsage = {
+  aiCopyCredits: { used: 68, total: 100 },
+  videoCredits: { used: 4, total: 15 },
+  graphicCredits: { used: 32, total: 50 },
+  storageGb: { used: 4.2, total: 15.0 },
+  planName: "DentiSync Growth Tier",
+  renewalDate: "November 1, 2026"
+};
 
 export const defaultBrandProfile: BrandProfile = {
   clinicName: "Apex Smile Studio & Implant Center",
@@ -9,6 +18,12 @@ export const defaultBrandProfile: BrandProfile = {
   address: "742 Medical Arts Pavilion, Suite 400, New York, NY",
   website: "https://apexsmilestudio.com",
   brandVoice: "Empathetic, Authoritative, Reassuring, and Cosmetically Sophisticated",
+  brandPersona: {
+    archetype: "Clinical Authority",
+    communicationStyle: "Clear, evidence-backed, reassuring, and free of medical jargon",
+    targetEmotions: ["Relief from anxiety", "Aesthetic confidence", "Trust in board-certified precision"],
+    formalityLevel: "Warm & Conversational"
+  },
   keyPhrases: [
     "Pain-free modern dentistry",
     "Tailored digital smile design",
@@ -21,34 +36,80 @@ export const defaultBrandProfile: BrandProfile = {
     "Discount dentistry",
     "Drill and fill"
   ],
-  primaryColor: "#137c70", // Calm dental teal
-  secondaryColor: "#183b34", // Deep botanical green
-  accentColor: "#68b49a", // Soft mint accent
-  fontFamily: "Inter, Segoe UI Variable, Segoe UI, sans-serif",
+  // Client Specified Brand Colors
+  primaryColor: "#4f98db",   // Client Primary
+  secondaryColor: "#333333", // Client Secondary
+  accentColor: "#e97538",    // Client CTA Highlight
+  fontFamily: "Inter, sans-serif",
   logoUrl: "https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=200&auto=format&fit=crop&q=80",
   gdriveRootFolder: "https://drive.google.com/drive/folders/1ApexDental_MarketingAssets_2026",
   icpProfiles: [
     {
       id: "icp-1",
-      name: "Cosmetic Professionals (24-40 yrs)",
-      targetDemographic: "Young working adults, public-facing careers, active on Instagram/LinkedIn",
-      painPoints: ["Crooked teeth in photos", "Coffee/tea discoloration", "Fear of traditional metal braces"],
+      name: "Cosmetic Professionals",
+      age: "24 - 38 years",
+      targetDemographic: "Young working adults, client-facing roles, active on Instagram & YouTube",
+      painPoints: [
+        "Self-conscious smiling in client meetings or photos",
+        "Coffee and red wine enamel discoloration",
+        "Refusal to wear visible metal brackets as a working adult"
+      ],
+      objections: [
+        "Fear that clear aligners will take 2+ years",
+        "Concern about upfront treatment costs",
+        "Worry about lisp or speech impediment during aligner wear"
+      ],
+      motivations: [
+        "Upcoming wedding or promotion",
+        "Wanting discreet, non-intrusive cosmetic enhancement",
+        "Desire for quick 6-month digital results"
+      ],
       recommendedTreatments: ["Invisalign Clear Aligners", "In-Office Laser Teeth Whitening", "Porcelain Veneers"],
       preferredTone: "Aesthetic, inspiring, confidence-boosting, sleek"
     },
     {
       id: "icp-2",
-      name: "Full Smile Restorations (45-65+ yrs)",
-      targetDemographic: "Adults suffering from missing teeth, worn dentition, chewing discomfort",
-      painPoints: ["Difficulty eating favorite foods", "Loose dentures", "Premature facial aging"],
+      name: "Full Smile Restorations",
+      age: "45 - 68 years",
+      targetDemographic: "Adults dealing with missing teeth, failing bridge work, or chewing discomfort",
+      painPoints: [
+        "Inability to eat solid food or favorite dishes",
+        "Embarrassment from loose, slipping dentures",
+        "Sunken facial appearance due to bone loss"
+      ],
+      objections: [
+        "Fear of painful surgery and long healing periods",
+        "Assumption that dental implants are strictly unaffordable",
+        "Past traumatic experiences at outdated dental clinics"
+      ],
+      motivations: [
+        "Reclaiming ability to eat steaks and apples without pain",
+        "Permanent fixed teeth that don't come out at night",
+        "Looking and feeling 10 years younger"
+      ],
       recommendedTreatments: ["All-on-4 Dental Implants", "Zirconia Crowns", "Full Mouth Reconstruction"],
       preferredTone: "Clinical expertise, life-transforming, permanent solution, reassuring"
     },
     {
       id: "icp-3",
-      name: "Family Preventive Care (Families & Kids)",
-      targetDemographic: "Parents managing family healthcare schedules",
-      painPoints: ["Children's dental anxiety", "Cavities from sugary snacks", "Juggling appointments"],
+      name: "Family Preventive Care",
+      age: "30 - 50 years (Parents with kids)",
+      targetDemographic: "Working parents coordinating healthcare for children and spouses",
+      painPoints: [
+        "Children's fear and tears before dental appointments",
+        "Hidden cavities developing between checkups",
+        "Difficulty scheduling multiple family members on busy weekdays"
+      ],
+      objections: [
+        "Fear of unexpected billing surprises",
+        "Dentist will lecture them on brushing habits",
+        "Time away from work/school"
+      ],
+      motivations: [
+        "Preventive health for children to avoid expensive future care",
+        "Friendly, gentle clinic environment with movie glasses and comfort amenities",
+        "Saturday morning family appointment blocks"
+      ],
       recommendedTreatments: ["Pediatric Checkups & Fluoride", "Preventive Sealants", "Custom Nightguards"],
       preferredTone: "Warm, family-first, educational, stress-free"
     }
@@ -93,6 +154,45 @@ export const defaultBrandProfile: BrandProfile = {
       typicalDuration: "30 minutes"
     }
   ],
+  // Dedicated Treatment Offers Panel requested by client
+  offers: [
+    {
+      id: "off-1",
+      title: "New Patient Invisalign® Smile Transformation Voucher",
+      treatmentId: "treat-invisalign",
+      treatmentName: "Invisalign® Clear Aligners",
+      discountValue: "$500 OFF + Free Whitening",
+      promoCode: "INVISALIGN500",
+      validUntil: "October 31, 2026",
+      terms: "Valid for new patients initiating full aligner therapy. Cannot be combined with insurance copay credits.",
+      ctaText: "Claim Your $500 Voucher Now",
+      status: "active"
+    },
+    {
+      id: "off-2",
+      title: "Complimentary 3D Guided Implant Consultation & CBCT Scan",
+      treatmentId: "treat-implants",
+      treatmentName: "Guided 3D Dental Implants",
+      discountValue: "Free $350 3D Scan",
+      promoCode: "SCAN3D",
+      validUntil: "November 15, 2026",
+      terms: "Includes complete digital bone density assessment and treatment blueprint with Dr. Sarah Chen.",
+      ctaText: "Book Free 3D Scan",
+      status: "active"
+    },
+    {
+      id: "off-3",
+      title: "Fall Philips Zoom Laser Whitening Special",
+      treatmentId: "treat-whitening",
+      treatmentName: "Philips Zoom Laser Whitening",
+      discountValue: "$299 Flat Rate (Regular $450)",
+      promoCode: "GLOW299",
+      validUntil: "October 25, 2026",
+      terms: "Includes enamel sensitivity relief application and free take-home touch-up kit.",
+      ctaText: "Reserve Whitening Spot",
+      status: "active"
+    }
+  ],
   ctaTemplates: [
     "Tap the link in our bio to book your complimentary 3D digital smile scan!",
     "Comment 'SMILE' below and we'll DM you our exclusive $500 Invisalign voucher.",
@@ -103,9 +203,9 @@ export const defaultBrandProfile: BrandProfile = {
 Your goal is to educate patients, demystify dental anxiety, and inspire bookings for premium dental procedures.
 Strict Guidelines:
 1. Always maintain an empathetic, authoritative, and medically accurate tone.
-2. Use strong psychological hooks that address patient insecurities (hiding smile, pain, chewing difficulties).
-3. Always include a clear Call To Action (CTA).
-4. Never make unrealistic medical claims (avoid 'guaranteed zero pain forever'); emphasize modern numbing techniques, digital precision, and patient comfort.
+2. Address specific patient age groups, pain points, objections, and core motivations.
+3. Feature active promotional offers when relevant.
+4. Ensure compliance: Never guarantee 100% painless treatment; emphasize modern numbing techniques, digital precision, and patient comfort.
 5. Provide formatted hashtags targeting local dental and cosmetic audiences.`
 };
 
@@ -132,7 +232,7 @@ export const defaultCalendarItems: CalendarItem[] = [
     topic: "Full Smile Transformation: 6 Months of Invisalign Before & After",
     pillar: "Smile Makeover",
     format: "single",
-    platforms: ["instagram", "facebook"],
+    platforms: ["instagram", "facebook", "youtube"],
     targetTreatmentId: "treat-invisalign",
     targetIcpId: "icp-1",
     status: "pending_approval",
@@ -146,7 +246,7 @@ export const defaultCalendarItems: CalendarItem[] = [
     topic: "Dental Myth: Are Dental Implants More Painful Than a Root Canal?",
     pillar: "Myth vs Fact",
     format: "reel",
-    platforms: ["instagram", "facebook"],
+    platforms: ["instagram", "youtube"],
     targetTreatmentId: "treat-implants",
     targetIcpId: "icp-2",
     status: "approved",
@@ -160,7 +260,7 @@ export const defaultCalendarItems: CalendarItem[] = [
     topic: "Meet Dr. Sarah Chen: Why Digital 3D Scans Replaced Goopy Molds",
     pillar: "Doctor Spotlight",
     format: "single",
-    platforms: ["instagram", "facebook"],
+    platforms: ["instagram", "facebook", "youtube"],
     targetTreatmentId: "treat-invisalign",
     targetIcpId: "icp-3",
     status: "draft"
@@ -187,11 +287,37 @@ export const defaultCalendarItems: CalendarItem[] = [
     topic: "Fall Laser Teeth Whitening Flash Offer ($299 In-Office)",
     pillar: "Special Offer",
     format: "single",
-    platforms: ["instagram", "facebook"],
+    platforms: ["instagram", "facebook", "youtube"],
     targetTreatmentId: "treat-whitening",
     targetIcpId: "icp-1",
     status: "pending_approval",
     contentRecordId: "rec-5"
+  },
+  {
+    id: "cal-7",
+    date: "2026-10-23",
+    dayOfWeek: "Friday",
+    timeSlot: "02:00 PM",
+    topic: "Why Sensitive Teeth Sting With Hot Coffee (And How to Fix It)",
+    pillar: "Educational",
+    format: "story",
+    platforms: ["instagram", "facebook"],
+    targetTreatmentId: "treat-pediatric",
+    targetIcpId: "icp-1",
+    status: "planned"
+  },
+  {
+    id: "cal-8",
+    date: "2026-10-27",
+    dayOfWeek: "Tuesday",
+    timeSlot: "12:00 PM",
+    topic: "YouTube Shorts: 30-Second Guide on Guided Bone Implants",
+    pillar: "Myth vs Fact",
+    format: "reel",
+    platforms: ["youtube"],
+    targetTreatmentId: "treat-implants",
+    targetIcpId: "icp-2",
+    status: "planned"
   }
 ];
 
@@ -277,7 +403,7 @@ Swipe through for the 3 hallmark signs our dentists look for during routine exam
     title: "6-Month Invisalign Transformation",
     format: "single",
     frequencyMode: "weekly",
-    platforms: ["instagram", "facebook"],
+    platforms: ["instagram", "facebook", "youtube"],
     treatmentId: "treat-invisalign",
     treatmentName: "Invisalign® Clear Aligners",
     hook: "She came to us hiding her smile during presentations. 6 months later, everything changed! ✨😁",
@@ -319,7 +445,7 @@ Your dream smile is closer than you think.`,
     title: "Dental Myth: Implants vs Root Canal Pain",
     format: "reel",
     frequencyMode: "monthly",
-    platforms: ["instagram", "facebook"],
+    platforms: ["instagram", "youtube"],
     treatmentId: "treat-implants",
     treatmentName: "Guided 3D Dental Implants",
     hook: "Think dental implants hurt worse than a root canal? You'll be shocked by what science actually says! 🛑🧠",
@@ -331,11 +457,15 @@ Why? Bone has very few nerve endings compared to the inflamed pulp of a diseased
 
 Watch Dr. Chen explain why modern implantology is a breeze! 👇`,
     cta: "Have questions about missing teeth? DM us 'IMPLANT' or call (555) 382-7645 for our patient guide.",
-    hashtags: ["#DentalImplants", "#DentalMyths", "#PainlessDentistry", "#DrSarahChen", "#DentalSurgery", "#OralHealth"],
+    hashtags: ["#DentalImplants", "#DentalMyths", "#PainlessDentistry", "#DrSarahChen", "#YouTubeShorts", "#OralHealth"],
+    videoSource: "drive",
+    captionOverlayStyle: "text_and_captions",
     reelScript: {
       hookDuration: "0:00 - 0:03",
       hookVisual: "Dr. Chen holding a realistic 3D clear dental bone model pointing at an implant fixture, eyebrow raised with 'Stop Believing This Myth' sticker.",
       hookAudio: "Trending high-energy upbeat synth track (lowered to 15% under voiceover)",
+      videoSource: "drive",
+      captionOverlayStyle: "text_and_captions",
       scenes: [
         {
           second: "0:03 - 0:10",
@@ -368,8 +498,8 @@ Watch Dr. Chen explain why modern implantology is a breeze! 👇`,
       ctaPresent: true,
       disclaimerCompliant: true,
       checks: [
-        { rule: "Video Aspect Ratio", passed: true, message: "9:16 (1080x1920 Reel / Story format)" },
-        { rule: "Audio Cue Sync", passed: true, message: "Timing markers within 30-second reel standard" },
+        { rule: "Video Aspect Ratio", passed: true, message: "9:16 (1080x1920 Reel / YouTube Shorts format)" },
+        { rule: "Audio Cue Sync", passed: true, message: "Timing markers within 30-second standard" },
         { rule: "Compliance Disclaimer", passed: true, message: "Clinical opinion notice formatted properly" }
       ]
     },
@@ -421,7 +551,7 @@ Swipe to see his journey from consultation to enjoying his favorite foods again!
     title: "Fall Laser Teeth Whitening Flash Offer",
     format: "single",
     frequencyMode: "on_request",
-    platforms: ["instagram", "facebook"],
+    platforms: ["instagram", "facebook", "youtube"],
     treatmentId: "treat-whitening",
     treatmentName: "Philips Zoom Laser Whitening",
     hook: "Coffee and red wine season is here—keep your smile radiant with our October Laser Whitening special! ☕🍷✨",
@@ -475,7 +605,7 @@ export const defaultFlyers: FlyerRecord[] = [
     contactNumber: "(555) 382-7645",
     clinicAddress: "742 Medical Arts Pavilion, Suite 400, New York, NY",
     templateStyle: "family_friendly",
-    accentColor: "#137c70",
+    accentColor: "#4f98db",
     status: "approved",
     downloadUrl: "/flyers/sample-health-camp.pdf",
     createdAt: "2026-10-04T12:00:00Z"
@@ -497,21 +627,52 @@ export const defaultFlyers: FlyerRecord[] = [
     contactNumber: "(555) 382-7645",
     clinicAddress: "Apex Smile Studio, 742 Medical Arts Pavilion",
     templateStyle: "premium_aesthetic",
-    accentColor: "#0d9488",
+    accentColor: "#e97538",
     status: "pending_approval",
     createdAt: "2026-10-05T08:30:00Z"
   }
 ];
 
+// Client requested: Display ONLY platform specific organic insights
 export const defaultAnalytics: AnalyticsSummary = {
-  totalPosts: 48,
-  totalScheduled: 14,
-  totalApproved: 32,
+  totalPosts: 54,
+  totalScheduled: 16,
+  totalApproved: 38,
   totalPending: 6,
-  avgEngagementRate: 4.8,
+  avgEngagementRate: 5.4,
   patientInquiries: 142,
-  estimatedRevenuePipeline: 86500,
-  platformSplit: { instagram: 68, facebook: 32 },
+  estimatedRevenuePipeline: 94800,
+  organicPlatforms: {
+    instagram: {
+      reach: 34200,
+      impressions: 48900,
+      engagementRate: 6.8,
+      followersGained: 412,
+      shares: 310,
+      savesOrLikes: 2480,
+      videoViews: 19400,
+      organicInquiries: 74
+    },
+    facebook: {
+      reach: 21800,
+      impressions: 29400,
+      engagementRate: 3.9,
+      followersGained: 185,
+      shares: 142,
+      savesOrLikes: 1120,
+      organicInquiries: 46
+    },
+    youtube: {
+      reach: 16400,
+      impressions: 24100,
+      engagementRate: 5.8,
+      followersGained: 230,
+      shares: 188,
+      savesOrLikes: 1450,
+      videoViews: 28900,
+      organicInquiries: 22
+    }
+  },
   topConvertingTreatments: [
     { name: "Invisalign Clear Aligners", inquiries: 58, reach: 24500 },
     { name: "Guided Dental Implants", inquiries: 44, reach: 18200 },
@@ -541,18 +702,18 @@ export const defaultAnalytics: AnalyticsSummary = {
     },
     {
       id: "pub-3",
-      title: "Invisalign vs Braces: Real Cost & Time Breakdown",
-      date: "Sep 25, 2026",
-      platform: "instagram",
-      likes: 540,
-      shares: 88,
-      comments: 64,
-      inquiries: 31
+      title: "30-Sec Shorts: Are Dental Implants Really Painful?",
+      date: "Sep 26, 2026",
+      platform: "youtube",
+      likes: 640,
+      shares: 112,
+      comments: 72,
+      inquiries: 14
     }
   ],
   aiRecommendations: [
-    "Invisalign before-and-after carousels show a 2.4x higher conversion rate than static single images. Schedule 2 additional carousels this month.",
-    "Patient Q&A Reels regarding dental implant discomfort drove 18 direct WhatsApp consultations last week. Recommend weekly Doctor Q&A clips.",
-    "Post timing between 11:30 AM and 1:30 PM on Tuesdays and Thursdays generated 42% of total clinical booking inquiries."
+    "YouTube Shorts explaining guided implant surgery drove 22 direct patient inquiries with zero ad spend. Recommend weekly 30-sec clinical myth debunks.",
+    "Invisalign before-and-after carousels on Instagram achieved an organic 6.8% engagement rate. Schedule 2 additional carousels this month.",
+    "Facebook organic posts featuring doctor bios and Saturday family checkups generated 46 patient inquiries among parents aged 32-48."
   ]
 };

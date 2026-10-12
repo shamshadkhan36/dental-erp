@@ -12,22 +12,37 @@ import {
   Palette, 
   FolderGit2, 
   Sliders,
-  MessageSquare
+  MessageSquare,
+  Tag,
+  ShieldCheck,
+  HeartHandshake
 } from 'lucide-react';
 import { useERPStore } from '../../lib/store';
 import { Card, CardHeader, CardTitle } from '../../components/ui/Card';
-import { PageBanner } from '../../components/ui/PageBanner';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { compileSystemPrompt } from '../../lib/ai-prompts';
-import { DentalTreatment, ICPProfile } from '../../types';
+import { DentalOffer, DentalTreatment, ICPProfile } from '../../types';
 
 export default function BrandIntakePage() {
-  const { brand, updateBrand } = useERPStore();
+  const { brand, updateBrand, saveOffer, deleteOffer } = useERPStore();
   const [formData, setFormData] = useState(brand);
   const [activeTab, setActiveTab] = useState<'profile' | 'icp' | 'treatments' | 'visual' | 'prompt'>('profile');
   const [copied, setCopied] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  // New offer modal/inline form
+  const [showAddOffer, setShowAddOffer] = useState(false);
+  const [newOffer, setNewOffer] = useState<Partial<DentalOffer>>({
+    title: '',
+    treatmentId: brand.treatments[0]?.id || '',
+    discountValue: '$500 OFF',
+    promoCode: 'SMILE500',
+    validUntil: 'October 31, 2026',
+    terms: 'Valid for new patients initiating full treatment.',
+    ctaText: 'Claim Your Voucher Now',
+    status: 'active'
+  });
 
   const compiledPrompt = compileSystemPrompt(formData);
 
@@ -43,13 +58,54 @@ export default function BrandIntakePage() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleCreateOffer = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newOffer.title) return;
+    const selectedTreat = formData.treatments.find(t => t.id === newOffer.treatmentId) || formData.treatments[0];
+    const created: DentalOffer = {
+      id: `off-${Date.now()}`,
+      title: newOffer.title || 'Special Clinic Offer',
+      treatmentId: selectedTreat.id,
+      treatmentName: selectedTreat.name,
+      discountValue: newOffer.discountValue || 'Special Discount',
+      promoCode: newOffer.promoCode || 'SMILE',
+      validUntil: newOffer.validUntil || 'Limited Time',
+      terms: newOffer.terms || 'Standard terms apply.',
+      ctaText: newOffer.ctaText || 'Claim Offer',
+      status: 'active'
+    };
+
+    saveOffer(created);
+    setFormData(prev => ({ ...prev, offers: [...prev.offers, created] }));
+    setShowAddOffer(false);
+    setNewOffer({
+      title: '',
+      treatmentId: brand.treatments[0]?.id || '',
+      discountValue: '$500 OFF',
+      promoCode: 'SMILE500',
+      validUntil: 'October 31, 2026',
+      terms: 'Valid for new patients initiating full treatment.',
+      ctaText: 'Claim Your Voucher Now',
+      status: 'active'
+    });
+  };
+
   return (
     <div className="space-y-6">
-      <PageBanner eyebrow="Practice profile" title="Brand Intake & Knowledge Base" description="Define your practice voice, treatments, target patient personas, and visual guidelines." icon={Sliders} action={
-          <Button variant="primary" size="md" onClick={handleSave}>
+      {/* Header bar with Save button */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+        <div>
+          <h2 className="text-lg font-bold text-[#333333]">Client & Brand Intake Knowledge Base</h2>
+          <p className="text-xs text-slate-500">
+            Configure practice voice, brand persona, patient profiles (with age, objections & motivations), and treatment offers.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          {/* Client CTA Highlight Button #e97538 */}
+          <Button variant="cta" size="md" onClick={handleSave}>
             {saved ? (
               <>
-                <Check className="w-4 h-4 mr-1 text-emerald-300" />
+                <Check className="w-4 h-4 mr-1 text-white" />
                 Changes Saved!
               </>
             ) : (
@@ -59,15 +115,16 @@ export default function BrandIntakePage() {
               </>
             )}
           </Button>
-        } />
+        </div>
+      </div>
 
       {/* Navigation Tabs */}
-      <div className="flex w-fit max-w-full overflow-x-auto gap-1.5 rounded-2xl border border-slate-200 bg-white p-1.5 shadow-sm">
+      <div className="flex overflow-x-auto gap-2 border-b border-slate-200 pb-2">
         {[
-          { id: 'profile', label: '1. Clinic Identity & Voice', icon: Sliders },
+          { id: 'profile', label: '1. Brand Voice & Persona', icon: Sliders },
           { id: 'icp', label: '2. Patient Personas (ICP)', icon: UserCheck },
-          { id: 'treatments', label: '3. Treatments & Offers', icon: Sparkles },
-          { id: 'visual', label: '4. Visual Identity & Assets', icon: Palette },
+          { id: 'treatments', label: '3. Treatments & Offers Panel', icon: Tag },
+          { id: 'visual', label: '4. Visual Identity & Drive', icon: Palette },
           { id: 'prompt', label: '5. Compiled System Prompts', icon: MessageSquare },
         ].map((tab) => {
           const Icon = tab.icon;
@@ -77,7 +134,7 @@ export default function BrandIntakePage() {
               onClick={() => setActiveTab(tab.id as any)}
               className={`flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-xl whitespace-nowrap transition-all ${
                 activeTab === tab.id
-                  ? 'bg-[#237a60] text-white shadow-sm'
+                  ? 'bg-[#4f98db] text-white shadow-xs'
                   : 'text-slate-600 hover:bg-slate-100'
               }`}
             >
@@ -88,16 +145,16 @@ export default function BrandIntakePage() {
         })}
       </div>
 
-      {/* Tab 1: Profile & Voice */}
+      {/* Tab 1: Profile, Voice & Persona */}
       {activeTab === 'profile' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
-              <CardTitle>Clinic Contact & General Info</CardTitle>
+              <CardTitle>Clinic Information</CardTitle>
             </CardHeader>
             <div className="space-y-4 text-xs">
               <div>
-                <label className="font-semibold text-slate-700 block mb-1">Clinic Name</label>
+                <label className="font-semibold text-slate-700 block mb-1">Practice Name</label>
                 <input
                   type="text"
                   value={formData.clinicName}
@@ -159,17 +216,55 @@ export default function BrandIntakePage() {
             </div>
           </Card>
 
+          {/* BRAND PERSONA & VOICE (Client Requirement #2) */}
           <Card>
             <CardHeader>
-              <CardTitle>Brand Voice & Clinical Persona</CardTitle>
+              <CardTitle>Brand Persona & Communication Tone</CardTitle>
+              <Badge variant="primary">AI Archetype</Badge>
             </CardHeader>
             <div className="space-y-4 text-xs">
               <div>
-                <label className="font-semibold text-slate-700 block mb-1">Tone of Voice Description</label>
+                <label className="font-semibold text-slate-700 block mb-1">Brand Persona Archetype</label>
+                <select
+                  value={formData.brandPersona.archetype}
+                  onChange={(e) => setFormData({
+                    ...formData,
+                    brandPersona: { ...formData.brandPersona, archetype: e.target.value as any }
+                  })}
+                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs bg-white font-medium text-[#333333]"
+                >
+                  <option value="Clinical Authority">Clinical Authority (Evidence-based, high-tech, board-certified trust)</option>
+                  <option value="Empathetic Healer">Empathetic Healer (Gentle touch, dental anxiety demystifier)</option>
+                  <option value="Cosmetic Visionary">Cosmetic Visionary (Aesthetic perfection, luxury smile makeovers)</option>
+                  <option value="Family Guardian">Family Guardian (Multi-generational, friendly, pediatric comfort)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="font-semibold text-slate-700 block mb-1">Formality & Style</label>
+                <select
+                  value={formData.brandPersona.formalityLevel}
+                  onChange={(e) => setFormData({
+                    ...formData,
+                    brandPersona: { ...formData.brandPersona, formalityLevel: e.target.value as any }
+                  })}
+                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs bg-white"
+                >
+                  <option value="Warm & Conversational">Warm & Conversational (Approachable & reassuring)</option>
+                  <option value="Professional Clinical">Professional Clinical (Scientific & precise)</option>
+                  <option value="Luxurious & High-End">Luxurious & High-End (Boutique concierge feel)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="font-semibold text-slate-700 block mb-1">Communication Style</label>
                 <textarea
-                  rows={3}
-                  value={formData.brandVoice}
-                  onChange={(e) => setFormData({ ...formData, brandVoice: e.target.value })}
+                  rows={2}
+                  value={formData.brandPersona.communicationStyle}
+                  onChange={(e) => setFormData({
+                    ...formData,
+                    brandPersona: { ...formData.brandPersona, communicationStyle: e.target.value }
+                  })}
                   className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs leading-relaxed"
                 />
               </div>
@@ -203,7 +298,7 @@ export default function BrandIntakePage() {
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => setFormData({ ...formData, keyPhrases: [...formData.keyPhrases, "New brand phrase"] })}
+                    onClick={() => setFormData({ ...formData, keyPhrases: [...formData.keyPhrases, "Digital 3D precision care"] })}
                   >
                     <Plus className="w-3.5 h-3.5 mr-1" /> Add Key Phrase
                   </Button>
@@ -211,7 +306,7 @@ export default function BrandIntakePage() {
               </div>
 
               <div>
-                <label className="font-semibold text-rose-700 block mb-1">Prohibited Terms (AI Compliance Blacklist)</label>
+                <label className="font-semibold text-rose-700 block mb-1">Prohibited Terms (AI Blacklist)</label>
                 <div className="space-y-2">
                   {formData.prohibitedTerms.map((term, idx) => (
                     <div key={idx} className="flex items-center gap-2">
@@ -236,13 +331,6 @@ export default function BrandIntakePage() {
                       </button>
                     </div>
                   ))}
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => setFormData({ ...formData, prohibitedTerms: [...formData.prohibitedTerms, "Discount terms"] })}
-                  >
-                    <Plus className="w-3.5 h-3.5 mr-1" /> Add Prohibited Term
-                  </Button>
                 </div>
               </div>
             </div>
@@ -250,33 +338,41 @@ export default function BrandIntakePage() {
         </div>
       )}
 
-      {/* Tab 2: Ideal Customer Profiles (ICP) */}
+      {/* Tab 2: Patient Personas (ICP) with Age, Pain Points, Objections, Motivations */}
       {activeTab === 'icp' && (
-        <div className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h3 className="text-sm font-bold text-slate-800">Target Patient Personas</h3>
+        <div className="space-y-5">
+          <div className="flex justify-between items-center bg-white p-4 rounded-xl border border-slate-200">
+            <div>
+              <h3 className="text-sm font-bold text-[#333333]">Target Patient Personas (ICP Profiles)</h3>
+              <p className="text-xs text-slate-500">
+                Segmented profiles with Age, Pain Points, Objections, and Motivations to guide AI psychological hooks.
+              </p>
+            </div>
             <Button
               size="sm"
-              variant="primary"
+              variant="cta"
               onClick={() => {
                 const newIcp: ICPProfile = {
                   id: `icp-${Date.now()}`,
-                  name: "New Patient Segment",
-                  targetDemographic: "e.g. Young athletes, seniors, brides-to-be",
-                  painPoints: ["Dental emergency fear", "Cost uncertainty"],
-                  recommendedTreatments: ["Preventive Dentistry"],
-                  preferredTone: "Reassuring and informative"
+                  name: "New Target Demographic",
+                  age: "25 - 45 years",
+                  targetDemographic: "e.g. Busy executives or brides-to-be",
+                  painPoints: ["Fear of long treatments", "Discolored smile"],
+                  objections: ["High upfront cost", "Pain anxiety"],
+                  motivations: ["Looking best in upcoming event", "Confidence boost"],
+                  recommendedTreatments: ["Invisalign Clear Aligners"],
+                  preferredTone: "Reassuring, luxury aesthetic"
                 };
                 setFormData({ ...formData, icpProfiles: [...formData.icpProfiles, newIcp] });
               }}
             >
-              <Plus className="w-3.5 h-3.5 mr-1" /> Add Persona
+              <Plus className="w-3.5 h-3.5 mr-1" /> Add Patient Persona
             </Button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {formData.icpProfiles.map((icp, idx) => (
-              <Card key={icp.id} className="space-y-3">
+              <Card key={icp.id} className="space-y-3.5 border-t-4 border-t-[#4f98db]">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-2">
                   <input
                     type="text"
@@ -286,7 +382,7 @@ export default function BrandIntakePage() {
                       updated[idx].name = e.target.value;
                       setFormData({ ...formData, icpProfiles: updated });
                     }}
-                    className="font-bold text-slate-900 text-sm border-b border-transparent hover:border-slate-300 focus:outline-none w-full mr-2"
+                    className="font-bold text-[#333333] text-sm border-b border-transparent hover:border-slate-300 focus:outline-none w-full mr-2"
                   />
                   <button
                     onClick={() => {
@@ -299,9 +395,29 @@ export default function BrandIntakePage() {
                   </button>
                 </div>
 
-                <div className="text-xs space-y-2">
+                <div className="text-xs space-y-2.5">
+                  {/* Age Range Field (Client Requirement #2) */}
                   <div>
-                    <label className="text-[11px] font-semibold text-slate-500">Target Demographic</label>
+                    <label className="text-[11px] font-bold text-slate-700 block mb-0.5">
+                      Target Age Range
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 24 - 38 years"
+                      value={icp.age}
+                      onChange={(e) => {
+                        const updated = [...formData.icpProfiles];
+                        updated[idx].age = e.target.value;
+                        setFormData({ ...formData, icpProfiles: updated });
+                      }}
+                      className="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs font-semibold text-[#4f98db]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[11px] font-bold text-slate-700 block mb-0.5">
+                      Target Demographic
+                    </label>
                     <input
                       type="text"
                       value={icp.targetDemographic}
@@ -314,22 +430,11 @@ export default function BrandIntakePage() {
                     />
                   </div>
 
+                  {/* Pain Points (Client Requirement #2) */}
                   <div>
-                    <label className="text-[11px] font-semibold text-slate-500">Preferred Tone</label>
-                    <input
-                      type="text"
-                      value={icp.preferredTone}
-                      onChange={(e) => {
-                        const updated = [...formData.icpProfiles];
-                        updated[idx].preferredTone = e.target.value;
-                        setFormData({ ...formData, icpProfiles: updated });
-                      }}
-                      className="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-[11px] font-semibold text-slate-500">Core Patient Insecurities & Pain Points</label>
+                    <label className="text-[11px] font-bold text-rose-700 block mb-0.5">
+                      Pain Points & Anxieties
+                    </label>
                     <textarea
                       rows={2}
                       value={icp.painPoints.join(', ')}
@@ -338,7 +443,41 @@ export default function BrandIntakePage() {
                         updated[idx].painPoints = e.target.value.split(',').map(s => s.trim());
                         setFormData({ ...formData, icpProfiles: updated });
                       }}
-                      className="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs"
+                      className="w-full px-2.5 py-1.5 border border-rose-200 bg-rose-50/20 rounded-lg text-xs"
+                    />
+                  </div>
+
+                  {/* Objections (Client Requirement #2) */}
+                  <div>
+                    <label className="text-[11px] font-bold text-amber-800 block mb-0.5">
+                      Patient Objections & Hesitations
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={icp.objections.join(', ')}
+                      onChange={(e) => {
+                        const updated = [...formData.icpProfiles];
+                        updated[idx].objections = e.target.value.split(',').map(s => s.trim());
+                        setFormData({ ...formData, icpProfiles: updated });
+                      }}
+                      className="w-full px-2.5 py-1.5 border border-amber-200 bg-amber-50/20 rounded-lg text-xs"
+                    />
+                  </div>
+
+                  {/* Motivations (Client Requirement #2) */}
+                  <div>
+                    <label className="text-[11px] font-bold text-emerald-800 block mb-0.5">
+                      Patient Motivations & Desired Outcome
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={icp.motivations.join(', ')}
+                      onChange={(e) => {
+                        const updated = [...formData.icpProfiles];
+                        updated[idx].motivations = e.target.value.split(',').map(s => s.trim());
+                        setFormData({ ...formData, icpProfiles: updated });
+                      }}
+                      className="w-full px-2.5 py-1.5 border border-emerald-200 bg-emerald-50/20 rounded-lg text-xs"
                     />
                   </div>
                 </div>
@@ -348,30 +487,161 @@ export default function BrandIntakePage() {
         </div>
       )}
 
-      {/* Tab 3: Treatments & Offers */}
+      {/* Tab 3: Treatments & Dedicated Offers Panel */}
       {activeTab === 'treatments' && (
-        <div className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h3 className="text-sm font-bold text-slate-800">Clinical Treatment Menu & Unique Selling Points</h3>
-            <Button
-              size="sm"
-              variant="primary"
-              onClick={() => {
-                const newTreatment: DentalTreatment = {
-                  id: `treat-${Date.now()}`,
-                  name: "New Clinical Procedure",
-                  category: "Cosmetic",
-                  usp: "Unique advantage & comfort features",
-                  typicalDuration: "1 hour"
-                };
-                setFormData({ ...formData, treatments: [...formData.treatments, newTreatment] });
-              }}
-            >
-              <Plus className="w-3.5 h-3.5 mr-1" /> Add Treatment
-            </Button>
-          </div>
+        <div className="space-y-6">
+          {/* SECTION A: Dedicated Treatment Offers Panel (Client Requirement #2) */}
+          <Card className="border-l-4 border-l-[#e97538] bg-white p-5 shadow-sm space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <div className="flex items-center gap-2">
+                  <Tag className="w-5 h-5 text-[#e97538]" />
+                  <h3 className="text-base font-bold text-[#333333]">Active Clinic Offers & Promotions Panel</h3>
+                  <Badge variant="cta">{formData.offers.length} Live Offers</Badge>
+                </div>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Special treatment discounts, vouchers, and consultation packages automatically woven into AI post hooks and CTAs.
+                </p>
+              </div>
 
+              <Button
+                size="sm"
+                variant="cta"
+                onClick={() => setShowAddOffer(true)}
+              >
+                <Plus className="w-3.5 h-3.5 mr-1" /> Create New Offer
+              </Button>
+            </div>
+
+            {/* Inline Add Offer Form */}
+            {showAddOffer && (
+              <form onSubmit={handleCreateOffer} className="p-4 bg-[#fdf2ec] border border-[#fbd3be] rounded-xl space-y-3 text-xs">
+                <div className="font-bold text-[#d6652a] text-sm">Add New Promotional Offer</div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="sm:col-span-2">
+                    <label className="font-semibold text-slate-700 block mb-1">Campaign Headline</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. $500 OFF Comprehensive Invisalign Treatment"
+                      value={newOffer.title}
+                      onChange={(e) => setNewOffer({ ...newOffer, title: e.target.value })}
+                      className="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="font-semibold text-slate-700 block mb-1">Target Treatment</label>
+                    <select
+                      value={newOffer.treatmentId}
+                      onChange={(e) => setNewOffer({ ...newOffer, treatmentId: e.target.value })}
+                      className="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white"
+                    >
+                      {formData.treatments.map(t => (
+                        <option key={t.id} value={t.id}>{t.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-3">
+                  <div>
+                    <label className="font-semibold text-slate-700 block mb-1">Discount Value</label>
+                    <input
+                      type="text"
+                      placeholder="$500 OFF"
+                      value={newOffer.discountValue}
+                      onChange={(e) => setNewOffer({ ...newOffer, discountValue: e.target.value })}
+                      className="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white font-bold text-[#e97538]"
+                    />
+                  </div>
+                  <div>
+                    <label className="font-semibold text-slate-700 block mb-1">Promo Code</label>
+                    <input
+                      type="text"
+                      placeholder="INVISALIGN500"
+                      value={newOffer.promoCode}
+                      onChange={(e) => setNewOffer({ ...newOffer, promoCode: e.target.value })}
+                      className="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white font-mono"
+                    />
+                  </div>
+                  <div>
+                    <label className="font-semibold text-slate-700 block mb-1">Valid Until</label>
+                    <input
+                      type="text"
+                      placeholder="Nov 15, 2026"
+                      value={newOffer.validUntil}
+                      onChange={(e) => setNewOffer({ ...newOffer, validUntil: e.target.value })}
+                      className="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-2 pt-2">
+                  <Button type="button" size="sm" variant="outline" onClick={() => setShowAddOffer(false)}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" size="sm" variant="cta">
+                    Save Offer to Database
+                  </Button>
+                </div>
+              </form>
+            )}
+
+            {/* List of Offers */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {formData.offers.map((offer) => (
+                <div key={offer.id} className="p-4 rounded-xl border border-slate-200 bg-slate-50 flex flex-col justify-between space-y-3">
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="px-2 py-0.5 rounded font-black text-xs bg-[#e97538] text-white">
+                        {offer.discountValue}
+                      </span>
+                      <button
+                        onClick={() => deleteOffer(offer.id)}
+                        className="text-slate-400 hover:text-rose-500"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+
+                    <h4 className="font-bold text-slate-900 text-xs leading-snug">{offer.title}</h4>
+                    <p className="text-[11px] text-slate-500 mt-1">For: {offer.treatmentName}</p>
+                    <p className="text-[10px] text-slate-400 mt-1 italic">{offer.terms}</p>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-200/80 flex items-center justify-between text-[11px]">
+                    <span className="font-mono font-bold text-slate-700 bg-white px-2 py-0.5 rounded border border-slate-200">
+                      {offer.promoCode}
+                    </span>
+                    <span className="text-slate-500 font-semibold">{offer.validUntil}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* SECTION B: Core Treatment Menu */}
           <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <h3 className="text-sm font-bold text-[#333333]">Clinical Procedures & USPs</h3>
+              <Button
+                size="sm"
+                variant="primary"
+                onClick={() => {
+                  const newTreatment: DentalTreatment = {
+                    id: `treat-${Date.now()}`,
+                    name: "New Clinical Procedure",
+                    category: "Cosmetic",
+                    usp: "Digital guided workflow & zero-discomfort protocol",
+                    typicalDuration: "45 minutes"
+                  };
+                  setFormData({ ...formData, treatments: [...formData.treatments, newTreatment] });
+                }}
+              >
+                <Plus className="w-3.5 h-3.5 mr-1" /> Add Treatment
+              </Button>
+            </div>
+
             {formData.treatments.map((t, idx) => (
               <Card key={t.id} className="p-4">
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center text-xs">
@@ -409,7 +679,7 @@ export default function BrandIntakePage() {
                   </div>
 
                   <div className="md:col-span-4">
-                    <label className="text-[10px] font-bold uppercase text-slate-400">Clinical USP / Selling Point</label>
+                    <label className="text-[10px] font-bold uppercase text-slate-400">Clinical USP</label>
                     <input
                       type="text"
                       value={t.usp}
@@ -454,12 +724,12 @@ export default function BrandIntakePage() {
         </div>
       )}
 
-      {/* Tab 4: Visual Identity & Google Drive */}
+      {/* Tab 4: Visual Identity with Client Palette (#4f98db, #333333, #e97538, #ffffff) */}
       {activeTab === 'visual' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
-              <CardTitle>Palette & Typography</CardTitle>
+              <CardTitle>Brand Colors & Visual Identity</CardTitle>
             </CardHeader>
             <div className="space-y-4 text-xs">
               <div className="grid grid-cols-3 gap-3">
@@ -476,7 +746,7 @@ export default function BrandIntakePage() {
                       type="text"
                       value={formData.primaryColor}
                       onChange={(e) => setFormData({ ...formData, primaryColor: e.target.value })}
-                      className="w-full px-2 py-1 border border-slate-200 rounded text-xs uppercase"
+                      className="w-full px-2 py-1 border border-slate-200 rounded text-xs uppercase font-mono font-bold text-[#4f98db]"
                     />
                   </div>
                 </div>
@@ -494,13 +764,13 @@ export default function BrandIntakePage() {
                       type="text"
                       value={formData.secondaryColor}
                       onChange={(e) => setFormData({ ...formData, secondaryColor: e.target.value })}
-                      className="w-full px-2 py-1 border border-slate-200 rounded text-xs uppercase"
+                      className="w-full px-2 py-1 border border-slate-200 rounded text-xs uppercase font-mono font-bold text-[#333333]"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="font-semibold text-slate-700 block mb-1">Accent Teal/Gold</label>
+                  <label className="font-semibold text-slate-700 block mb-1">CTA Highlight</label>
                   <div className="flex items-center gap-2">
                     <input
                       type="color"
@@ -512,7 +782,7 @@ export default function BrandIntakePage() {
                       type="text"
                       value={formData.accentColor}
                       onChange={(e) => setFormData({ ...formData, accentColor: e.target.value })}
-                      className="w-full px-2 py-1 border border-slate-200 rounded text-xs uppercase"
+                      className="w-full px-2 py-1 border border-slate-200 rounded text-xs uppercase font-mono font-bold text-[#e97538]"
                     />
                   </div>
                 </div>
@@ -529,9 +799,9 @@ export default function BrandIntakePage() {
               </div>
 
               <div>
-                <label className="font-semibold text-slate-700 block mb-1">Clinic Google Drive Root Folder</label>
+                <label className="font-semibold text-slate-700 block mb-1">Google Drive Root Folder</label>
                 <div className="flex items-center gap-2">
-                  <FolderGit2 className="w-5 h-5 text-sky-600 shrink-0" />
+                  <FolderGit2 className="w-5 h-5 text-[#4f98db] shrink-0" />
                   <input
                     type="text"
                     value={formData.gdriveRootFolder}
@@ -539,9 +809,6 @@ export default function BrandIntakePage() {
                     className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs"
                   />
                 </div>
-                <p className="text-[11px] text-slate-400 mt-1">
-                  Generated creative assets and high-res treatment photos are automatically synchronized to this folder.
-                </p>
               </div>
             </div>
           </Card>
@@ -553,7 +820,7 @@ export default function BrandIntakePage() {
             <div className="space-y-3 text-xs">
               {formData.ctaTemplates.map((cta, idx) => (
                 <div key={idx} className="flex items-center gap-2">
-                  <span className="w-5 h-5 rounded-full bg-sky-100 text-sky-700 text-[10px] font-bold flex items-center justify-center shrink-0">
+                  <span className="w-5 h-5 rounded-full bg-[#f0f7fd] text-[#4f98db] text-[10px] font-bold flex items-center justify-center shrink-0">
                     {idx + 1}
                   </span>
                   <input
@@ -577,13 +844,6 @@ export default function BrandIntakePage() {
                   </button>
                 </div>
               ))}
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => setFormData({ ...formData, ctaTemplates: [...formData.ctaTemplates, "Comment 'CONSULT' for appointment"] })}
-              >
-                <Plus className="w-3.5 h-3.5 mr-1" /> Add CTA Template
-              </Button>
             </div>
           </Card>
         </div>
@@ -596,7 +856,7 @@ export default function BrandIntakePage() {
             <div>
               <CardTitle>Compiled System Prompt for AI Generator</CardTitle>
               <p className="text-xs text-slate-500">
-                This exact prompt is supplied to the AI engine to generate medically accurate, on-brand dental content.
+                Includes Brand Persona, Patient ICP Age/Pain Points/Objections/Motivations, and Active Treatment Offers.
               </p>
             </div>
             <Button size="sm" variant="outline" onClick={copyPromptToClipboard}>
@@ -614,7 +874,7 @@ export default function BrandIntakePage() {
             </Button>
           </CardHeader>
 
-          <pre className="p-4 bg-slate-900 text-sky-200 font-mono text-xs rounded-xl overflow-x-auto whitespace-pre-wrap leading-relaxed max-h-[500px]">
+          <pre className="p-4 bg-[#333333] text-[#7ebef1] font-mono text-xs rounded-xl overflow-x-auto whitespace-pre-wrap leading-relaxed max-h-[500px]">
             {compiledPrompt}
           </pre>
         </Card>

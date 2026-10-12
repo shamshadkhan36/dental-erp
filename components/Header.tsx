@@ -1,35 +1,103 @@
 'use client';
 
 import React from 'react';
-import { useRouter } from 'next/navigation';
-import { Sparkles, RotateCcw, Plus, Check } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { 
+  Sparkles, 
+  RotateCcw, 
+  Plus, 
+  Instagram,
+  Facebook,
+  Youtube
+} from 'lucide-react';
 import { Button } from './ui/Button';
+import { Badge } from './ui/Badge';
 import { useERPStore } from '../lib/store';
 
 export function Header() {
   const router = useRouter();
-  const { resetToDefaults } = useERPStore();
+  const pathname = usePathname();
+  const { brand, resetToDefaults } = useERPStore();
+
+  const getPageTitle = () => {
+    switch (pathname) {
+      case '/': return { title: 'Executive Operations & Usage', subtitle: 'Command center for clinical patient acquisition, content flow, and credit usage' };
+      case '/brand-intake': return { title: 'Client & Brand Intake', subtitle: 'Configure practice persona, patient profiles (ICP with age, pain points, objections, motivations), and offers' };
+      case '/calendar': return { title: 'Content Calendar Planner', subtitle: 'Interactive full month & weekly schedule across Instagram, Facebook, and YouTube' };
+      case '/copywriter': return { title: 'AI Copywriter Studio', subtitle: 'Generate high-converting dental hooks, captions, carousels, and video reel scripts' };
+      case '/creative': return { title: 'Creative Studio (Reels, Story, Wallpaper & Flyers)', subtitle: 'Controlled templates, video overlays (static vs captions), and Drive / AI video generation' };
+      case '/approvals': return { title: 'Quality Check & Approvals Queue', subtitle: 'Automated compliance rule validation and clinical doctor sign-off' };
+      case '/delivery': return { title: 'Delivery & Multi-Channel Publish', subtitle: 'Scheduled queue, instant asset downloads, Meta (FB & IG) and YouTube publishing' };
+      case '/analytics': return { title: 'Analytics & Growth (Organic Only)', subtitle: 'Platform-specific organic insights for Instagram, Facebook, and YouTube' };
+      case '/integrations': return { title: 'Automations & Roadmap (Paused)', subtitle: 'Automations and roadmap modules are temporarily disabled as requested' };
+      default: return { title: 'DentiSync Operations', subtitle: 'Social Media & Creative Operations Automation' };
+    }
+  };
+
+  const { title, subtitle } = getPageTitle();
 
   return (
-    <header className="bg-white/95 backdrop-blur border-b border-[#e8eeeb] sticky top-0 z-30 px-4 sm:px-7 py-3 flex flex-wrap items-center justify-between gap-3">
-      <div className="flex items-center gap-2.5 text-xs font-medium text-[#61776d]">
-        <span className="w-8 h-8 rounded-xl bg-[#eaf5ef] text-[#287a61] flex items-center justify-center"><Check className="w-4 h-4" /></span>
-        <span>Practice workspace</span>
-        <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-[#e5eee8] bg-[#f8fbf9] px-2.5 py-1 text-[10px] text-[#55806b]"><span className="w-1.5 h-1.5 rounded-full bg-[#54a77b]" />Channels ready</span>
+    <header className="bg-white border-b border-slate-200 sticky top-0 z-30 px-8 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <div className="flex items-center gap-2.5">
+          <h1 className="text-xl font-bold text-[#333333] tracking-tight">{title}</h1>
+          <Badge variant="primary" size="sm" className="hidden sm:inline-flex">
+            DentiSync ERP
+          </Badge>
+        </div>
+        <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>
       </div>
 
-      <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
-        <Button size="sm" variant="primary" onClick={() => router.push('/copywriter')} className="shadow-sm shadow-emerald-900/10">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">AI Generator</span><span className="sm:hidden">Create</span>
+      <div className="flex items-center gap-3 shrink-0">
+        {/* Connected Channels indicator (including YouTube per client request) */}
+        <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-600">
+          <span className="flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <Instagram className="w-3.5 h-3.5 text-pink-600" />
+            <Facebook className="w-3.5 h-3.5 text-blue-600" />
+            <span className="font-semibold text-[#333333]">Meta</span>
+          </span>
+          <span className="text-slate-300">|</span>
+          <span className="flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <Youtube className="w-3.5 h-3.5 text-red-600" />
+            <span className="font-semibold text-[#333333]">YouTube</span>
+          </span>
+        </div>
+
+        {/* Quick Highlight CTA Button (#e97538) */}
+        <Button
+          size="sm"
+          variant="cta"
+          onClick={() => router.push('/copywriter')}
+          className="shadow-sm"
+        >
+          <Sparkles className="w-3.5 h-3.5 mr-1" />
+          AI Studio
         </Button>
-        <Button size="sm" variant="outline" onClick={() => router.push('/creative?tab=flyers')}>
-          <Plus className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">New Flyer</span>
+
+        {/* Quick Flyer Button */}
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => router.push('/creative?tab=flyers')}
+        >
+          <Plus className="w-3.5 h-3.5 mr-1 text-slate-500" />
+          New Flyer
         </Button>
-        <Button size="sm" variant="ghost" onClick={() => {
-          if (confirm('Reset all data to default dental clinic showcase state?')) resetToDefaults();
-        }} title="Reset to default demo data" aria-label="Reset demo data" className="text-slate-400 hover:text-slate-700 px-2.5">
+
+        {/* Reset Demo State Button */}
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={() => {
+            if (confirm("Reset all data to default dental clinic showcase state?")) {
+              resetToDefaults();
+            }
+          }}
+          title="Reset to default demo data"
+          className="text-slate-400 hover:text-slate-700"
+        >
           <RotateCcw className="w-3.5 h-3.5" />
         </Button>
       </div>

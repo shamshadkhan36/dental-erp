@@ -3,7 +3,7 @@ import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'success';
+  variant?: 'primary' | 'secondary' | 'cta' | 'outline' | 'ghost' | 'danger' | 'success';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
 }
@@ -18,25 +18,27 @@ export function Button({
   ...props
 }: ButtonProps) {
   const variantStyles = {
-    primary: 'bg-[#137c70] hover:bg-[#0c665d] text-white shadow-sm focus-visible:ring-emerald-600',
-    secondary: 'bg-[#18312f] hover:bg-[#244641] text-white shadow-sm focus-visible:ring-slate-700',
-    outline: 'border border-[#d5e2dd] hover:bg-[#f3f8f6] text-[#34514c] focus-visible:ring-emerald-500',
-    ghost: 'hover:bg-[#eef5f2] text-[#34514c] focus-visible:ring-emerald-500',
-    danger: 'bg-rose-600 hover:bg-rose-700 text-white shadow-sm focus-visible:ring-rose-500',
-    success: 'bg-[#218768] hover:bg-[#176e53] text-white shadow-sm focus-visible:ring-emerald-500',
+    // Client Brand Colors: Primary #4f98db, Secondary #333333, CTA Highlight #e97538
+    primary: 'bg-[#4f98db] hover:bg-[#3b84c7] text-white shadow-xs focus-visible:ring-[#4f98db]',
+    secondary: 'bg-[#333333] hover:bg-[#222222] text-white shadow-xs focus-visible:ring-[#333333]',
+    cta: 'bg-[#e97538] hover:bg-[#d6652a] text-white shadow-sm font-bold focus-visible:ring-[#e97538]', // High-priority highlight action
+    outline: 'border border-slate-300 hover:bg-slate-50 text-slate-700 focus-visible:ring-slate-400',
+    ghost: 'hover:bg-slate-100 text-slate-700 focus-visible:ring-slate-400',
+    danger: 'bg-rose-600 hover:bg-rose-700 text-white shadow-xs focus-visible:ring-rose-500',
+    success: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs focus-visible:ring-emerald-500',
   };
 
   const sizeStyles = {
-    sm: 'text-xs px-3 py-1.5 rounded-lg gap-1.5 font-medium',
-    md: 'text-sm px-4 py-2.5 rounded-xl gap-2 font-medium',
-    lg: 'text-base px-5 py-3 rounded-xl gap-2.5 font-semibold',
+    sm: 'text-xs px-2.5 py-1.5 rounded-md gap-1.5 font-medium',
+    md: 'text-sm px-4 py-2 rounded-lg gap-2 font-medium',
+    lg: 'text-base px-5 py-2.5 rounded-lg gap-2.5 font-semibold',
   };
 
   return (
     <button
       className={twMerge(
         clsx(
-      'inline-flex items-center justify-center transition-all duration-200 hover:-translate-y-px active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+          'inline-flex items-center justify-center transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
           variantStyles[variant],
           sizeStyles[size],
           className

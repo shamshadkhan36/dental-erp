@@ -18,7 +18,6 @@ import {
 } from 'lucide-react';
 import { useERPStore } from '../../lib/store';
 import { Card, CardHeader, CardTitle } from '../../components/ui/Card';
-import { PageBanner } from '../../components/ui/PageBanner';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 
@@ -42,21 +41,38 @@ export default function IntegrationsPage() {
 
   return (
     <div className="space-y-6">
-      <PageBanner eyebrow="Connected tools" title="Integrations & Automations" description="Manage publishing channels, asset storage, and patient message workflows." icon={Bot} action={
-        <>
-          <Badge variant="primary">Module roadmap</Badge>
-          <Button size="md" variant="primary" onClick={handleSave}>
-          {savedNote ? (
-            <>
-              <Check className="w-4 h-4 mr-1 text-emerald-300" />
-              Settings Saved!
-            </>
-          ) : (
-            'Save Configuration'
-          )}
-          </Button>
-        </>
-      } />
+      {/* Paused Notice Banner */}
+      <div className="bg-amber-50 border border-amber-200/80 p-4 rounded-2xl flex items-center gap-3 text-amber-900 shadow-xs">
+        <div className="w-9 h-9 rounded-xl bg-amber-200/80 flex items-center justify-center shrink-0 text-amber-800 font-bold">
+          <Bot className="w-5 h-5" />
+        </div>
+        <div className="flex-1">
+          <div className="flex items-center gap-2">
+            <h3 className="font-bold text-sm">Automations & Roadmap (Disabled for now)</h3>
+            <Badge variant="warning">Module Paused</Badge>
+          </div>
+          <p className="text-xs text-amber-800/90 mt-0.5">
+            This module is temporarily paused while core production workflows (Creative Studio, Content Calendar, and Organic Analytics) are finalized. Interactive automations are in read-only preview mode.
+          </p>
+        </div>
+      </div>
+
+      {/* Top Banner */}
+      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 opacity-75">
+        <div>
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg font-bold text-slate-900">Integrations, DM Automations & Roadmap</h2>
+            <Badge variant="outline">Read-Only Preview</Badge>
+          </div>
+          <p className="text-xs text-slate-500">
+            External channel webhooks, Google Drive asset sync, WhatsApp routing, and DM bots configuration.
+          </p>
+        </div>
+
+        <Button size="md" variant="secondary" disabled className="cursor-not-allowed opacity-60">
+          Module Paused
+        </Button>
+      </div>
 
       {/* Connected Channel Integrations Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

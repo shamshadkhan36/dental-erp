@@ -7,6 +7,8 @@ import {
   ContentRecord,
   FlyerRecord,
   AnalyticsSummary,
+  CreditUsage,
+  DentalOffer,
   PostStatus
 } from '../types';
 import {
@@ -14,7 +16,8 @@ import {
   defaultCalendarItems,
   defaultContentRecords,
   defaultFlyers,
-  defaultAnalytics
+  defaultAnalytics,
+  defaultCreditUsage
 } from './default-data';
 import { runQualityCheck } from './qc-engine';
 
@@ -23,7 +26,8 @@ const STORAGE_KEYS = {
   CALENDAR: 'dental_erp_calendar',
   CONTENT: 'dental_erp_content',
   FLYERS: 'dental_erp_flyers',
-  ANALYTICS: 'dental_erp_analytics'
+  ANALYTICS: 'dental_erp_analytics',
+  CREDITS: 'dental_erp_credits'
 };
 
 export function useERPStore() {
@@ -32,6 +36,7 @@ export function useERPStore() {
   const [contentRecords, setContentRecordsState] = useState<ContentRecord[]>(defaultContentRecords);
   const [flyers, setFlyersState] = useState<FlyerRecord[]>(defaultFlyers);
   const [analytics, setAnalyticsState] = useState<AnalyticsSummary>(defaultAnalytics);
+  const [creditUsage, setCreditUsageState] = useState<CreditUsage>(defaultCreditUsage);
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Load from localStorage on mount
@@ -51,6 +56,9 @@ export function useERPStore() {
 
       const storedAnalytics = localStorage.getItem(STORAGE_KEYS.ANALYTICS);
       if (storedAnalytics) setAnalyticsState(JSON.parse(storedAnalytics));
+
+      const storedCredits = localStorage.getItem(STORAGE_KEYS.CREDITS);
+      if (storedCredits) setCreditUsageState(JSON.parse(storedCredits));
     } catch (e) {
       console.warn("Could not load from localStorage, using defaults", e);
     }
@@ -67,9 +75,37 @@ export function useERPStore() {
     }
   };
 
+  // Add / Update Offer
+  const saveOffer = (offer: DentalOffer) => {
+    setBrandState(prev => {
+      const exists = prev.offers.some(o => o.id === offer.id);
+      const updatedOffers = exists
+        ? prev.offers.map(o => (o.id === offer.id ? offer : o))
+        : [...prev.offers, offer];
+      const nextBrand = { ...prev, offers: updatedOffers };
+      try {
+        localStorage.setItem(STORAGE_KEYS.BRAND, JSON.stringify(nextBrand));
+      } catch (e) {
+        console.error(e);
+      }
+      return nextBrand;
+    });
+  };
+
+  const deleteOffer = (offerId: string) => {
+    setBrandState(prev => {
+      const nextBrand = { ...prev, offers: prev.offers.filter(o => o.id !== offerId) };
+      try {
+        localStorage.setItem(STORAGE_KEYS.BRAND, JSON.stringify(nextBrand));
+      } catch (e) {
+        console.error(e);
+      }
+      return nextBrand;
+    });
+  };
+
   // Add / Update Content Record
   const saveContentRecord = (record: ContentRecord) => {
-    // Run QC check before saving
     const qc = runQualityCheck(record, brand);
     const checkedRecord = { ...record, qcResults: qc };
 
@@ -86,7 +122,6 @@ export function useERPStore() {
       return next;
     });
 
-    // If attached to calendar item, update its status
     if (checkedRecord.calendarItemId) {
       updateCalendarItemStatus(checkedRecord.calendarItemId, checkedRecord.status, checkedRecord.id);
     }
@@ -180,6 +215,7 @@ export function useERPStore() {
     setContentRecordsState(defaultContentRecords);
     setFlyersState(defaultFlyers);
     setAnalyticsState(defaultAnalytics);
+    setCreditUsageState(defaultCreditUsage);
   };
 
   return {
@@ -189,7 +225,10 @@ export function useERPStore() {
     contentRecords,
     flyers,
     analytics,
+    creditUsage,
     updateBrand,
+    saveOffer,
+    deleteOffer,
     saveContentRecord,
     updateContentStatus,
     addCalendarItem,

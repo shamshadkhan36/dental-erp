@@ -10,16 +10,14 @@ import {
   Trash2, 
   Instagram, 
   Facebook, 
+  Youtube,
   ShieldCheck, 
-  Sliders, 
   Layers, 
   Video, 
-  FileText,
-  AlertCircle
+  FileText
 } from 'lucide-react';
 import { useERPStore } from '../../lib/store';
 import { Card, CardHeader, CardTitle } from '../../components/ui/Card';
-import { PageBanner } from '../../components/ui/PageBanner';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { MockPostPreview } from '../../components/MockPostPreview';
@@ -39,24 +37,22 @@ function CopywriterContent() {
   const initialTreatment = searchParams.get('treatment') || brand.treatments[0]?.id;
   const initialIcp = searchParams.get('icp') || brand.icpProfiles[0]?.id;
 
-  // Frequency selector: Monthly | Weekly | On Request
   const [frequencyMode, setFrequencyMode] = useState<ProductionFrequency>('weekly');
 
   // Generation Form State
   const [selectedTopic, setSelectedTopic] = useState(initialTopic);
   const [selectedCalendarId, setSelectedCalendarId] = useState(calId || '');
   const [format, setFormat] = useState<ContentFormat>(initialFormat);
-  const [platforms, setPlatforms] = useState<PlatformType[]>(['instagram', 'facebook']);
+  const [platforms, setPlatforms] = useState<PlatformType[]>(['instagram', 'facebook', 'youtube']);
   const [treatmentId, setTreatmentId] = useState(initialTreatment);
   const [icpId, setIcpId] = useState(initialIcp);
   const [customInstructions, setCustomInstructions] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
 
-  // Active Content Record being edited or generated
+  // Active Content Record
   const [currentRecord, setCurrentRecord] = useState<ContentRecord | null>(null);
   const [submittedToApprovals, setSubmittedToApprovals] = useState(false);
 
-  // Load existing record if editing
   useEffect(() => {
     if (editId) {
       const existing = contentRecords.find(r => r.id === editId);
@@ -71,7 +67,6 @@ function CopywriterContent() {
     }
   }, [editId, contentRecords]);
 
-  // When calendar item selected, prefill topic and treatment
   const handleCalendarSelect = (cId: string) => {
     setSelectedCalendarId(cId);
     const item = calendar.find(c => c.id === cId);
@@ -98,6 +93,8 @@ function CopywriterContent() {
         brand,
         customInstructions
       });
+
+      generated.platforms = platforms;
 
       if (selectedCalendarId) {
         generated.calendarItemId = selectedCalendarId;
@@ -135,8 +132,16 @@ function CopywriterContent() {
 
   return (
     <div className="space-y-6">
-      <PageBanner eyebrow="AI content studio" title="AI Copywriter & Creative Studio" description="Create on-brand dental posts, educational captions, carousels, and short-form video scripts." icon={Sparkles} action={
-        <div className="flex items-center gap-1.5 p-1 bg-white/80 border border-slate-200 rounded-xl">
+      {/* Top Banner */}
+      <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 className="text-lg font-bold text-[#333333]">AI Copywriter & Creative Studio</h2>
+          <p className="text-xs text-slate-500">
+            Generate high-converting dental hooks, captions, carousels, and video reel scripts for IG, FB & YouTube.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl">
           <span className="text-[10px] font-bold uppercase text-slate-400 px-2">Frequency:</span>
           {(['weekly', 'monthly', 'on_request'] as ProductionFrequency[]).map((mode) => (
             <button
@@ -144,7 +149,7 @@ function CopywriterContent() {
               onClick={() => setFrequencyMode(mode)}
               className={`px-3 py-1.5 text-xs font-semibold rounded-lg capitalize transition-all ${
                 frequencyMode === mode
-                  ? 'bg-sky-600 text-white shadow-xs'
+                  ? 'bg-[#4f98db] text-white shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -152,25 +157,22 @@ function CopywriterContent() {
             </button>
           ))}
         </div>
-      } />
+      </div>
 
       {/* Main 2-Column Studio */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Left Column: Generation Controls & Live Editor */}
         <div className="lg:col-span-7 space-y-6">
-          {/* Generation Configuration Card */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-sm font-bold uppercase tracking-wider text-slate-800">
+              <CardTitle className="text-sm font-bold uppercase tracking-wider text-[#333333]">
                 1. Post Parameters & AI Prompts
               </CardTitle>
               <Badge variant="primary" size="sm">
-                Voice: {brand.brandVoice.split(',')[0]}
+                Persona: {brand.brandPersona.archetype}
               </Badge>
             </CardHeader>
 
             <div className="space-y-4 text-xs">
-              {/* Select from Calendar option */}
               <div>
                 <label className="font-semibold text-slate-700 block mb-1">
                   Select Planned Topic from Content Calendar (Optional)
@@ -189,7 +191,6 @@ function CopywriterContent() {
                 </select>
               </div>
 
-              {/* Topic Input */}
               <div>
                 <label className="font-semibold text-slate-700 block mb-1">
                   Post Topic / Hook Theme
@@ -203,7 +204,7 @@ function CopywriterContent() {
                 />
               </div>
 
-              {/* Format & Platforms Row */}
+              {/* Format & Platforms Row (with YouTube) */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="font-semibold text-slate-700 block mb-1">Content Format</label>
@@ -211,7 +212,7 @@ function CopywriterContent() {
                     {[
                       { id: 'single', label: 'Single Post', icon: FileText },
                       { id: 'carousel', label: 'Carousel', icon: Layers },
-                      { id: 'reel', label: 'Reel Script', icon: Video },
+                      { id: 'reel', label: 'Reel / Shorts', icon: Video },
                     ].map(f => (
                       <button
                         key={f.id}
@@ -219,7 +220,7 @@ function CopywriterContent() {
                         onClick={() => setFormat(f.id as any)}
                         className={`p-2 rounded-lg border text-center font-medium transition-all ${
                           format === f.id
-                            ? 'bg-sky-50 border-sky-500 text-sky-700 font-bold'
+                            ? 'bg-[#f0f7fd] border-[#4f98db] text-[#1d528c] font-bold'
                             : 'border-slate-200 text-slate-600 hover:bg-slate-50'
                         }`}
                       >
@@ -232,28 +233,39 @@ function CopywriterContent() {
 
                 <div>
                   <label className="font-semibold text-slate-700 block mb-1">Target Platforms</label>
-                  <div className="flex gap-2 pt-1">
+                  <div className="grid grid-cols-3 gap-1.5 pt-1">
                     <button
                       type="button"
                       onClick={() => togglePlatform('instagram')}
-                      className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg border text-xs font-semibold transition-all ${
+                      className={`flex items-center justify-center gap-1 py-2 px-2 rounded-lg border text-xs font-semibold transition-all ${
                         platforms.includes('instagram')
                           ? 'bg-pink-50 border-pink-400 text-pink-700'
                           : 'border-slate-200 text-slate-400'
                       }`}
                     >
-                      <Instagram className="w-4 h-4" /> Instagram
+                      <Instagram className="w-3.5 h-3.5" /> IG
                     </button>
                     <button
                       type="button"
                       onClick={() => togglePlatform('facebook')}
-                      className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg border text-xs font-semibold transition-all ${
+                      className={`flex items-center justify-center gap-1 py-2 px-2 rounded-lg border text-xs font-semibold transition-all ${
                         platforms.includes('facebook')
                           ? 'bg-blue-50 border-blue-400 text-blue-700'
                           : 'border-slate-200 text-slate-400'
                       }`}
                     >
-                      <Facebook className="w-4 h-4" /> Facebook
+                      <Facebook className="w-3.5 h-3.5" /> FB
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => togglePlatform('youtube')}
+                      className={`flex items-center justify-center gap-1 py-2 px-2 rounded-lg border text-xs font-semibold transition-all ${
+                        platforms.includes('youtube')
+                          ? 'bg-red-50 border-red-400 text-red-700'
+                          : 'border-slate-200 text-slate-400'
+                      }`}
+                    >
+                      <Youtube className="w-3.5 h-3.5" /> YT
                     </button>
                   </div>
                 </div>
@@ -282,7 +294,7 @@ function CopywriterContent() {
                     className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs bg-white"
                   >
                     {brand.icpProfiles.map(i => (
-                      <option key={i.id} value={i.id}>{i.name}</option>
+                      <option key={i.id} value={i.id}>{i.name} ({i.age})</option>
                     ))}
                   </select>
                 </div>
@@ -291,26 +303,26 @@ function CopywriterContent() {
               {/* Custom Instructions */}
               <div>
                 <label className="font-semibold text-slate-700 block mb-1">
-                  Custom Doctor Instructions / Seasonal Angles
+                  Custom Doctor Instructions / Promotional Angle
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. Emphasize zero-percent financing and evening slots for busy executives"
+                  placeholder="e.g. Highlight our $500 Invisalign voucher and free 3D digital smile scan"
                   value={customInstructions}
                   onChange={(e) => setCustomInstructions(e.target.value)}
                   className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs"
                 />
               </div>
 
-              {/* Generate Trigger */}
+              {/* Generate Trigger Button #e97538 */}
               <Button
-                variant="primary"
+                variant="cta"
                 size="md"
                 className="w-full shadow-md"
                 onClick={handleGenerate}
                 loading={isGenerating}
               >
-                <Sparkles className="w-4 h-4 mr-2 text-sky-200" />
+                <Sparkles className="w-4 h-4 mr-2" />
                 Generate Dental Copy & Visual Plan
               </Button>
             </div>
@@ -321,7 +333,7 @@ function CopywriterContent() {
             <Card className="space-y-4">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <CardTitle className="text-sm font-bold uppercase tracking-wider text-slate-800">
+                  <CardTitle className="text-sm font-bold uppercase tracking-wider text-[#333333]">
                     2. Generated Clinical Copy
                   </CardTitle>
                   <Badge variant="purple" size="sm">{currentRecord.frequencyMode} batch</Badge>
@@ -334,7 +346,6 @@ function CopywriterContent() {
               </CardHeader>
 
               <div className="space-y-4 text-xs">
-                {/* Hook Editor */}
                 <div>
                   <label className="font-bold text-slate-700 block mb-1">
                     First Line Hook (Thumb-Stop)
@@ -347,7 +358,6 @@ function CopywriterContent() {
                   />
                 </div>
 
-                {/* Caption Editor */}
                 <div>
                   <label className="font-bold text-slate-700 block mb-1">
                     Clinical Educational Caption
@@ -360,7 +370,6 @@ function CopywriterContent() {
                   />
                 </div>
 
-                {/* CTA Editor */}
                 <div>
                   <label className="font-bold text-slate-700 block mb-1">
                     Call To Action (CTA)
@@ -369,100 +378,9 @@ function CopywriterContent() {
                     type="text"
                     value={currentRecord.cta}
                     onChange={(e) => setCurrentRecord({ ...currentRecord, cta: e.target.value })}
-                    className="w-full px-3 py-2 border border-sky-200 bg-sky-50/50 rounded-lg text-xs text-sky-900 font-medium"
+                    className="w-full px-3 py-2 border border-[#fbd3be] bg-[#fdf2ec] rounded-lg text-xs text-[#d6652a] font-medium"
                   />
                 </div>
-
-                {/* Carousel Slides Breakdown if Carousel */}
-                {currentRecord.format === 'carousel' && currentRecord.carouselSlides && (
-                  <div className="pt-2 border-t border-slate-100 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-slate-800">Carousel Slide Breakdown ({currentRecord.carouselSlides.length} Slides)</span>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => {
-                          const newSlide = {
-                            slideNumber: (currentRecord.carouselSlides?.length || 0) + 1,
-                            badge: "Bonus Tip",
-                            title: "Next Step to Perfection",
-                            bodyText: "Book your examination today.",
-                            visualCue: "Clinic staff smiling at reception"
-                          };
-                          setCurrentRecord({
-                            ...currentRecord,
-                            carouselSlides: [...(currentRecord.carouselSlides || []), newSlide]
-                          });
-                        }}
-                      >
-                        <Plus className="w-3.5 h-3.5 mr-1" /> Add Slide
-                      </Button>
-                    </div>
-
-                    <div className="space-y-3">
-                      {currentRecord.carouselSlides.map((slide, idx) => (
-                        <div key={idx} className="p-3 bg-slate-50 border border-slate-200/80 rounded-xl space-y-2">
-                          <div className="flex items-center justify-between">
-                            <span className="font-bold text-slate-700 text-[11px]">
-                              Slide {slide.slideNumber}: {slide.badge}
-                            </span>
-                            <button
-                              onClick={() => {
-                                const updated = currentRecord.carouselSlides?.filter((_, i) => i !== idx);
-                                setCurrentRecord({ ...currentRecord, carouselSlides: updated });
-                              }}
-                              className="text-slate-400 hover:text-rose-500"
-                            >
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                          <input
-                            type="text"
-                            value={slide.title}
-                            onChange={(e) => {
-                              const updated = [...(currentRecord.carouselSlides || [])];
-                              updated[idx].title = e.target.value;
-                              setCurrentRecord({ ...currentRecord, carouselSlides: updated });
-                            }}
-                            className="w-full px-2.5 py-1 border border-slate-200 rounded font-semibold text-xs"
-                          />
-                          <textarea
-                            rows={2}
-                            value={slide.bodyText}
-                            onChange={(e) => {
-                              const updated = [...(currentRecord.carouselSlides || [])];
-                              updated[idx].bodyText = e.target.value;
-                              setCurrentRecord({ ...currentRecord, carouselSlides: updated });
-                            }}
-                            className="w-full px-2.5 py-1 border border-slate-200 rounded text-xs"
-                          />
-                          <div className="text-[10px] text-slate-500 italic">
-                            Visual Cue: {slide.visualCue}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Reel Script Breakdown if Reel */}
-                {currentRecord.format === 'reel' && currentRecord.reelScript && (
-                  <div className="pt-2 border-t border-slate-100 space-y-3">
-                    <span className="font-bold text-slate-800">Doctor Reel Script (30-Sec Pacing)</span>
-                    <div className="space-y-2.5">
-                      {currentRecord.reelScript.scenes.map((scene, i) => (
-                        <div key={i} className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1.5">
-                          <div className="flex items-center justify-between text-[11px] font-bold text-rose-600">
-                            <span>Scene {i + 1} ({scene.second})</span>
-                            <span className="text-slate-500 font-normal">Text: {scene.onScreenText}</span>
-                          </div>
-                          <p className="text-slate-700 italic">Voiceover: &quot;{scene.voiceover}&quot;</p>
-                          <p className="text-[10px] text-slate-400">Action: {scene.action}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
 
                 {/* Submission Action */}
                 <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
@@ -471,14 +389,14 @@ function CopywriterContent() {
                   </div>
 
                   <Button
-                    variant="success"
+                    variant="cta"
                     size="md"
                     onClick={handleSaveAndSubmit}
                     disabled={submittedToApprovals}
                   >
                     {submittedToApprovals ? (
                       <>
-                        <Check className="w-4 h-4 mr-1 text-emerald-200" />
+                        <Check className="w-4 h-4 mr-1 text-white" />
                         Routed to Approvals!
                       </>
                     ) : (
@@ -497,10 +415,10 @@ function CopywriterContent() {
         {/* Right Column: Live Feed Simulation */}
         <div className="lg:col-span-5 space-y-5">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">
+            <h3 className="text-sm font-bold text-[#333333] uppercase tracking-wider">
               Social Media Preview
             </h3>
-            <span className="text-xs text-slate-400">Real-Time Mockup</span>
+            <span className="text-xs text-slate-400">Live Mockup</span>
           </div>
 
           {currentRecord ? (
@@ -511,7 +429,6 @@ function CopywriterContent() {
             </Card>
           )}
 
-          {/* Quality Check breakdown widget */}
           {currentRecord?.qcResults && (
             <Card>
               <CardHeader className="pb-2">
@@ -525,15 +442,15 @@ function CopywriterContent() {
               </CardHeader>
               <div className="space-y-2 text-xs">
                 {currentRecord.qcResults.checks.map((c, i) => (
-                  <div key={i} className="flex items-start gap-2">
-                    <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] text-white shrink-0 mt-0.5 ${
+                  <div key={i} className="flex items-start gap-2 text-[11px]">
+                    <span className={`w-3.5 h-3.5 rounded-full flex items-center justify-center text-[9px] text-white shrink-0 mt-0.5 ${
                       c.passed ? 'bg-emerald-500' : 'bg-amber-500'
                     }`}>
                       {c.passed ? '✓' : '!'}
                     </span>
                     <div>
                       <div className="font-semibold text-slate-800 leading-tight">{c.rule}</div>
-                      <div className="text-[11px] text-slate-500">{c.message}</div>
+                      <div className="text-[10px] text-slate-500">{c.message}</div>
                     </div>
                   </div>
                 ))}

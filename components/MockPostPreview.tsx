@@ -11,17 +11,19 @@ import {
   ChevronRight, 
   Instagram, 
   Facebook, 
-  Sparkles,
+  Youtube,
   CheckCircle2,
-  AlertTriangle
+  AlertTriangle,
+  ThumbsUp,
+  Share2
 } from 'lucide-react';
-import { ContentRecord, BrandProfile } from '../types';
+import { ContentRecord, BrandProfile, PlatformType } from '../types';
 import { Badge } from './ui/Badge';
 
 interface MockPostPreviewProps {
   record: ContentRecord;
   brand: BrandProfile;
-  initialPlatform?: 'instagram' | 'facebook';
+  initialPlatform?: PlatformType;
 }
 
 export function MockPostPreview({
@@ -29,7 +31,7 @@ export function MockPostPreview({
   brand,
   initialPlatform = 'instagram'
 }: MockPostPreviewProps) {
-  const [activePlatform, setActivePlatform] = useState<'instagram' | 'facebook'>(initialPlatform);
+  const [activePlatform, setActivePlatform] = useState<PlatformType>(initialPlatform);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showFullCaption, setShowFullCaption] = useState(false);
 
@@ -38,8 +40,8 @@ export function MockPostPreview({
 
   return (
     <div className="bg-slate-50 border border-slate-200/90 rounded-2xl overflow-hidden shadow-sm flex flex-col">
-      {/* Platform Switcher & Format Header */}
-      <div className="px-4 py-2.5 bg-white border-b border-slate-200 flex items-center justify-between">
+      {/* Platform Switcher & Format Header (Instagram, Facebook & YouTube) */}
+      <div className="px-4 py-2.5 bg-white border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-1.5 p-0.5 bg-slate-100 rounded-lg">
           <button
             onClick={() => setActivePlatform('instagram')}
@@ -62,6 +64,17 @@ export function MockPostPreview({
           >
             <Facebook className="w-3.5 h-3.5" />
             Facebook
+          </button>
+          <button
+            onClick={() => setActivePlatform('youtube')}
+            className={`flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-md transition-all ${
+              activePlatform === 'youtube'
+                ? 'bg-white text-red-600 shadow-xs'
+                : 'text-slate-500 hover:text-slate-900'
+            }`}
+          >
+            <Youtube className="w-3.5 h-3.5" />
+            YouTube
           </button>
         </div>
 
@@ -88,7 +101,7 @@ export function MockPostPreview({
           {/* Post Header */}
           <div className="px-3.5 py-3 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-full ring-2 ring-sky-500/30 overflow-hidden bg-slate-100">
+              <div className="w-9 h-9 rounded-full ring-2 ring-[#4f98db]/30 overflow-hidden bg-slate-100">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
                   src={brand.logoUrl} 
@@ -99,9 +112,9 @@ export function MockPostPreview({
               <div>
                 <div className="flex items-center gap-1">
                   <span className="text-xs font-bold text-slate-900 leading-tight">
-                    {activePlatform === 'instagram' ? 'apexsmilestudio' : brand.clinicName}
+                    {activePlatform === 'instagram' ? 'apexsmilestudio' : activePlatform === 'youtube' ? 'Apex Smile Studio NYC • YouTube' : brand.clinicName}
                   </span>
-                  <span className="w-3.5 h-3.5 rounded-full bg-sky-500 text-white flex items-center justify-center text-[9px]">
+                  <span className="w-3.5 h-3.5 rounded-full bg-[#4f98db] text-white flex items-center justify-center text-[9px]">
                     ✓
                   </span>
                 </div>
@@ -134,7 +147,7 @@ export function MockPostPreview({
             {/* Carousel Slide Overlay */}
             {hasCarousel ? (
               <div className="relative z-10 p-5">
-                <div className="inline-block px-2 py-0.5 mb-2 rounded bg-sky-500 text-white text-[10px] font-bold uppercase tracking-wider">
+                <div className="inline-block px-2 py-0.5 mb-2 rounded bg-[#4f98db] text-white text-[10px] font-bold uppercase tracking-wider">
                   {slides[currentSlide]?.badge || `Slide ${currentSlide + 1}/${slides.length}`}
                 </div>
                 <h4 className="text-lg font-bold leading-tight mb-2 text-white drop-shadow-md">
@@ -150,7 +163,7 @@ export function MockPostPreview({
             ) : record.format === 'reel' ? (
               <div className="relative z-10 p-5">
                 <div className="inline-block px-2 py-0.5 mb-2 rounded bg-rose-500 text-white text-[10px] font-bold uppercase tracking-wider">
-                  🎬 Reel Video Hook
+                  {activePlatform === 'youtube' ? 'YouTube Shorts' : 'Reel Video Hook'}
                 </div>
                 <h4 className="text-base font-bold leading-snug text-white mb-2">
                   {record.reelScript?.hookVisual || record.hook}
@@ -161,7 +174,7 @@ export function MockPostPreview({
               </div>
             ) : (
               <div className="relative z-10 p-5">
-                <span className="px-2 py-0.5 bg-sky-600 rounded text-[10px] font-bold tracking-wide uppercase mb-2 inline-block">
+                <span className="px-2 py-0.5 bg-[#4f98db] rounded text-[10px] font-bold tracking-wide uppercase mb-2 inline-block">
                   {record.treatmentName}
                 </span>
                 <h4 className="text-base font-bold text-white drop-shadow leading-snug">
@@ -179,7 +192,7 @@ export function MockPostPreview({
                       key={idx}
                       onClick={() => setCurrentSlide(idx)}
                       className={`h-1.5 rounded-full transition-all ${
-                        currentSlide === idx ? 'w-5 bg-sky-400' : 'w-1.5 bg-white/50'
+                        currentSlide === idx ? 'w-5 bg-[#4f98db]' : 'w-1.5 bg-white/50'
                       }`}
                     />
                   ))}
@@ -208,17 +221,34 @@ export function MockPostPreview({
 
           {/* Social Engagement Bar */}
           <div className="p-3">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-3 text-slate-700">
-                <Heart className="w-5 h-5 hover:text-rose-500 cursor-pointer" />
-                <MessageCircle className="w-5 h-5 hover:text-sky-500 cursor-pointer" />
-                <Send className="w-5 h-5 hover:text-sky-500 cursor-pointer" />
+            {activePlatform === 'youtube' ? (
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-3 text-slate-700 text-xs font-semibold">
+                  <span className="flex items-center gap-1 cursor-pointer hover:text-red-600">
+                    <ThumbsUp className="w-4 h-4" /> 480
+                  </span>
+                  <span className="flex items-center gap-1 cursor-pointer hover:text-slate-900">
+                    <MessageCircle className="w-4 h-4" /> 34
+                  </span>
+                  <span className="flex items-center gap-1 cursor-pointer hover:text-slate-900">
+                    <Share2 className="w-4 h-4" /> Share
+                  </span>
+                </div>
+                <Badge variant="primary" size="sm">Shorts</Badge>
               </div>
-              <Bookmark className="w-5 h-5 text-slate-700 hover:text-slate-900 cursor-pointer" />
-            </div>
+            ) : (
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-3 text-slate-700">
+                  <Heart className="w-5 h-5 hover:text-rose-500 cursor-pointer" />
+                  <MessageCircle className="w-5 h-5 hover:text-[#4f98db] cursor-pointer" />
+                  <Send className="w-5 h-5 hover:text-[#4f98db] cursor-pointer" />
+                </div>
+                <Bookmark className="w-5 h-5 text-slate-700 hover:text-slate-900 cursor-pointer" />
+              </div>
+            )}
 
             <div className="text-xs font-bold text-slate-900 mb-1">
-              {activePlatform === 'instagram' ? '128 likes' : '34 reactions • 8 comments'}
+              {activePlatform === 'instagram' ? '128 likes' : activePlatform === 'youtube' ? '2.8K views • 480 likes' : '34 reactions • 8 comments'}
             </div>
 
             {/* Caption Text */}
@@ -239,14 +269,14 @@ export function MockPostPreview({
               )}
             </div>
 
-            {/* CTA Box */}
-            <div className="mt-2.5 p-2 bg-sky-50 border border-sky-100 rounded-lg text-xs text-sky-900 font-medium flex items-center gap-2">
-              <span className="text-sky-600 font-bold">CTA:</span>
+            {/* CTA Box with #e97538 highlight */}
+            <div className="mt-2.5 p-2 bg-[#fdf2ec] border border-[#fbd3be] rounded-lg text-xs text-[#d6652a] font-medium flex items-center gap-2">
+              <span className="font-bold text-[#e97538]">CTA:</span>
               <span className="text-[11px] leading-tight">{record.cta}</span>
             </div>
 
             {/* Hashtags */}
-            <div className="mt-2 text-[11px] text-sky-600 space-x-1 font-normal line-clamp-2">
+            <div className="mt-2 text-[11px] text-[#4f98db] space-x-1 font-normal line-clamp-2">
               {record.hashtags.map((h, i) => (
                 <span key={i} className="hover:underline cursor-pointer">{h}</span>
               ))}
