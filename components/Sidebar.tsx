@@ -23,7 +23,7 @@ import { useMobileNav } from './MobileNavContext';
 
 export function Sidebar() {
   const pathname = usePathname();
-  const { contentRecords, flyers, creditUsage, brand } = useERPStore();
+  const { contentRecords, flyers } = useERPStore();
   const { isOpen, close } = useMobileNav();
 
   const pendingApprovalsCount = 
@@ -34,45 +34,38 @@ export function Sidebar() {
     {
       name: 'Overview',
       href: '/',
-      icon: LayoutGrid,
-      description: 'Operations overview'
+      icon: LayoutGrid
     },
     {
       name: 'Brand Profile',
       href: '/brand-intake',
-      icon: User,
-      description: 'Voice, Persona, ICP & Offers'
+      icon: User
     },
     {
       name: 'Content calendar',
       href: '/calendar',
-      icon: CalendarIcon,
-      description: 'Full Month & Weekly updates'
+      icon: CalendarIcon
     },
     {
       name: 'AI copywriter',
       href: '/copywriter',
-      icon: Sparkles,
-      description: 'Hooks, captions & reels'
+      icon: Sparkles
     },
     {
       name: 'Creative studio',
       href: '/creative',
-      icon: ImageIcon,
-      description: 'Reels, Story, Wallpaper & Flyers'
+      icon: ImageIcon
     },
     {
       name: 'Approvals',
       href: '/approvals',
       icon: CheckCircle2,
-      badge: pendingApprovalsCount > 0 ? pendingApprovalsCount : 4,
-      description: 'Quality checks & sign-off'
+      badge: pendingApprovalsCount > 0 ? pendingApprovalsCount : 4
     },
     {
       name: 'Analytics',
       href: '/analytics',
-      icon: TrendingUp,
-      description: 'Platform organic insights'
+      icon: TrendingUp
     }
   ];
 
@@ -80,21 +73,18 @@ export function Sidebar() {
     {
       name: 'Paid campaigns',
       href: '/delivery',
-      icon: Megaphone,
-      description: 'Multi-channel publisher'
+      icon: Megaphone
     },
     {
       name: 'Billing & usage',
       href: '/',
-      icon: Zap,
-      description: 'Credit limits & quotas'
+      icon: Zap
     },
     {
       name: 'Automations & Roadmap',
       href: '/integrations',
       icon: Bot,
-      disabled: true,
-      description: 'Paused for now'
+      disabled: true
     }
   ];
 
@@ -103,12 +93,9 @@ export function Sidebar() {
       {/* Brand Header */}
       <div className="p-4 border-b border-slate-100 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          {/* Stylized Yellow/Amber Brand Icon matching the reference UI */}
-          <div className="w-10 h-10 rounded-2xl bg-[#ffcf33] text-slate-950 flex items-center justify-center font-black shadow-xs shrink-0">
-            <svg className="w-6 h-6 text-slate-950" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 2C8 2 6 4.5 6 7.5C6 11 8 13 9 17C9.5 19 10 22 12 22C14 22 14.5 19 15 17C16 13 18 11 18 7.5C18 4.5 16 2 12 2Z"/>
-              <path d="M9 7C9.5 8 10.5 8.5 12 8.5C13.5 8.5 14.5 8 15 7" stroke="#e97538" strokeWidth="2.5"/>
-            </svg>
+          {/* Stylized Yellow Squircle Brand Icon with "ai" glyph from reference screenshot */}
+          <div className="w-10 h-10 rounded-2xl bg-[#facc15] flex items-center justify-center shadow-xs shrink-0 text-slate-950 font-black">
+            <span className="text-xl font-black text-slate-950 tracking-tighter lowercase leading-none select-none">ai</span>
           </div>
           <div>
             <h1 className="font-extrabold text-slate-900 text-[15px] leading-tight tracking-tight">
@@ -129,13 +116,13 @@ export function Sidebar() {
       </div>
 
       {/* Navigation Sections */}
-      <nav className="flex-1 px-3 py-3 space-y-4 overflow-y-auto">
+      <nav className="flex-1 px-3 py-4 space-y-5 overflow-y-auto">
         {/* WORKSPACE SECTION */}
         <div>
-          <div className="px-3 pb-1.5 text-[10px] font-bold tracking-wider uppercase text-slate-400">
+          <div className="px-3 pb-2 text-[10px] font-bold tracking-widest uppercase text-slate-400">
             WORKSPACE
           </div>
-          <div className="space-y-0.5">
+          <div className="space-y-1">
             {workspaceItems.map((item) => {
               const isActive = pathname === item.href;
               const Icon = item.icon;
@@ -145,21 +132,21 @@ export function Sidebar() {
                   key={item.name}
                   href={item.href}
                   onClick={close}
-                  className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all group ${
+                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-medium transition-all group ${
                     isActive
-                      ? 'bg-[#fffbeb] text-amber-950 font-bold border border-[#fde68a] shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                      ? 'border-2 border-[#facc15] bg-[#fefce8] text-slate-900 font-bold shadow-2xs'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border-2 border-transparent'
                   }`}
                 >
                   <div className="flex items-center gap-3 truncate">
                     <Icon className={`w-4 h-4 shrink-0 transition-transform group-hover:scale-105 ${
-                      isActive ? 'text-amber-600' : 'text-slate-400 group-hover:text-slate-600'
+                      isActive ? 'text-slate-900' : 'text-slate-400 group-hover:text-slate-600'
                     }`} />
                     <span className="truncate">{item.name}</span>
                   </div>
 
                   {item.badge !== undefined && (
-                    <span className="w-5 h-5 rounded-full bg-[#f59e0b] text-white font-bold text-[10px] flex items-center justify-center shrink-0 shadow-2xs">
+                    <span className="w-5 h-5 rounded-full bg-[#facc15] text-slate-950 font-black text-[11px] flex items-center justify-center shrink-0 shadow-2xs">
                       {item.badge}
                     </span>
                   )}
@@ -171,10 +158,10 @@ export function Sidebar() {
 
         {/* MANAGE SECTION */}
         <div>
-          <div className="px-3 pb-1.5 text-[10px] font-bold tracking-wider uppercase text-slate-400">
+          <div className="px-3 pb-2 text-[10px] font-bold tracking-widest uppercase text-slate-400">
             MANAGE
           </div>
-          <div className="space-y-0.5">
+          <div className="space-y-1">
             {manageItems.map((item) => {
               const isActive = pathname === item.href;
               const Icon = item.icon;
@@ -183,7 +170,7 @@ export function Sidebar() {
                 return (
                   <div
                     key={item.name}
-                    className="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 opacity-60 cursor-not-allowed"
+                    className="flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-medium text-slate-400 opacity-60 cursor-not-allowed border-2 border-transparent"
                     title="Paused per client instructions"
                   >
                     <div className="flex items-center gap-3 truncate">
@@ -202,15 +189,15 @@ export function Sidebar() {
                   key={item.name}
                   href={item.href}
                   onClick={close}
-                  className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all group ${
+                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-medium transition-all group ${
                     isActive
-                      ? 'bg-[#fffbeb] text-amber-950 font-bold border border-[#fde68a] shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                      ? 'border-2 border-[#facc15] bg-[#fefce8] text-slate-900 font-bold shadow-2xs'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border-2 border-transparent'
                   }`}
                 >
                   <div className="flex items-center gap-3 truncate">
                     <Icon className={`w-4 h-4 shrink-0 transition-transform group-hover:scale-105 ${
-                      isActive ? 'text-amber-600' : 'text-slate-400 group-hover:text-slate-600'
+                      isActive ? 'text-slate-900' : 'text-slate-400 group-hover:text-slate-600'
                     }`} />
                     <span className="truncate">{item.name}</span>
                   </div>
@@ -221,33 +208,33 @@ export function Sidebar() {
         </div>
       </nav>
 
-      {/* Bottom Area: Usage Progress Widget & User Profile (as shown in reference screenshot) */}
-      <div className="p-3 border-t border-slate-100 space-y-3 bg-white">
+      {/* Bottom Area: Usage Progress Widget & User Profile (from reference screenshot) */}
+      <div className="p-3 border-t border-slate-100 space-y-2.5 bg-white">
         {/* Usage Meter Card */}
-        <div className="p-3 bg-amber-50/70 border border-amber-200/70 rounded-xl space-y-2">
+        <div className="p-3.5 bg-[#fefce8]/90 border border-[#fef08a] rounded-2xl space-y-2">
           <div className="flex items-center justify-between text-xs font-semibold">
-            <span className="text-[11px] text-slate-700">June usage</span>
-            <span className="text-[11px] font-bold text-amber-900">68%</span>
+            <span className="text-[12px] text-slate-700 font-medium">June usage</span>
+            <span className="text-[12px] font-bold text-slate-900">68%</span>
           </div>
-          <div className="h-1.5 w-full bg-slate-200/80 rounded-full overflow-hidden">
+          <div className="h-1.5 w-full bg-slate-200/90 rounded-full overflow-hidden">
             <div 
-              className="h-full bg-amber-400 rounded-full transition-all duration-500" 
+              className="h-full bg-[#facc15] rounded-full transition-all duration-500" 
               style={{ width: '68%' }}
             />
           </div>
         </div>
 
         {/* Doctor / User Profile Row */}
-        <div className="pt-1 flex items-center justify-between px-1 hover:bg-slate-50 p-2 rounded-xl cursor-pointer transition-colors">
+        <div className="flex items-center justify-between px-2 hover:bg-slate-50 p-2 rounded-2xl cursor-pointer transition-colors">
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center font-bold text-xs text-slate-700 shrink-0">
+            <div className="w-9 h-9 rounded-full bg-[#f1f5f9] border border-slate-200 flex items-center justify-center font-bold text-xs text-slate-700 shrink-0">
               JD
             </div>
             <div className="min-w-0">
               <div className="text-xs font-bold text-slate-900 truncate">
                 Dr. Priya Sharma
               </div>
-              <div className="text-[10px] text-slate-400 truncate">
+              <div className="text-[11px] text-slate-400 truncate">
                 Clinic owner
               </div>
             </div>

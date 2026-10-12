@@ -64,12 +64,16 @@ function CopywriterContent() {
       const existing = contentRecords.find(r => r.id === editId);
       if (existing) {
         setCurrentRecord(existing);
-        setFormat(existing.format);
-        setPlatforms(existing.platforms);
-        setTreatmentId(existing.treatmentId);
+        setFormat(existing.format || 'single');
+        setPlatforms(existing.platforms || ['instagram', 'facebook', 'youtube']);
+        setTreatmentId(existing.treatmentId || safeTreatments[0]?.id || '');
       }
     } else if (!currentRecord && contentRecords.length > 0) {
-      setCurrentRecord(contentRecords[0]);
+      const first = contentRecords[0];
+      setCurrentRecord(first);
+      if (first.platforms) setPlatforms(first.platforms);
+      if (first.treatmentId) setTreatmentId(first.treatmentId);
+      if (first.format) setFormat(first.format);
     }
   }, [editId, contentRecords]);
 
@@ -80,7 +84,7 @@ function CopywriterContent() {
       setSelectedTopic(item.topic);
       setFormat(item.format);
       setTreatmentId(item.targetTreatmentId);
-      setPlatforms(item.platforms);
+      setPlatforms(item.platforms || ['instagram', 'facebook', 'youtube']);
     }
   };
 
@@ -129,10 +133,11 @@ function CopywriterContent() {
   };
 
   const togglePlatform = (p: PlatformType) => {
-    if (platforms.includes(p)) {
-      if (platforms.length > 1) setPlatforms(platforms.filter(x => x !== p));
+    const list: PlatformType[] = Array.isArray(platforms) ? platforms : ['instagram', 'facebook', 'youtube'];
+    if (list.includes(p)) {
+      if (list.length > 1) setPlatforms(list.filter(x => x !== p));
     } else {
-      setPlatforms([...platforms, p]);
+      setPlatforms([...list, p]);
     }
   };
 
@@ -244,7 +249,7 @@ function CopywriterContent() {
                       type="button"
                       onClick={() => togglePlatform('instagram')}
                       className={`flex items-center justify-center gap-1 py-2 px-2 rounded-lg border text-xs font-semibold transition-all ${
-                        platforms.includes('instagram')
+                        (platforms || []).includes('instagram')
                           ? 'bg-pink-50 border-pink-400 text-pink-700'
                           : 'border-slate-200 text-slate-400'
                       }`}
@@ -255,7 +260,7 @@ function CopywriterContent() {
                       type="button"
                       onClick={() => togglePlatform('facebook')}
                       className={`flex items-center justify-center gap-1 py-2 px-2 rounded-lg border text-xs font-semibold transition-all ${
-                        platforms.includes('facebook')
+                        (platforms || []).includes('facebook')
                           ? 'bg-blue-50 border-blue-400 text-blue-700'
                           : 'border-slate-200 text-slate-400'
                       }`}
@@ -266,7 +271,7 @@ function CopywriterContent() {
                       type="button"
                       onClick={() => togglePlatform('youtube')}
                       className={`flex items-center justify-center gap-1 py-2 px-2 rounded-lg border text-xs font-semibold transition-all ${
-                        platforms.includes('youtube')
+                        (platforms || []).includes('youtube')
                           ? 'bg-red-50 border-red-400 text-red-700'
                           : 'border-slate-200 text-slate-400'
                       }`}
@@ -358,8 +363,8 @@ function CopywriterContent() {
                   </label>
                   <input
                     type="text"
-                    value={currentRecord.hook}
-                    onChange={(e) => setCurrentRecord({ ...currentRecord, hook: e.target.value })}
+                    value={currentRecord?.hook || ''}
+                    onChange={(e) => setCurrentRecord(prev => prev ? { ...prev, hook: e.target.value } : null)}
                     className="w-full px-3 py-2 font-semibold text-slate-900 border border-slate-200 rounded-lg text-xs"
                   />
                 </div>
@@ -370,8 +375,8 @@ function CopywriterContent() {
                   </label>
                   <textarea
                     rows={6}
-                    value={currentRecord.caption}
-                    onChange={(e) => setCurrentRecord({ ...currentRecord, caption: e.target.value })}
+                    value={currentRecord?.caption || ''}
+                    onChange={(e) => setCurrentRecord(prev => prev ? { ...prev, caption: e.target.value } : null)}
                     className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs leading-relaxed"
                   />
                 </div>
@@ -382,8 +387,8 @@ function CopywriterContent() {
                   </label>
                   <input
                     type="text"
-                    value={currentRecord.cta}
-                    onChange={(e) => setCurrentRecord({ ...currentRecord, cta: e.target.value })}
+                    value={currentRecord?.cta || ''}
+                    onChange={(e) => setCurrentRecord(prev => prev ? { ...prev, cta: e.target.value } : null)}
                     className="w-full px-3 py-2 border border-[#fbd3be] bg-[#fdf2ec] rounded-lg text-xs text-[#d6652a] font-medium"
                   />
                 </div>
@@ -447,7 +452,7 @@ function CopywriterContent() {
                 </span>
               </CardHeader>
               <div className="space-y-2 text-xs">
-                {currentRecord.qcResults.checks.map((c, i) => (
+                {(currentRecord.qcResults.checks || []).map((c, i) => (
                   <div key={i} className="flex items-start gap-2 text-[11px]">
                     <span className={`w-3.5 h-3.5 rounded-full flex items-center justify-center text-[9px] text-white shrink-0 mt-0.5 ${
                       c.passed ? 'bg-emerald-500' : 'bg-amber-500'
@@ -469,10 +474,67 @@ function CopywriterContent() {
   );
 }
 
+class CopywriterErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean; error: Error | null }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: any) {
+    console.error("AI Copywriter Studio caught error:", error, errorInfo);
+  }
+
+  handleReset = () => {
+    try {
+      localStorage.removeItem('dental_erp_brand');
+      localStorage.removeItem('dental_erp_content');
+      localStorage.removeItem('dental_erp_calendar');
+      localStorage.removeItem('dental_erp_analytics');
+      localStorage.removeItem('dental_erp_credits');
+    } catch {}
+    this.setState({ hasError: false, error: null });
+    window.location.reload();
+  };
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="p-8 max-w-lg mx-auto my-12 bg-white rounded-2xl border border-amber-200 shadow-md text-center space-y-4">
+          <div className="w-12 h-12 rounded-full bg-amber-50 text-amber-600 mx-auto flex items-center justify-center font-bold text-xl">
+            ✨
+          </div>
+          <h2 className="text-base font-bold text-slate-900">Synchronizing AI Copywriter Studio</h2>
+          <p className="text-xs text-slate-500 leading-relaxed">
+            Your workspace cache was upgraded to support YouTube Shorts, reels captions, and multi-format presets.
+          </p>
+          <div className="pt-2">
+            <button
+              onClick={this.handleReset}
+              className="px-5 py-2.5 bg-[#4f98db] text-white rounded-xl text-xs font-bold hover:bg-[#3d83c2] transition-colors shadow-xs"
+            >
+              Update Cache & Launch Studio
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 export default function CopywriterPage() {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-slate-400 text-sm">Loading AI Studio...</div>}>
-      <CopywriterContent />
-    </Suspense>
+    <CopywriterErrorBoundary>
+      <Suspense fallback={<div className="p-8 text-center text-slate-400 text-sm">Loading AI Studio...</div>}>
+        <CopywriterContent />
+      </Suspense>
+    </CopywriterErrorBoundary>
   );
 }

@@ -9,7 +9,8 @@ import {
   Instagram,
   Facebook,
   Youtube,
-  Menu
+  Menu,
+  Bell
 } from 'lucide-react';
 import { Button } from './ui/Button';
 import { Badge } from './ui/Badge';
@@ -99,6 +100,16 @@ export function Header() {
           <Plus className="w-3.5 h-3.5 mr-1 text-slate-500" />
           New Flyer
         </Button>
+
+        {/* User Notification Bell & Avatar (matches reference image top-right) */}
+        <div className="flex items-center gap-1.5 pl-2 border-l border-slate-200">
+          <button className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-colors" title="Notifications">
+            <Bell className="w-4 h-4" />
+          </button>
+          <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center font-bold text-xs text-slate-700 shrink-0">
+            JD
+          </div>
+        </div>
 
         {/* Reset Demo State Button */}
         <Button
