@@ -506,18 +506,18 @@ class CopywriterErrorBoundary extends React.Component<
   render() {
     if (this.state.hasError) {
       return (
-        <div className="p-8 max-w-lg mx-auto my-12 bg-white rounded-2xl border border-amber-200 shadow-md text-center space-y-4">
-          <div className="w-12 h-12 rounded-full bg-amber-50 text-amber-600 mx-auto flex items-center justify-center font-bold text-xl">
+        <div className="p-8 max-w-lg mx-auto my-12 bg-white rounded-2xl border border-sky-200 shadow-md text-center space-y-4">
+          <div className="w-12 h-12 rounded-full bg-sky-50 text-[#4f98db] mx-auto flex items-center justify-center font-bold text-xl">
             ✨
           </div>
-          <h2 className="text-base font-bold text-slate-900">Synchronizing AI Copywriter Studio</h2>
+          <h2 className="text-base font-bold text-[#333333]">Synchronizing AI Copywriter Studio</h2>
           <p className="text-xs text-slate-500 leading-relaxed">
             Your workspace cache was upgraded to support YouTube Shorts, reels captions, and multi-format presets.
           </p>
           <div className="pt-2">
             <button
               onClick={this.handleReset}
-              className="px-5 py-2.5 bg-[#4f98db] text-white rounded-xl text-xs font-bold hover:bg-[#3d83c2] transition-colors shadow-xs"
+              className="px-5 py-2.5 bg-[#e97538] text-white rounded-xl text-xs font-bold hover:bg-[#d6652a] transition-colors shadow-xs"
             >
               Update Cache & Launch Studio
             </button>
