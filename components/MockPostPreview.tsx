@@ -35,8 +35,15 @@ export function MockPostPreview({
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showFullCaption, setShowFullCaption] = useState(false);
 
-  const slides = record.carouselSlides || [];
-  const hasCarousel = record.format === 'carousel' && slides.length > 0;
+  const slides = record?.carouselSlides || [];
+  const hasCarousel = record?.format === 'carousel' && slides.length > 0;
+
+  const clinicName = brand?.clinicName || 'Apex Smile Studio';
+  const address = brand?.address || 'New York, NY';
+  const logoUrl = brand?.logoUrl || 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=150&auto=format&fit=crop&q=80';
+  const caption = record?.caption || '';
+  const cta = record?.cta || 'Schedule your visit today.';
+  const hashtags = Array.isArray(record?.hashtags) ? record.hashtags : [];
 
   return (
     <div className="bg-slate-50 border border-slate-200/90 rounded-2xl overflow-hidden shadow-sm flex flex-col">
@@ -104,21 +111,21 @@ export function MockPostPreview({
               <div className="w-9 h-9 rounded-full ring-2 ring-[#4f98db]/30 overflow-hidden bg-slate-100">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
-                  src={brand.logoUrl} 
-                  alt={brand.clinicName} 
+                  src={logoUrl} 
+                  alt={clinicName} 
                   className="w-full h-full object-cover" 
                 />
               </div>
               <div>
                 <div className="flex items-center gap-1">
                   <span className="text-xs font-bold text-slate-900 leading-tight">
-                    {activePlatform === 'instagram' ? 'apexsmilestudio' : activePlatform === 'youtube' ? 'Apex Smile Studio NYC • YouTube' : brand.clinicName}
+                    {activePlatform === 'instagram' ? 'apexsmilestudio' : activePlatform === 'youtube' ? `${clinicName} • YouTube` : clinicName}
                   </span>
                   <span className="w-3.5 h-3.5 rounded-full bg-[#4f98db] text-white flex items-center justify-center text-[9px]">
                     ✓
                   </span>
                 </div>
-                <p className="text-[10px] text-slate-500">{brand.address.split(',')[0]}</p>
+                <p className="text-[10px] text-slate-500">{address.split(',')[0]}</p>
               </div>
             </div>
             <button className="text-slate-400 hover:text-slate-600">
@@ -131,8 +138,8 @@ export function MockPostPreview({
             {/* Visual background image */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img 
-              src={record.creativeAssetUrl || "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=1080&auto=format&fit=crop&q=80"} 
-              alt={record.title}
+              src={record?.creativeAssetUrl || "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=1080&auto=format&fit=crop&q=80"} 
+              alt={record?.title || 'Dental post'}
               className="absolute inset-0 w-full h-full object-cover opacity-85"
             />
 
@@ -141,7 +148,7 @@ export function MockPostPreview({
 
             {/* Clinic Logo Watermark in Top Right */}
             <div className="absolute top-3 right-3 px-2.5 py-1 bg-black/50 backdrop-blur-md rounded-md text-[10px] font-semibold tracking-wider uppercase text-sky-200 border border-white/10">
-              {brand.clinicName.split(' ')[0]} Clinical
+              {clinicName.split(' ')[0]} Clinical
             </div>
 
             {/* Carousel Slide Overlay */}
@@ -254,12 +261,12 @@ export function MockPostPreview({
             {/* Caption Text */}
             <div className="text-xs text-slate-800 leading-relaxed">
               <span className="font-bold mr-1">
-                {activePlatform === 'instagram' ? 'apexsmilestudio' : brand.clinicName}
+                {activePlatform === 'instagram' ? 'apexsmilestudio' : clinicName}
               </span>
               <span>
-                {showFullCaption ? record.caption : `${record.caption.slice(0, 130)}...`}
+                {showFullCaption ? caption : `${caption.slice(0, 130)}${caption.length > 130 ? '...' : ''}`}
               </span>
-              {record.caption.length > 130 && (
+              {caption.length > 130 && (
                 <button
                   onClick={() => setShowFullCaption(!showFullCaption)}
                   className="text-slate-400 font-semibold ml-1 hover:text-slate-600 inline"
@@ -272,12 +279,12 @@ export function MockPostPreview({
             {/* CTA Box with #e97538 highlight */}
             <div className="mt-2.5 p-2 bg-[#fdf2ec] border border-[#fbd3be] rounded-lg text-xs text-[#d6652a] font-medium flex items-center gap-2">
               <span className="font-bold text-[#e97538]">CTA:</span>
-              <span className="text-[11px] leading-tight">{record.cta}</span>
+              <span className="text-[11px] leading-tight">{cta}</span>
             </div>
 
             {/* Hashtags */}
             <div className="mt-2 text-[11px] text-[#4f98db] space-x-1 font-normal line-clamp-2">
-              {record.hashtags.map((h, i) => (
+              {hashtags.map((h, i) => (
                 <span key={i} className="hover:underline cursor-pointer">{h}</span>
               ))}
             </div>

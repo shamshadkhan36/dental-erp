@@ -23,6 +23,7 @@ import { Badge } from '../../components/ui/Badge';
 import { MockPostPreview } from '../../components/MockPostPreview';
 import { generateDentalContent } from '../../lib/ai-prompts';
 import { runQualityCheck } from '../../lib/qc-engine';
+import { defaultBrandProfile } from '../../lib/default-data';
 import { ContentFormat, ContentRecord, PlatformType, ProductionFrequency } from '../../types';
 
 function CopywriterContent() {
@@ -30,12 +31,17 @@ function CopywriterContent() {
   const searchParams = useSearchParams();
   const { brand, calendar, contentRecords, saveContentRecord } = useERPStore();
 
+  const safeBrand = brand || defaultBrandProfile;
+  const safeTreatments = safeBrand.treatments?.length ? safeBrand.treatments : defaultBrandProfile.treatments;
+  const safeIcps = safeBrand.icpProfiles?.length ? safeBrand.icpProfiles : defaultBrandProfile.icpProfiles;
+  const safeCalendar = calendar || [];
+
   const editId = searchParams.get('edit');
   const calId = searchParams.get('calId');
   const initialTopic = searchParams.get('topic') || '';
   const initialFormat = (searchParams.get('format') as ContentFormat) || 'single';
-  const initialTreatment = searchParams.get('treatment') || brand.treatments[0]?.id;
-  const initialIcp = searchParams.get('icp') || brand.icpProfiles[0]?.id;
+  const initialTreatment = searchParams.get('treatment') || safeTreatments[0]?.id || '';
+  const initialIcp = searchParams.get('icp') || safeIcps[0]?.id || '';
 
   const [frequencyMode, setFrequencyMode] = useState<ProductionFrequency>('weekly');
 
@@ -81,8 +87,8 @@ function CopywriterContent() {
   const handleGenerate = () => {
     setIsGenerating(true);
     setTimeout(() => {
-      const treatment = brand.treatments.find(t => t.id === treatmentId) || brand.treatments[0];
-      const icp = brand.icpProfiles.find(i => i.id === icpId) || brand.icpProfiles[0];
+      const treatment = safeTreatments.find(t => t.id === treatmentId) || safeTreatments[0];
+      const icp = safeIcps.find(i => i.id === icpId) || safeIcps[0];
 
       const generated = generateDentalContent({
         topic: selectedTopic || `Modern ${treatment.name} Clinical Guide`,
@@ -90,7 +96,7 @@ function CopywriterContent() {
         frequencyMode,
         treatment,
         icp,
-        brand,
+        brand: safeBrand,
         customInstructions
       });
 
@@ -168,7 +174,7 @@ function CopywriterContent() {
                 1. Post Parameters & AI Prompts
               </CardTitle>
               <Badge variant="primary" size="sm">
-                Persona: {brand.brandPersona.archetype}
+                Persona: {safeBrand.brandPersona?.archetype || 'Clinical Authority'}
               </Badge>
             </CardHeader>
 
@@ -183,7 +189,7 @@ function CopywriterContent() {
                   className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs bg-white"
                 >
                   <option value="">-- Or enter custom topic below --</option>
-                  {calendar.map(c => (
+                  {safeCalendar.map(c => (
                     <option key={c.id} value={c.id}>
                       {c.date} • [{c.pillar}] {c.topic}
                     </option>
@@ -280,7 +286,7 @@ function CopywriterContent() {
                     onChange={(e) => setTreatmentId(e.target.value)}
                     className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs bg-white"
                   >
-                    {brand.treatments.map(t => (
+                    {safeTreatments.map(t => (
                       <option key={t.id} value={t.id}>{t.name} ({t.category})</option>
                     ))}
                   </select>
@@ -293,8 +299,8 @@ function CopywriterContent() {
                     onChange={(e) => setIcpId(e.target.value)}
                     className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs bg-white"
                   >
-                    {brand.icpProfiles.map(i => (
-                      <option key={i.id} value={i.id}>{i.name} ({i.age})</option>
+                    {safeIcps.map(i => (
+                      <option key={i.id} value={i.id}>{i.name} {i.age ? `(${i.age})` : ''}</option>
                     ))}
                   </select>
                 </div>
@@ -422,7 +428,7 @@ function CopywriterContent() {
           </div>
 
           {currentRecord ? (
-            <MockPostPreview record={currentRecord} brand={brand} />
+            <MockPostPreview record={currentRecord} brand={safeBrand} />
           ) : (
             <Card className="p-8 text-center text-slate-400 text-xs">
               Configure parameters on the left and click &quot;Generate Dental Copy&quot; to preview.

@@ -43,22 +43,112 @@ export function useERPStore() {
   useEffect(() => {
     try {
       const storedBrand = localStorage.getItem(STORAGE_KEYS.BRAND);
-      if (storedBrand) setBrandState(JSON.parse(storedBrand));
+      if (storedBrand) {
+        try {
+          const parsed = JSON.parse(storedBrand);
+          setBrandState({
+            ...defaultBrandProfile,
+            ...parsed,
+            brandPersona: {
+              ...defaultBrandProfile.brandPersona,
+              ...(parsed.brandPersona || {})
+            },
+            keyPhrases: parsed.keyPhrases || defaultBrandProfile.keyPhrases,
+            offers: parsed.offers || defaultBrandProfile.offers,
+            treatments: parsed.treatments?.length ? parsed.treatments : defaultBrandProfile.treatments,
+            icpProfiles: (parsed.icpProfiles?.length ? parsed.icpProfiles : defaultBrandProfile.icpProfiles).map((icp: any, idx: number) => ({
+              ...(defaultBrandProfile.icpProfiles[idx] || {}),
+              ...icp,
+              painPoints: Array.isArray(icp.painPoints) ? icp.painPoints : (defaultBrandProfile.icpProfiles[idx]?.painPoints || ['Teeth alignment', 'Cost concerns']),
+              objections: Array.isArray(icp.objections) ? icp.objections : (defaultBrandProfile.icpProfiles[idx]?.objections || ['Time commitment']),
+              motivations: Array.isArray(icp.motivations) ? icp.motivations : (defaultBrandProfile.icpProfiles[idx]?.motivations || ['Confidence', 'Health'])
+            })),
+            ctaTemplates: parsed.ctaTemplates?.length ? parsed.ctaTemplates : defaultBrandProfile.ctaTemplates,
+            prohibitedTerms: parsed.prohibitedTerms?.length ? parsed.prohibitedTerms : defaultBrandProfile.prohibitedTerms
+          });
+        } catch {
+          setBrandState(defaultBrandProfile);
+        }
+      }
 
       const storedCalendar = localStorage.getItem(STORAGE_KEYS.CALENDAR);
-      if (storedCalendar) setCalendarState(JSON.parse(storedCalendar));
+      if (storedCalendar) {
+        try {
+          const parsed = JSON.parse(storedCalendar);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setCalendarState(parsed);
+          } else {
+            setCalendarState(defaultCalendarItems);
+          }
+        } catch {
+          setCalendarState(defaultCalendarItems);
+        }
+      }
 
       const storedContent = localStorage.getItem(STORAGE_KEYS.CONTENT);
-      if (storedContent) setContentRecordsState(JSON.parse(storedContent));
+      if (storedContent) {
+        try {
+          const parsed = JSON.parse(storedContent);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setContentRecordsState(parsed.map((item: any) => ({
+              ...item,
+              platforms: item.platforms || ['instagram', 'facebook', 'youtube'],
+              hashtags: Array.isArray(item.hashtags) ? item.hashtags : ['#Dentistry', '#SmileStudio'],
+              caption: item.caption || '',
+              hook: item.hook || '',
+              cta: item.cta || 'Book Consultation'
+            })));
+          } else {
+            setContentRecordsState(defaultContentRecords);
+          }
+        } catch {
+          setContentRecordsState(defaultContentRecords);
+        }
+      }
 
       const storedFlyers = localStorage.getItem(STORAGE_KEYS.FLYERS);
-      if (storedFlyers) setFlyersState(JSON.parse(storedFlyers));
+      if (storedFlyers) {
+        try {
+          const parsed = JSON.parse(storedFlyers);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setFlyersState(parsed);
+          } else {
+            setFlyersState(defaultFlyers);
+          }
+        } catch {
+          setFlyersState(defaultFlyers);
+        }
+      }
 
       const storedAnalytics = localStorage.getItem(STORAGE_KEYS.ANALYTICS);
-      if (storedAnalytics) setAnalyticsState(JSON.parse(storedAnalytics));
+      if (storedAnalytics) {
+        try {
+          const parsed = JSON.parse(storedAnalytics);
+          setAnalyticsState({
+            ...defaultAnalytics,
+            ...parsed,
+            organicPlatforms: {
+              ...defaultAnalytics.organicPlatforms,
+              ...(parsed.organicPlatforms || {})
+            }
+          });
+        } catch {
+          setAnalyticsState(defaultAnalytics);
+        }
+      }
 
       const storedCredits = localStorage.getItem(STORAGE_KEYS.CREDITS);
-      if (storedCredits) setCreditUsageState(JSON.parse(storedCredits));
+      if (storedCredits) {
+        try {
+          const parsed = JSON.parse(storedCredits);
+          setCreditUsageState({
+            ...defaultCreditUsage,
+            ...parsed
+          });
+        } catch {
+          setCreditUsageState(defaultCreditUsage);
+        }
+      }
     } catch (e) {
       console.warn("Could not load from localStorage, using defaults", e);
     }

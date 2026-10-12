@@ -2,28 +2,35 @@ import { BrandProfile, ContentFormat, ContentRecord, DentalTreatment, ICPProfile
 import { runQualityCheck } from './qc-engine';
 
 export function compileSystemPrompt(brand: BrandProfile): string {
+  const safeBrand = brand || {} as any;
+  const treatments = safeBrand.treatments || [];
+  const icpProfiles = safeBrand.icpProfiles || [];
+  const keyPhrases = safeBrand.keyPhrases || [];
+  const prohibitedTerms = safeBrand.prohibitedTerms || [];
+  const ctaTemplates = safeBrand.ctaTemplates || [];
+
   return `=== SYSTEM PROMPT FOR DENTAL SOCIAL MEDIA & CREATIVE AUTOMATION ===
-Clinic Name: ${brand.clinicName}
-Tagline: ${brand.tagline}
-Brand Voice: ${brand.brandVoice}
-Website: ${brand.website}
-Phone: ${brand.phone} | WhatsApp: ${brand.whatsapp}
-Address: ${brand.address}
+Clinic Name: ${safeBrand.clinicName || 'Apex Smile Studio'}
+Tagline: ${safeBrand.tagline || ''}
+Brand Voice: ${safeBrand.brandVoice || 'Clinical Authority'}
+Website: ${safeBrand.website || ''}
+Phone: ${safeBrand.phone || ''} | WhatsApp: ${safeBrand.whatsapp || ''}
+Address: ${safeBrand.address || ''}
 
 CORE CLINICAL TREATMENTS:
-${brand.treatments.map(t => `- ${t.name} (${t.category}): ${t.usp} | Duration: ${t.typicalDuration}`).join('\n')}
+${treatments.map(t => `- ${t.name} (${t.category}): ${t.usp} | Duration: ${t.typicalDuration}`).join('\n')}
 
 TARGET AUDIENCES (ICPs):
-${brand.icpProfiles.map(icp => `- ${icp.name}: Tone: ${icp.preferredTone} | Pain Points: ${icp.painPoints.join(', ')}`).join('\n')}
+${icpProfiles.map(icp => `- ${icp.name}: Tone: ${icp.preferredTone} | Pain Points: ${Array.isArray(icp.painPoints) ? icp.painPoints.join(', ') : icp.painPoints}`).join('\n')}
 
 KEY BRAND PHRASES TO INCLUDE:
-${brand.keyPhrases.map(p => `• "${p}"`).join('\n')}
+${keyPhrases.map(p => `• "${p}"`).join('\n')}
 
 PROHIBITED TERMINOLOGY (NEVER USE):
-${brand.prohibitedTerms.map(p => `❌ "${p}"`).join('\n')}
+${prohibitedTerms.map(p => `❌ "${p}"`).join('\n')}
 
 CALL TO ACTION TEMPLATES:
-${brand.ctaTemplates.map(c => `👉 "${c}"`).join('\n')}
+${ctaTemplates.map(c => `👉 "${c}"`).join('\n')}
 
 EXECUTION RULES:
 1. Always craft attention-grabbing, pattern-interrupt hooks addressing patient pain, smile confidence, or dental myths.

@@ -8,16 +8,19 @@ import {
   Plus, 
   Instagram,
   Facebook,
-  Youtube
+  Youtube,
+  Menu
 } from 'lucide-react';
 import { Button } from './ui/Button';
 import { Badge } from './ui/Badge';
 import { useERPStore } from '../lib/store';
+import { useMobileNav } from './MobileNavContext';
 
 export function Header() {
   const router = useRouter();
   const pathname = usePathname();
   const { brand, resetToDefaults } = useERPStore();
+  const { toggle } = useMobileNav();
 
   const getPageTitle = () => {
     switch (pathname) {
@@ -37,15 +40,26 @@ export function Header() {
   const { title, subtitle } = getPageTitle();
 
   return (
-    <header className="bg-white border-b border-slate-200 sticky top-0 z-30 px-8 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div>
-        <div className="flex items-center gap-2.5">
-          <h1 className="text-xl font-bold text-[#333333] tracking-tight">{title}</h1>
-          <Badge variant="primary" size="sm" className="hidden sm:inline-flex">
-            DentiSync ERP
-          </Badge>
+    <header className="bg-white border-b border-slate-200 sticky top-0 z-30 px-4 sm:px-8 py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div className="flex items-center gap-3">
+        {/* Mobile Hamburger Menu Toggle */}
+        <button
+          onClick={toggle}
+          className="md:hidden p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors shrink-0"
+          aria-label="Open mobile navigation menu"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+
+        <div>
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-lg sm:text-xl font-bold text-[#333333] tracking-tight">{title}</h1>
+            <Badge variant="primary" size="sm" className="hidden sm:inline-flex">
+              DentiSync ERP
+            </Badge>
+          </div>
+          <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5">{subtitle}</p>
         </div>
-        <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>
       </div>
 
       <div className="flex items-center gap-3 shrink-0">

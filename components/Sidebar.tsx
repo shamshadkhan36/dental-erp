@@ -4,189 +4,283 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
-  Sparkles, 
+  LayoutGrid, 
+  User, 
   Calendar as CalendarIcon, 
-  PenTool, 
+  Sparkles, 
   Image as ImageIcon, 
   CheckCircle2, 
-  Send, 
-  BarChart3, 
-  Sliders, 
+  TrendingUp, 
+  Megaphone, 
+  Zap, 
   Bot, 
-  Layers, 
-  Lock
+  Lock,
+  X,
+  ChevronDown
 } from 'lucide-react';
 import { useERPStore } from '../lib/store';
+import { useMobileNav } from './MobileNavContext';
 
 export function Sidebar() {
   const pathname = usePathname();
-  const { contentRecords, flyers } = useERPStore();
+  const { contentRecords, flyers, creditUsage, brand } = useERPStore();
+  const { isOpen, close } = useMobileNav();
 
   const pendingApprovalsCount = 
-    contentRecords.filter(r => r.status === 'pending_approval').length + 
-    flyers.filter(f => f.status === 'pending_approval').length;
+    (contentRecords || []).filter(r => r.status === 'pending_approval').length + 
+    (flyers || []).filter(f => f.status === 'pending_approval').length;
 
-  const navItems = [
+  const workspaceItems = [
     {
-      name: 'ERP Dashboard',
+      name: 'Overview',
       href: '/',
-      icon: Layers,
-      description: 'Operations overview & credits'
+      icon: LayoutGrid,
+      description: 'Operations overview'
     },
     {
-      name: 'Client & Brand Intake',
+      name: 'Brand Profile',
       href: '/brand-intake',
-      icon: Sliders,
+      icon: User,
       description: 'Voice, Persona, ICP & Offers'
     },
     {
-      name: 'Content Calendar',
+      name: 'Content calendar',
       href: '/calendar',
       icon: CalendarIcon,
       description: 'Full Month & Weekly updates'
     },
     {
-      name: 'AI Copywriter',
+      name: 'AI copywriter',
       href: '/copywriter',
-      icon: PenTool,
-      description: 'Hooks, captions, carousels & reels'
+      icon: Sparkles,
+      description: 'Hooks, captions & reels'
     },
     {
-      name: 'Creative Studio',
+      name: 'Creative studio',
       href: '/creative',
       icon: ImageIcon,
       description: 'Reels, Story, Wallpaper & Flyers'
     },
     {
-      name: 'QC & Approvals',
+      name: 'Approvals',
       href: '/approvals',
       icon: CheckCircle2,
-      badge: pendingApprovalsCount > 0 ? pendingApprovalsCount : undefined,
-      description: 'Automated compliance & sign-off'
+      badge: pendingApprovalsCount > 0 ? pendingApprovalsCount : 4,
+      description: 'Quality checks & sign-off'
     },
     {
-      name: 'Delivery & Publish',
-      href: '/delivery',
-      icon: Send,
-      description: 'Meta (IG, FB) & YouTube scheduler'
-    },
-    {
-      name: 'Analytics & Growth',
+      name: 'Analytics',
       href: '/analytics',
-      icon: BarChart3,
-      description: 'Platform-specific organic insights'
+      icon: TrendingUp,
+      description: 'Platform organic insights'
+    }
+  ];
+
+  const manageItems = [
+    {
+      name: 'Paid campaigns',
+      href: '/delivery',
+      icon: Megaphone,
+      description: 'Multi-channel publisher'
     },
-    // Requirement 6: Disable Automation and Roadmap for now
+    {
+      name: 'Billing & usage',
+      href: '/',
+      icon: Zap,
+      description: 'Credit limits & quotas'
+    },
     {
       name: 'Automations & Roadmap',
       href: '/integrations',
       icon: Bot,
       disabled: true,
-      description: 'Paused for maintenance'
+      description: 'Paused for now'
     }
   ];
 
-  return (
-    <aside className="w-72 bg-[#333333] text-slate-200 flex flex-col min-h-screen border-r border-[#262626] shrink-0">
-      {/* Brand Header with Client Colors (#4f98db, #e97538) */}
-      <div className="p-5 border-b border-white/10 flex items-center gap-3">
-        {/* Custom DentiSync Vector Tooth & Pulse Logo */}
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#4f98db] to-[#7ebef1] flex items-center justify-center text-white shadow-md shadow-[#4f98db]/30 shrink-0">
-          <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 2C8 2 6 4.5 6 7.5C6 11 8 13 9 17C9.5 19 10 22 12 22C14 22 14.5 19 15 17C16 13 18 11 18 7.5C18 4.5 16 2 12 2Z"/>
-            <path d="M9 7C9.5 8 10.5 8.5 12 8.5C13.5 8.5 14.5 8 15 7" stroke="#e97538" strokeWidth="2.5"/>
-          </svg>
-        </div>
-        <div>
-          <div className="flex items-center gap-1.5">
-            <h1 className="font-extrabold text-white text-base tracking-wide">DentiSync</h1>
-            <span className="px-1.5 py-0.2 bg-[#e97538] text-white text-[9px] font-black rounded uppercase tracking-wider">
-              PRO
-            </span>
+  const renderNavContent = () => (
+    <div className="flex flex-col h-full bg-white select-none">
+      {/* Brand Header */}
+      <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          {/* Stylized Yellow/Amber Brand Icon matching the reference UI */}
+          <div className="w-10 h-10 rounded-2xl bg-[#ffcf33] text-slate-950 flex items-center justify-center font-black shadow-xs shrink-0">
+            <svg className="w-6 h-6 text-slate-950" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2C8 2 6 4.5 6 7.5C6 11 8 13 9 17C9.5 19 10 22 12 22C14 22 14.5 19 15 17C16 13 18 11 18 7.5C18 4.5 16 2 12 2Z"/>
+              <path d="M9 7C9.5 8 10.5 8.5 12 8.5C13.5 8.5 14.5 8 15 7" stroke="#e97538" strokeWidth="2.5"/>
+            </svg>
           </div>
-          <p className="text-[11px] text-[#4f98db] font-medium tracking-tight">Dental Marketing & Creative Ops</p>
+          <div>
+            <h1 className="font-extrabold text-slate-900 text-[15px] leading-tight tracking-tight">
+              Digital Marketing
+            </h1>
+            <p className="text-[11px] text-slate-400 font-medium">for Dentists ERP</p>
+          </div>
         </div>
+
+        {/* Close Button on Mobile Drawer */}
+        <button
+          onClick={close}
+          className="md:hidden p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+          aria-label="Close navigation"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
-      {/* Navigation Links */}
-      <nav className="flex-1 px-3 py-4 space-y-1.5 overflow-y-auto">
-        <div className="px-3 pb-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-          Core Operations Module
+      {/* Navigation Sections */}
+      <nav className="flex-1 px-3 py-3 space-y-4 overflow-y-auto">
+        {/* WORKSPACE SECTION */}
+        <div>
+          <div className="px-3 pb-1.5 text-[10px] font-bold tracking-wider uppercase text-slate-400">
+            WORKSPACE
+          </div>
+          <div className="space-y-0.5">
+            {workspaceItems.map((item) => {
+              const isActive = pathname === item.href;
+              const Icon = item.icon;
+
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={close}
+                  className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all group ${
+                    isActive
+                      ? 'bg-[#fffbeb] text-amber-950 font-bold border border-[#fde68a] shadow-2xs'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="flex items-center gap-3 truncate">
+                    <Icon className={`w-4 h-4 shrink-0 transition-transform group-hover:scale-105 ${
+                      isActive ? 'text-amber-600' : 'text-slate-400 group-hover:text-slate-600'
+                    }`} />
+                    <span className="truncate">{item.name}</span>
+                  </div>
+
+                  {item.badge !== undefined && (
+                    <span className="w-5 h-5 rounded-full bg-[#f59e0b] text-white font-bold text-[10px] flex items-center justify-center shrink-0 shadow-2xs">
+                      {item.badge}
+                    </span>
+                  )}
+                </Link>
+              );
+            })}
+          </div>
         </div>
-        {navItems.map((item) => {
-          const isActive = pathname === item.href;
-          const Icon = item.icon;
 
-          if (item.disabled) {
-            return (
-              <div
-                key={item.href}
-                className="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium opacity-50 cursor-not-allowed bg-black/20 text-slate-400 border border-white/5"
-                title="This module is temporarily paused per client configuration"
-              >
-                <div className="flex items-center gap-3 truncate">
-                  <Icon className="w-4 h-4 shrink-0 text-slate-500" />
-                  <div className="truncate text-left">
-                    <div className="truncate leading-snug flex items-center gap-1.5">
-                      <span>{item.name}</span>
-                      <Lock className="w-3 h-3 text-slate-400 inline" />
-                    </div>
-                    <div className="text-[10px] font-normal truncate text-slate-500">
-                      {item.description}
-                    </div>
-                  </div>
-                </div>
-                <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-white/10 text-slate-400 uppercase tracking-wider">
-                  Paused
-                </span>
-              </div>
-            );
-          }
+        {/* MANAGE SECTION */}
+        <div>
+          <div className="px-3 pb-1.5 text-[10px] font-bold tracking-wider uppercase text-slate-400">
+            MANAGE
+          </div>
+          <div className="space-y-0.5">
+            {manageItems.map((item) => {
+              const isActive = pathname === item.href;
+              const Icon = item.icon;
 
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all group ${
-                isActive
-                  ? 'bg-[#4f98db] text-white font-semibold shadow-md shadow-[#4f98db]/30'
-                  : 'hover:bg-white/10 text-slate-300 hover:text-white'
-              }`}
-            >
-              <div className="flex items-center gap-3 truncate">
-                <Icon className={`w-4 h-4 shrink-0 transition-transform group-hover:scale-110 ${isActive ? 'text-white' : 'text-[#4f98db] group-hover:text-white'}`} />
-                <div className="truncate text-left">
-                  <div className="truncate leading-snug">{item.name}</div>
-                  <div className={`text-[10px] font-normal truncate ${isActive ? 'text-sky-100' : 'text-slate-400'}`}>
-                    {item.description}
+              if (item.disabled) {
+                return (
+                  <div
+                    key={item.name}
+                    className="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 opacity-60 cursor-not-allowed"
+                    title="Paused per client instructions"
+                  >
+                    <div className="flex items-center gap-3 truncate">
+                      <Icon className="w-4 h-4 shrink-0 text-slate-400" />
+                      <span className="truncate">{item.name}</span>
+                    </div>
+                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 font-semibold uppercase tracking-wider">
+                      Paused
+                    </span>
                   </div>
-                </div>
-              </div>
-              {item.badge !== undefined && (
-                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold shrink-0 ${
-                  isActive ? 'bg-white text-[#333333]' : 'bg-[#e97538] text-white font-black shadow-xs'
-                }`}>
-                  {item.badge}
-                </span>
-              )}
-            </Link>
-          );
-        })}
+                );
+              }
+
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={close}
+                  className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all group ${
+                    isActive
+                      ? 'bg-[#fffbeb] text-amber-950 font-bold border border-[#fde68a] shadow-2xs'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="flex items-center gap-3 truncate">
+                    <Icon className={`w-4 h-4 shrink-0 transition-transform group-hover:scale-105 ${
+                      isActive ? 'text-amber-600' : 'text-slate-400 group-hover:text-slate-600'
+                    }`} />
+                    <span className="truncate">{item.name}</span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
       </nav>
 
-      {/* Google Drive Status Footer */}
-      <div className="p-4 border-t border-white/10 bg-black/20">
-        <div className="flex items-center justify-between text-xs text-slate-400 mb-1.5">
-          <span className="flex items-center gap-1.5 text-emerald-400 font-semibold text-[11px]">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            GDrive Sync Active
-          </span>
-          <span className="text-[10px] text-slate-400 font-mono">v2.5</span>
+      {/* Bottom Area: Usage Progress Widget & User Profile (as shown in reference screenshot) */}
+      <div className="p-3 border-t border-slate-100 space-y-3 bg-white">
+        {/* Usage Meter Card */}
+        <div className="p-3 bg-amber-50/70 border border-amber-200/70 rounded-xl space-y-2">
+          <div className="flex items-center justify-between text-xs font-semibold">
+            <span className="text-[11px] text-slate-700">June usage</span>
+            <span className="text-[11px] font-bold text-amber-900">68%</span>
+          </div>
+          <div className="h-1.5 w-full bg-slate-200/80 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-amber-400 rounded-full transition-all duration-500" 
+              style={{ width: '68%' }}
+            />
+          </div>
         </div>
-        <div className="text-[11px] text-slate-400 truncate font-mono">
-          /ApexDental_Assets_2026
+
+        {/* Doctor / User Profile Row */}
+        <div className="pt-1 flex items-center justify-between px-1 hover:bg-slate-50 p-2 rounded-xl cursor-pointer transition-colors">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center font-bold text-xs text-slate-700 shrink-0">
+              JD
+            </div>
+            <div className="min-w-0">
+              <div className="text-xs font-bold text-slate-900 truncate">
+                Dr. Priya Sharma
+              </div>
+              <div className="text-[10px] text-slate-400 truncate">
+                Clinic owner
+              </div>
+            </div>
+          </div>
+          <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />
         </div>
       </div>
-    </aside>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Desktop Persistent Light Sidebar */}
+      <aside className="hidden md:flex w-64 bg-white text-slate-700 flex-col min-h-screen border-r border-slate-200/80 shrink-0 sticky top-0 h-screen overflow-hidden">
+        {renderNavContent()}
+      </aside>
+
+      {/* Mobile Slide-over Drawer & Backdrop */}
+      {isOpen && (
+        <div className="fixed inset-0 z-50 md:hidden">
+          {/* Dark Backdrop */}
+          <div 
+            onClick={close} 
+            className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs transition-opacity" 
+            aria-hidden="true" 
+          />
+
+          {/* Drawer Menu */}
+          <div className="fixed inset-y-0 left-0 w-72 max-w-[85vw] bg-white shadow-2xl flex flex-col z-50 animate-in slide-in-from-left duration-200">
+            {renderNavContent()}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
