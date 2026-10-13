@@ -111,7 +111,7 @@ export function Sidebar() {
         {/* Close Button on Mobile Drawer */}
         <button
           onClick={close}
-          className="md:hidden p-1.5 text-slate-400 hover:text-[#333333] hover:bg-slate-100 rounded-lg transition-colors"
+          className="lg:hidden p-1.5 text-slate-400 hover:text-[#333333] hover:bg-slate-100 rounded-lg transition-colors"
           aria-label="Close navigation"
         >
           <X className="w-5 h-5" />
@@ -252,13 +252,13 @@ export function Sidebar() {
   return (
     <>
       {/* Desktop Persistent Light Sidebar with Background #ffffff */}
-      <aside className="hidden md:flex w-64 bg-[#ffffff] text-[#333333] flex-col min-h-screen border-r border-slate-200/80 shrink-0 sticky top-0 h-screen overflow-hidden">
+      <aside className="hidden lg:flex w-64 bg-[#ffffff] text-[#333333] flex-col min-h-screen border-r border-slate-200/80 shrink-0 sticky top-0 h-screen overflow-hidden">
         {renderNavContent()}
       </aside>
 
-      {/* Mobile Slide-over Drawer & Backdrop */}
+      {/* Mobile & Tablet Slide-over Drawer & Backdrop */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 md:hidden">
+        <div className="fixed inset-0 z-50 lg:hidden">
           {/* Dark Backdrop */}
           <div 
             onClick={close} 

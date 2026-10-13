@@ -370,7 +370,7 @@ export default function BrandIntakePage() {
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {formData.icpProfiles.map((icp, idx) => (
               <Card key={icp.id} className="space-y-3.5 border-t-4 border-t-[#4f98db]">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-2">
@@ -588,7 +588,7 @@ export default function BrandIntakePage() {
             )}
 
             {/* List of Offers */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {formData.offers.map((offer) => (
                 <div key={offer.id} className="p-4 rounded-xl border border-slate-200 bg-slate-50 flex flex-col justify-between space-y-3">
                   <div>
@@ -644,8 +644,8 @@ export default function BrandIntakePage() {
 
             {formData.treatments.map((t, idx) => (
               <Card key={t.id} className="p-4">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center text-xs">
-                  <div className="md:col-span-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center text-xs">
+                  <div className="sm:col-span-2 lg:col-span-3">
                     <label className="text-[10px] font-bold uppercase text-slate-400">Treatment Name</label>
                     <input
                       type="text"
@@ -659,7 +659,7 @@ export default function BrandIntakePage() {
                     />
                   </div>
 
-                  <div className="md:col-span-2">
+                  <div className="sm:col-span-1 lg:col-span-2">
                     <label className="text-[10px] font-bold uppercase text-slate-400">Category</label>
                     <select
                       value={t.category}
@@ -678,7 +678,7 @@ export default function BrandIntakePage() {
                     </select>
                   </div>
 
-                  <div className="md:col-span-4">
+                  <div className="sm:col-span-2 lg:col-span-4">
                     <label className="text-[10px] font-bold uppercase text-slate-400">Clinical USP</label>
                     <input
                       type="text"
@@ -692,7 +692,7 @@ export default function BrandIntakePage() {
                     />
                   </div>
 
-                  <div className="md:col-span-2">
+                  <div className="sm:col-span-1 lg:col-span-2">
                     <label className="text-[10px] font-bold uppercase text-slate-400">Typical Duration</label>
                     <input
                       type="text"
@@ -706,7 +706,7 @@ export default function BrandIntakePage() {
                     />
                   </div>
 
-                  <div className="md:col-span-1 flex justify-end">
+                  <div className="sm:col-span-2 lg:col-span-1 flex justify-end">
                     <button
                       onClick={() => {
                         const updated = formData.treatments.filter((_, i) => i !== idx);

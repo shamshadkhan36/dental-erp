@@ -58,7 +58,7 @@ export default function IntegrationsPage() {
       </div>
 
       {/* Top Banner */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 opacity-75">
+      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4 opacity-75">
         <div>
           <div className="flex items-center gap-2">
             <h2 className="text-lg font-bold text-slate-900">Integrations, DM Automations & Roadmap</h2>
@@ -75,7 +75,7 @@ export default function IntegrationsPage() {
       </div>
 
       {/* Connected Channel Integrations Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {/* Meta Graph API Card */}
         <Card className="border-t-4 border-t-sky-500">
           <CardHeader>

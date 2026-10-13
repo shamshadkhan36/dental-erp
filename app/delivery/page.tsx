@@ -70,7 +70,7 @@ export default function DeliveryPage() {
   return (
     <div className="space-y-6">
       {/* Top Banner */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
             <h2 className="text-lg font-bold text-[#333333]">Delivery & Multi-Channel Scheduling</h2>
@@ -143,7 +143,7 @@ export default function DeliveryPage() {
             </Card>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {approvedRecords.map((post) => (
               <Card key={post.id} hoverEffect className="flex flex-col justify-between">
                 <div>
@@ -235,7 +235,7 @@ export default function DeliveryPage() {
       {/* TAB 2: Scheduled Queue */}
       {activeTab === 'scheduler' && (
         <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <Card className="border-l-4 border-l-pink-500">
               <div className="text-xs font-semibold uppercase text-slate-500 mb-1 flex items-center gap-1.5">
                 <Instagram className="w-4 h-4 text-pink-600" /> Instagram Business
@@ -267,7 +267,7 @@ export default function DeliveryPage() {
             </h3>
 
             {scheduledRecords.map((post) => (
-              <Card key={post.id} className="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <Card key={post.id} className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 rounded-lg bg-slate-900 overflow-hidden shrink-0">
                     {/* eslint-disable-next-line @next/next/no-img-element */}

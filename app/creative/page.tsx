@@ -76,7 +76,7 @@ function CreativeContent() {
   return (
     <div className="space-y-6">
       {/* Top Banner with All Requested Tabs (Social, Reels, Story, Wallpaper, Flyers) */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-lg font-bold text-[#333333]">Creative Production Studio</h2>
           <p className="text-xs text-slate-500">
@@ -216,7 +216,7 @@ function CreativeContent() {
                   <label className="font-semibold text-slate-700 block mb-2">
                     Choose Approved Clinical Artwork (or Drive Link)
                   </label>
-                  <div className="grid grid-cols-5 gap-2">
+                  <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                     {clinicPhotoPresets.map((photo, i) => (
                       <button
                         key={i}
@@ -326,7 +326,7 @@ function CreativeContent() {
                   <label className="font-bold text-slate-800 block mb-1.5 uppercase text-[10px] tracking-wider">
                     Step 1: Choose Video Source
                   </label>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <button
                       type="button"
                       onClick={() => setVideoSource('drive')}
@@ -422,7 +422,7 @@ function CreativeContent() {
                   <label className="font-bold text-slate-800 block mb-1.5 uppercase text-[10px] tracking-wider">
                     Step 2: Video Caption & Overlay Format
                   </label>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <button
                       type="button"
                       onClick={() => setCaptionStyle('static_text')}
@@ -553,7 +553,7 @@ function CreativeContent() {
           <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
             Staging templates for daily 24-hour clinic stories (Interactive Q&A patient stickers, Treatment of the Day, Clinic behind-the-scenes polls).
           </p>
-          <div className="grid grid-cols-3 gap-3 pt-4 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 text-xs">
             <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
               <span className="font-bold block text-slate-800">Q&A Sticker</span>
               <span className="text-[10px] text-slate-400">Ask the Dentist</span>
@@ -581,7 +581,7 @@ function CreativeContent() {
           <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
             Generate customized 16:9 4K waiting room TV screensavers, patient treatment lounge slides, and mobile wallpapers with clinic branding and QR codes.
           </p>
-          <div className="grid grid-cols-2 gap-3 pt-4 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4 text-xs">
             <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
               <span className="font-bold block text-slate-800">16:9 Clinic TV Display</span>
               <span className="text-[10px] text-slate-400">Waiting Room Loop</span>

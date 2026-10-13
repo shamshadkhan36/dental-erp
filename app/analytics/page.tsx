@@ -72,7 +72,7 @@ export default function AnalyticsPage() {
   return (
     <div className="space-y-6">
       {/* Top Banner - Platform-Specific Organic Focus */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2 mb-1">
             <h2 className="text-lg font-bold text-slate-900">Platform-Specific Organic Analytics & Growth</h2>
@@ -259,7 +259,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Platform-Specific Organic Breakdown Cards (Instagram vs Facebook vs YouTube) */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Instagram Organic Card */}
         <Card className={`border-t-4 border-t-pink-500 transition-all ${selectedPlatform === 'instagram' ? 'ring-2 ring-pink-500/30 shadow-md' : ''}`}>
           <CardHeader>

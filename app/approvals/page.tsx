@@ -111,7 +111,7 @@ export default function ApprovalsPage() {
             Ad-Hoc Promotional Flyers Awaiting Approval ({pendingFlyers.length})
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {pendingFlyers.map((flyer) => (
               <Card key={flyer.id} className="p-4 border-l-4 border-l-sky-500 flex flex-col justify-between">
                 <div>

@@ -37,7 +37,7 @@ export default function DashboardOverview() {
       {/* Top Banner: Clinic Status with Client Visual Identity */}
       <div className="bg-[#333333] text-white rounded-2xl p-6 shadow-xl relative overflow-hidden border border-black/20">
         <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-64 h-64 bg-[#4f98db]/20 rounded-full blur-3xl"></div>
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
               <span className="px-2.5 py-0.5 rounded-full bg-[#4f98db]/20 text-[#4f98db] text-xs font-semibold border border-[#4f98db]/30">
@@ -71,7 +71,7 @@ export default function DashboardOverview() {
 
       {/* Requirement 5: CREDIT USAGE PANEL */}
       <Card className="border-l-4 border-l-[#e97538] bg-white shadow-sm p-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-[#fdf2ec] text-[#e97538] flex items-center justify-center font-bold">
               <Zap className="w-5 h-5" />

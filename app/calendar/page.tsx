@@ -109,7 +109,7 @@ export default function ContentCalendarPage() {
   return (
     <div className="space-y-6">
       {/* Calendar Header with Controls */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-[#f0f7fd] text-[#4f98db] flex items-center justify-center font-bold">
             <CalendarIcon className="w-5 h-5" />
@@ -226,98 +226,103 @@ export default function ContentCalendarPage() {
             </div>
           </div>
 
-          {/* Days of Week Header */}
-          <div className="grid grid-cols-7 gap-2 text-center text-xs font-bold uppercase tracking-wider text-slate-400 pb-2">
-            <div>Sun</div>
-            <div>Mon</div>
-            <div>Tue</div>
-            <div>Wed</div>
-            <div>Thu</div>
-            <div>Fri</div>
-            <div>Sat</div>
-          </div>
+          {/* Responsive wrapper: preserves readable day cell widths on tablet / iPad / mobile */}
+          <div className="overflow-x-auto pb-2 -mx-2 px-2 sm:mx-0 sm:px-0">
+            <div className="min-w-[700px]">
+              {/* Days of Week Header */}
+              <div className="grid grid-cols-7 gap-2 text-center text-xs font-bold uppercase tracking-wider text-slate-400 pb-2">
+                <div>Sun</div>
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thu</div>
+                <div>Fri</div>
+                <div>Sat</div>
+              </div>
 
-          {/* Month Matrix Grid */}
-          <div className="grid grid-cols-7 gap-2">
-            {/* Blank leading days for October 2026 */}
-            {paddingDays.map((_, i) => (
-              <div key={`pad-${i}`} className="min-h-[110px] bg-slate-50/50 rounded-xl border border-dashed border-slate-200/60 p-2 opacity-40"></div>
-            ))}
+              {/* Month Matrix Grid */}
+              <div className="grid grid-cols-7 gap-2">
+                {/* Blank leading days for October 2026 */}
+                {paddingDays.map((_, i) => (
+                  <div key={`pad-${i}`} className="min-h-[110px] bg-slate-50/50 rounded-xl border border-dashed border-slate-200/60 p-2 opacity-40"></div>
+                ))}
 
-            {/* 31 Calendar Days */}
-            {daysInMonth.map((day) => {
-              const dateStr = `2026-10-${day < 10 ? '0' + day : day}`;
-              const dayPosts = filteredItems.filter(item => item.date === dateStr);
-              const isToday = day === 12;
+                {/* 31 Calendar Days */}
+                {daysInMonth.map((day) => {
+                  const dateStr = `2026-10-${day < 10 ? '0' + day : day}`;
+                  const dayPosts = filteredItems.filter(item => item.date === dateStr);
+                  const isToday = day === 12;
 
-              return (
-                <div
-                  key={day}
-                  className={`min-h-[110px] rounded-xl border p-2 flex flex-col justify-between transition-all ${
-                    isToday
-                      ? 'border-[#4f98db] bg-[#f0f7fd]/40 ring-2 ring-[#4f98db]/20'
-                      : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-2xs'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className={`text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center ${
-                      isToday ? 'bg-[#4f98db] text-white' : 'text-slate-700'
-                    }`}>
-                      {day}
-                    </span>
-                    {dayPosts.length > 0 && (
-                      <span className="text-[10px] text-slate-400 font-semibold">{dayPosts.length} post</span>
-                    )}
-                  </div>
-
-                  {/* Scheduled Post Chips */}
-                  <div className="space-y-1 my-1 overflow-y-auto max-h-[70px]">
-                    {dayPosts.map((post) => {
-                      const isApproved = post.status === 'approved' || post.status === 'scheduled';
-                      const isPending = post.status === 'pending_approval';
-
-                      return (
-                        <div
-                          key={post.id}
-                          onClick={() => handleGenerate(post)}
-                          className={`p-1.5 rounded-lg text-[10px] leading-tight font-medium cursor-pointer border transition-all truncate ${
-                            isApproved
-                              ? 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
-                              : isPending
-                              ? 'bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100'
-                              : 'bg-[#f0f7fd] text-[#1d528c] border-[#b9ddf7] hover:bg-[#e0effb]'
-                          }`}
-                          title={`${post.topic} (${post.format.toUpperCase()})`}
-                        >
-                          <div className="flex items-center gap-1 font-bold">
-                            {post.platforms.includes('youtube') && <Youtube className="w-2.5 h-2.5 text-red-600 inline shrink-0" />}
-                            {post.platforms.includes('instagram') && <Instagram className="w-2.5 h-2.5 text-pink-600 inline shrink-0" />}
-                            <span className="truncate">{post.topic}</span>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  <div className="flex justify-end">
-                    <button
-                      onClick={() => {
-                        setNewItem(prev => ({ ...prev, date: dateStr }));
-                        setIsModalOpen(true);
-                      }}
-                      className="text-[10px] text-slate-400 hover:text-[#4f98db] font-bold"
+                  return (
+                    <div
+                      key={day}
+                      className={`min-h-[110px] rounded-xl border p-2 flex flex-col justify-between transition-all ${
+                        isToday
+                          ? 'border-[#4f98db] bg-[#f0f7fd]/40 ring-2 ring-[#4f98db]/20'
+                          : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-2xs'
+                      }`}
                     >
-                      + Add
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
+                      <div className="flex items-center justify-between">
+                        <span className={`text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center ${
+                          isToday ? 'bg-[#4f98db] text-white' : 'text-slate-700'
+                        }`}>
+                          {day}
+                        </span>
+                        {dayPosts.length > 0 && (
+                          <span className="text-[10px] text-slate-400 font-semibold">{dayPosts.length} post</span>
+                        )}
+                      </div>
+
+                      {/* Scheduled Post Chips */}
+                      <div className="space-y-1 my-1 overflow-y-auto max-h-[70px]">
+                        {dayPosts.map((post) => {
+                          const isApproved = post.status === 'approved' || post.status === 'scheduled';
+                          const isPending = post.status === 'pending_approval';
+
+                          return (
+                            <div
+                              key={post.id}
+                              onClick={() => handleGenerate(post)}
+                              className={`p-1.5 rounded-lg text-[10px] leading-tight font-medium cursor-pointer border transition-all truncate ${
+                                isApproved
+                                  ? 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
+                                  : isPending
+                                  ? 'bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100'
+                                  : 'bg-[#f0f7fd] text-[#1d528c] border-[#b9ddf7] hover:bg-[#e0effb]'
+                              }`}
+                              title={`${post.topic} (${post.format.toUpperCase()})`}
+                            >
+                              <div className="flex items-center gap-1 font-bold">
+                                {post.platforms.includes('youtube') && <Youtube className="w-2.5 h-2.5 text-red-600 inline shrink-0" />}
+                                {post.platforms.includes('instagram') && <Instagram className="w-2.5 h-2.5 text-pink-600 inline shrink-0" />}
+                                <span className="truncate">{post.topic}</span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      <div className="flex justify-end">
+                        <button
+                          onClick={() => {
+                            setNewItem(prev => ({ ...prev, date: dateStr }));
+                            setIsModalOpen(true);
+                          }}
+                          className="text-[10px] text-slate-400 hover:text-[#4f98db] font-bold"
+                        >
+                          + Add
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </Card>
       ) : (
         /* Post Cards View */
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredItems.map((item) => {
             const treatment = brand.treatments.find(t => t.id === item.targetTreatmentId);
             const isPending = item.status === 'pending_approval';
