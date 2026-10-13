@@ -93,12 +93,10 @@ export function Sidebar() {
       {/* Brand Header with Primary #4f98db and Secondary #333333 */}
       <div className="p-4 border-b border-slate-100 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          {/* Brand Icon in Primary #4f98db with CTA Highlight #e97538 accent */}
-          <div className="w-10 h-10 rounded-2xl bg-[#4f98db] text-white flex items-center justify-center shadow-xs shrink-0">
-            <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 2C8 2 6 4.5 6 7.5C6 11 8 13 9 17C9.5 19 10 22 12 22C14 22 14.5 19 15 17C16 13 18 11 18 7.5C18 4.5 16 2 12 2Z"/>
-              <path d="M9 7C9.5 8 10.5 8.5 12 8.5C13.5 8.5 14.5 8 15 7" stroke="#e97538" strokeWidth="2.5"/>
-            </svg>
+          {/* Official Client Brand Logo */}
+          <div className="w-10 h-10 rounded-xl overflow-hidden bg-white border border-slate-200/80 p-0.5 flex items-center justify-center shadow-2xs shrink-0">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.png" alt="DentiSync Logo" className="w-full h-full object-contain" />
           </div>
           <div>
             <h1 className="font-extrabold text-[#333333] text-[15px] leading-tight tracking-tight">

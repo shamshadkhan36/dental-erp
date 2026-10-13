@@ -790,12 +790,19 @@ export default function BrandIntakePage() {
 
               <div>
                 <label className="font-semibold text-slate-700 block mb-1">Logo URL</label>
-                <input
-                  type="text"
-                  value={formData.logoUrl}
-                  onChange={(e) => setFormData({ ...formData, logoUrl: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs"
-                />
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl border border-slate-200 bg-white p-1 flex items-center justify-center shrink-0 shadow-2xs">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={formData.logoUrl || '/logo.png'} alt="Clinic logo preview" className="w-full h-full object-contain" />
+                  </div>
+                  <input
+                    type="text"
+                    value={formData.logoUrl}
+                    onChange={(e) => setFormData({ ...formData, logoUrl: e.target.value })}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs"
+                    placeholder="/logo.png"
+                  />
+                </div>
               </div>
 
               <div>

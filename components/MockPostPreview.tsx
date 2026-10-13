@@ -40,7 +40,7 @@ export function MockPostPreview({
 
   const clinicName = brand?.clinicName || 'Apex Smile Studio';
   const address = brand?.address || 'New York, NY';
-  const logoUrl = brand?.logoUrl || 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=150&auto=format&fit=crop&q=80';
+  const logoUrl = brand?.logoUrl || '/logo.png';
   const caption = record?.caption || '';
   const cta = record?.cta || 'Schedule your visit today.';
   const hashtags = Array.isArray(record?.hashtags) ? record.hashtags : [];
@@ -113,7 +113,7 @@ export function MockPostPreview({
                 <img 
                   src={logoUrl} 
                   alt={clinicName} 
-                  className="w-full h-full object-cover" 
+                  className="w-full h-full object-contain bg-white p-0.5" 
                 />
               </div>
               <div>

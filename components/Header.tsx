@@ -55,7 +55,9 @@ export function Header() {
         <div className="min-w-0">
           <div className="flex items-center gap-2">
             <h1 className="text-base sm:text-lg lg:text-xl font-bold text-[#333333] tracking-tight truncate">{title}</h1>
-            <Badge variant="primary" size="sm" className="hidden sm:inline-flex shrink-0">
+            <Badge variant="primary" size="sm" className="hidden sm:inline-flex shrink-0 items-center gap-1.5">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo.png" alt="" className="w-3.5 h-3.5 object-contain" />
               DentiSync ERP
             </Badge>
           </div>

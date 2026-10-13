@@ -238,7 +238,7 @@ export function FlyerEditor({
               <div className="flex items-center gap-2.5">
                 <div className="w-10 h-10 rounded-xl bg-white p-1 shadow-sm">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={brand.logoUrl} alt={brand.clinicName} className="w-full h-full object-cover rounded-lg" />
+                  <img src={brand.logoUrl || '/logo.png'} alt={brand.clinicName} className="w-full h-full object-contain rounded-lg" />
                 </div>
                 <div>
                   <h4 className="font-extrabold text-sm tracking-wide uppercase">{brand.clinicName}</h4>

@@ -53,6 +53,7 @@ export function useERPStore() {
               ...defaultBrandProfile.brandPersona,
               ...(parsed.brandPersona || {})
             },
+            logoUrl: (!parsed.logoUrl || parsed.logoUrl.includes('unsplash.com')) ? '/logo.png' : parsed.logoUrl,
             keyPhrases: parsed.keyPhrases || defaultBrandProfile.keyPhrases,
             offers: parsed.offers || defaultBrandProfile.offers,
             treatments: parsed.treatments?.length ? parsed.treatments : defaultBrandProfile.treatments,

@@ -41,7 +41,7 @@ export const defaultBrandProfile: BrandProfile = {
   secondaryColor: "#333333", // Client Secondary
   accentColor: "#e97538",    // Client CTA Highlight
   fontFamily: "Inter, sans-serif",
-  logoUrl: "https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=200&auto=format&fit=crop&q=80",
+  logoUrl: "/logo.png",
   gdriveRootFolder: "https://drive.google.com/drive/folders/1ApexDental_MarketingAssets_2026",
   icpProfiles: [
     {
