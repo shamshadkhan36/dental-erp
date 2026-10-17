@@ -9,6 +9,8 @@ export function compileSystemPrompt(brand: BrandProfile): string {
   const prohibitedTerms = safeBrand.prohibitedTerms || [];
   const ctaTemplates = safeBrand.ctaTemplates || [];
 
+  const dentistVerification = safeBrand.dentistVerification;
+
   return `=== SYSTEM PROMPT FOR DENTAL SOCIAL MEDIA & CREATIVE AUTOMATION ===
 Clinic Name: ${safeBrand.clinicName || 'Apex Smile Studio'}
 Tagline: ${safeBrand.tagline || ''}
@@ -17,17 +19,31 @@ Website: ${safeBrand.website || ''}
 Phone: ${safeBrand.phone || ''} | WhatsApp: ${safeBrand.whatsapp || ''}
 Address: ${safeBrand.address || ''}
 
+REGISTERED DENTIST CREDENTIALS:
+${dentistVerification ? `• Lead Practitioner: ${dentistVerification.fullName}
+• State Dental Council: ${dentistVerification.stateCouncilName}
+• Registration No: ${dentistVerification.registrationNumber} (Reg. Year: ${dentistVerification.registrationYear})
+• NDR / DCI Verification Status: ${dentistVerification.status.toUpperCase()} (Active on Registry)
+• Verification Source: ${dentistVerification.registrySource || 'National Dental Register (NDR)'}` : '• Registration verification active under practice license.'}
+
 CORE CLINICAL TREATMENTS:
 ${treatments.map(t => `- ${t.name} (${t.category}): ${t.usp} | Duration: ${t.typicalDuration}`).join('\n')}
 
 TARGET AUDIENCES (ICPs):
-${icpProfiles.map(icp => `- ${icp.name}: Tone: ${icp.preferredTone} | Pain Points: ${Array.isArray(icp.painPoints) ? icp.painPoints.join(', ') : icp.painPoints}`).join('\n')}
+${icpProfiles.map(icp => `- ${icp.name} (Age: ${icp.age || 'Adults'}): Tone: ${icp.preferredTone} | Pain: ${Array.isArray(icp.painPoints) ? icp.painPoints.join(', ') : icp.painPoints} | Objections: ${Array.isArray(icp.objections) ? icp.objections.join(', ') : icp.objections}`).join('\n')}
 
 KEY BRAND PHRASES TO INCLUDE:
 ${keyPhrases.map(p => `• "${p}"`).join('\n')}
 
 PROHIBITED TERMINOLOGY (NEVER USE):
 ${prohibitedTerms.map(p => `❌ "${p}"`).join('\n')}
+
+NATIONAL DENTAL COMMISSION (NDC) & DENTAL ETHICS CONSTRAINTS:
+1. No False or Guaranteed Claims: Never claim "100% painless", "lifetime guarantee", "miracle cure", or "permanent results without maintenance".
+2. Mandatory Clinical Disclaimers: Ensure patient communications acknowledge that individual clinical outcomes vary and require in-person diagnosis.
+3. No Disparagement or Sensationalism: Never disparage other dental practitioners, clinics, or conventional treatments.
+4. Patient Consent & Privacy: All patient testimonials, case photos, and smile reveals require explicit clinical consent under dental confidentiality regulations.
+5. Truth in Credentials & Pricing: Reflect truthful doctor qualifications, council registration status, and transparent treatment estimates.
 
 CALL TO ACTION TEMPLATES:
 ${ctaTemplates.map(c => `👉 "${c}"`).join('\n')}
@@ -36,7 +52,7 @@ EXECUTION RULES:
 1. Always craft attention-grabbing, pattern-interrupt hooks addressing patient pain, smile confidence, or dental myths.
 2. For Carousels, format slide-by-slide with concise, high-value takeaways (1 headline + 2 sentences per slide).
 3. For Reels, write 15-30 second timing markers, visual direction cues, and spoken doctor voiceovers.
-4. Ensure compliance: Never guarantee 100% painless treatment; emphasize modern digital precision, local comfort, and customized assessments.
+4. Always append the required clinical disclaimer for ethical compliance.
 5. Finish every post with a selected CTA and 6-10 targeted dental and local hashtags.`;
 }
 
@@ -169,7 +185,9 @@ After completing our customized ${treatment.name} program:
 ✨ Completed comfortably in ${treatment.typicalDuration}
 ✨ A natural, glowing smile that radiates confidence in every room!
 
-${customInstructions ? `Special Note: ${customInstructions}\n\n` : ''}Your smile is the first thing people notice—invest in feeling proud of it every single day.`;
+${customInstructions ? `Special Note: ${customInstructions}\n\n` : ''}Your smile is the first thing people notice—invest in feeling proud of it every single day.
+
+*Clinical Disclaimer: Individual treatment outcomes vary. Medical evaluation required. Practice registered under State Dental Council guidelines.`;
   }
 
   // Pre-assign sample clinical creative image

@@ -17,6 +17,7 @@ import {
 import { Button } from './ui/Button';
 import { Badge } from './ui/Badge';
 import { useERPStore } from '../lib/store';
+import { TermsModal } from './TermsModal';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -39,6 +40,10 @@ export function AuthModal({ isOpen, onClose, initialTab = 'signin' }: AuthModalP
   const [trialEmail, setTrialEmail] = useState('');
   const [clinicName, setClinicName] = useState('');
   const [trialPassword, setTrialPassword] = useState('');
+  const [regCode, setRegCode] = useState('');
+  const [stateCouncil, setStateCouncil] = useState('');
+  const [agreedToTerms, setAgreedToTerms] = useState(true);
+  const [isTermsOpen, setIsTermsOpen] = useState(false);
 
   // Status/Error
   const [isLoading, setIsLoading] = useState(false);
@@ -107,7 +112,10 @@ export function AuthModal({ isOpen, onClose, initialTab = 'signin' }: AuthModalP
       startFreeTrial({
         name: fullName,
         email: trialEmail,
-        clinicName: clinicName
+        clinicName: clinicName,
+        registrationCode: regCode,
+        stateCouncil: stateCouncil,
+        agreedToTerms: agreedToTerms
       });
       setIsLoading(false);
       onClose();
@@ -383,6 +391,33 @@ export function AuthModal({ isOpen, onClose, initialTab = 'signin' }: AuthModalP
                 </div>
               </div>
 
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="font-semibold text-slate-700 block mb-1">
+                    Registration No. (NDC / DCI)
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. MDC-48921"
+                    value={regCode}
+                    onChange={(e) => setRegCode(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:border-[#4f98db] focus:ring-1 focus:ring-[#4f98db] outline-none transition-all uppercase font-medium"
+                  />
+                </div>
+                <div>
+                  <label className="font-semibold text-slate-700 block mb-1">
+                    State Dental Council
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. State Dental Council"
+                    value={stateCouncil}
+                    onChange={(e) => setStateCouncil(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-xl focus:border-[#4f98db] focus:ring-1 focus:ring-[#4f98db] outline-none transition-all"
+                  />
+                </div>
+              </div>
+
               <div>
                 <label className="font-semibold text-slate-700 block mb-1">Create Password</label>
                 <div className="relative">
@@ -398,8 +433,31 @@ export function AuthModal({ isOpen, onClose, initialTab = 'signin' }: AuthModalP
                 </div>
               </div>
 
-              <div className="text-[11px] text-slate-500 pt-1">
-                No credit card required. Instant activation with free credits quota.
+              {/* Requirement 13: Terms & Conditions Checkbox (NDC Rules + ERP Terms) */}
+              <div className="pt-1 bg-slate-50 p-2.5 rounded-xl border border-slate-200/80">
+                <label className="flex items-start gap-2 cursor-pointer text-[11px] text-slate-600">
+                  <input
+                    type="checkbox"
+                    required
+                    checked={agreedToTerms}
+                    onChange={(e) => setAgreedToTerms(e.target.checked)}
+                    className="mt-0.5 rounded border-slate-300 text-[#4f98db] focus:ring-[#4f98db]"
+                  />
+                  <span>
+                    I confirm my registration and agree to the{' '}
+                    <button
+                      type="button"
+                      onClick={() => setIsTermsOpen(true)}
+                      className="text-[#4f98db] underline font-bold hover:text-[#3d82c2]"
+                    >
+                      NDC Advertising Rules & ERP Terms & Conditions
+                    </button>
+                  </span>
+                </label>
+              </div>
+
+              <div className="text-[11px] text-slate-500 pt-0.5">
+                No credit card required. Instant activation with 25 free credits.
               </div>
 
               <Button
@@ -407,7 +465,7 @@ export function AuthModal({ isOpen, onClose, initialTab = 'signin' }: AuthModalP
                 variant="primary"
                 size="md"
                 loading={isLoading}
-                className="w-full mt-2 font-bold shadow-sm"
+                className="w-full mt-1 font-bold shadow-sm"
               >
                 Activate Free Trial (25 Free Credits)
                 <ArrowRight className="w-4 h-4 ml-1" />
@@ -417,10 +475,24 @@ export function AuthModal({ isOpen, onClose, initialTab = 'signin' }: AuthModalP
         )}
 
         {/* Modal Footer */}
-        <div className="p-4 bg-slate-50 border-t border-slate-100 text-center text-[11px] text-slate-500">
-          Enterprise HIPAA & Data Privacy Compliant • Digital Marketing for Dentists
+        <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+          <span>HIPAA & NDC Advertising Compliant</span>
+          <button 
+            type="button" 
+            onClick={() => setIsTermsOpen(true)}
+            className="text-[#4f98db] hover:underline font-semibold"
+          >
+            Terms & NDC Rules
+          </button>
         </div>
       </div>
+
+      {/* Embedded Terms & Conditions Modal */}
+      <TermsModal
+        isOpen={isTermsOpen}
+        onClose={() => setIsTermsOpen(false)}
+        onAccept={() => setAgreedToTerms(true)}
+      />
     </div>
   );
 }

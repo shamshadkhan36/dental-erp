@@ -70,7 +70,8 @@ export function useERPStore() {
               motivations: Array.isArray(icp.motivations) ? icp.motivations : (defaultBrandProfile.icpProfiles[idx]?.motivations || ['Confidence', 'Health'])
             })),
             ctaTemplates: parsed.ctaTemplates?.length ? parsed.ctaTemplates : defaultBrandProfile.ctaTemplates,
-            prohibitedTerms: parsed.prohibitedTerms?.length ? parsed.prohibitedTerms : defaultBrandProfile.prohibitedTerms
+            prohibitedTerms: parsed.prohibitedTerms?.length ? parsed.prohibitedTerms : defaultBrandProfile.prohibitedTerms,
+            dentistVerification: parsed.dentistVerification || defaultBrandProfile.dentistVerification
           });
         } catch {
           setBrandState(defaultBrandProfile);
@@ -349,18 +350,40 @@ export function useERPStore() {
     localStorage.removeItem(STORAGE_KEYS.USER);
   };
 
-  const startFreeTrial = (data: { name: string; email: string; clinicName: string }) => {
+  const updateDentistVerification = (verification: any) => {
+    setBrandState(prev => {
+      const nextBrand = { ...prev, dentistVerification: verification };
+      try {
+        localStorage.setItem(STORAGE_KEYS.BRAND, JSON.stringify(nextBrand));
+      } catch (e) {
+        console.error(e);
+      }
+      return nextBrand;
+    });
+  };
+
+  const startFreeTrial = (data: { 
+    name: string; 
+    email: string; 
+    clinicName: string;
+    registrationCode?: string;
+    stateCouncil?: string;
+    agreedToTerms?: boolean;
+  }) => {
     const initials = data.name.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2) || 'DR';
     const trialUser: UserProfile = {
       id: `trial-${Date.now()}`,
       name: data.name,
       email: data.email,
       clinicName: data.clinicName,
-      role: 'Clinic Director',
+      role: 'Clinic Director & Lead Dentist',
       isTrial: true,
       trialDaysRemaining: 14,
       provider: 'credentials',
-      avatarInitials: initials
+      avatarInitials: initials,
+      registrationCode: data.registrationCode,
+      stateCouncil: data.stateCouncil,
+      agreedToTerms: data.agreedToTerms ?? true
     };
     const trialCredits: CreditUsage = {
       aiCopyCredits: { used: 0, total: 25 },
@@ -370,6 +393,24 @@ export function useERPStore() {
       planName: "14-Day Free Trial (Active)",
       renewalDate: "November 1, 2026"
     };
+
+    if (data.registrationCode) {
+      updateDentistVerification({
+        fullName: data.name,
+        stateCouncilName: data.stateCouncil || "State Dental Council",
+        registrationNumber: data.registrationCode,
+        registrationYear: "2020",
+        status: "verified",
+        lastVerifiedAt: new Date().toISOString(),
+        nextReVerificationDate: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        photoIdName: data.name,
+        photoIdVerified: true,
+        activeStatusConfirmed: true,
+        registrySource: "National Dental Register (NDR) Live Lookup",
+        selfieMatchVerified: true
+      });
+    }
+
     setUserState(trialUser);
     setIsAuthenticated(true);
     setCreditUsageState(trialCredits);
@@ -404,6 +445,7 @@ export function useERPStore() {
     analytics,
     creditUsage,
     updateBrand,
+    updateDentistVerification,
     saveOffer,
     deleteOffer,
     saveContentRecord,

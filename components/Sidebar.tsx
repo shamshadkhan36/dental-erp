@@ -16,7 +16,8 @@ import {
   Bot, 
   Lock,
   X,
-  ChevronDown
+  ChevronDown,
+  Scale
 } from 'lucide-react';
 import { useERPStore } from '../lib/store';
 import { useMobileNav } from './MobileNavContext';
@@ -87,6 +88,11 @@ export function Sidebar() {
       href: '/integrations',
       icon: Bot,
       disabled: true
+    },
+    {
+      name: 'NDC Rules & Terms',
+      href: '/terms',
+      icon: Scale
     }
   ];
 

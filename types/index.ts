@@ -61,6 +61,22 @@ export interface CreditUsage {
   renewalDate: string;
 }
 
+export interface DentistVerification {
+  fullName: string;
+  stateCouncilName: string;
+  registrationNumber: string;
+  dciId?: string; // DCI / National Dental Register (NDR) ID
+  registrationYear: string;
+  status: 'verified' | 'pending' | 'unverified' | 're_verification_due';
+  lastVerifiedAt?: string;
+  nextReVerificationDate?: string;
+  photoIdName?: string;
+  photoIdVerified?: boolean;
+  activeStatusConfirmed?: boolean;
+  registrySource?: string;
+  selfieMatchVerified?: boolean;
+}
+
 export interface BrandProfile {
   clinicName: string;
   tagline: string;
@@ -84,6 +100,7 @@ export interface BrandProfile {
   offers: DentalOffer[];
   ctaTemplates: string[];
   systemPrompt: string;
+  dentistVerification?: DentistVerification;
 }
 
 export interface CalendarItem {
@@ -235,4 +252,7 @@ export interface UserProfile {
   trialDaysRemaining: number;
   provider: 'gmail' | 'credentials' | 'apple' | 'sso';
   avatarInitials: string;
+  registrationCode?: string;
+  stateCouncil?: string;
+  agreedToTerms?: boolean;
 }

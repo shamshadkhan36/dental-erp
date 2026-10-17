@@ -36,8 +36,8 @@ export function Header() {
       case '/approvals': return { title: 'Quality Check & Approvals Queue', subtitle: 'Automated compliance rule validation and clinical doctor sign-off' };
       case '/delivery': return { title: 'Delivery & Multi-Channel Publish', subtitle: 'Scheduled queue, instant asset downloads, Meta (FB & IG) and YouTube publishing' };
       case '/analytics': return { title: 'Analytics & Growth (Organic Only)', subtitle: 'Platform-specific organic insights for Instagram, Facebook, and YouTube' };
-      case '/integrations': return { title: 'Automations & Roadmap (Paused)', subtitle: 'Automations and roadmap modules are temporarily disabled as requested' };
-      default: return { title: 'DentiSync Operations', subtitle: 'Social Media & Creative Operations Automation' };
+      case '/terms': return { title: 'Terms of Service & NDC Rules', subtitle: 'National Dental Commission (NDC) ethical advertising rules & ERP compliance framework' };
+      default: return { title: 'Digital Marketing for Dentists', subtitle: 'Social Media & Creative Operations Automation' };
     }
   };
 

@@ -9,7 +9,10 @@ export const defaultUserProfile: UserProfile = {
   isTrial: true,
   trialDaysRemaining: 14,
   provider: "gmail",
-  avatarInitials: "PS"
+  avatarInitials: "PS",
+  registrationCode: "NY-DEN-84920",
+  stateCouncil: "New York State Board of Dentistry / State Dental Council",
+  agreedToTerms: true
 };
 
 export const defaultCreditUsage: CreditUsage = {
@@ -218,7 +221,22 @@ Strict Guidelines:
 2. Address specific patient age groups, pain points, objections, and core motivations.
 3. Feature active promotional offers when relevant.
 4. Ensure compliance: Never guarantee 100% painless treatment; emphasize modern numbing techniques, digital precision, and patient comfort.
-5. Provide formatted hashtags targeting local dental and cosmetic audiences.`
+5. Provide formatted hashtags targeting local dental and cosmetic audiences.`,
+  dentistVerification: {
+    fullName: "Dr. Sarah Chen, DDS, MDS",
+    stateCouncilName: "New York State Board of Dentistry / State Dental Council",
+    registrationNumber: "NY-DEN-84920",
+    dciId: "NDR-2024-DCI-91823",
+    registrationYear: "2015",
+    status: "verified",
+    lastVerifiedAt: "2026-10-01T10:00:00.000Z",
+    nextReVerificationDate: "2027-04-01",
+    photoIdName: "Dr. Sarah Chen",
+    photoIdVerified: true,
+    activeStatusConfirmed: true,
+    registrySource: "National Dental Register (NDR) & Official State Dental Council Registry",
+    selfieMatchVerified: true
+  }
 };
 
 export const defaultCalendarItems: CalendarItem[] = [
