@@ -9,7 +9,8 @@ import {
   AnalyticsSummary,
   CreditUsage,
   DentalOffer,
-  PostStatus
+  PostStatus,
+  UserProfile
 } from '../types';
 import {
   defaultBrandProfile,
@@ -17,7 +18,8 @@ import {
   defaultContentRecords,
   defaultFlyers,
   defaultAnalytics,
-  defaultCreditUsage
+  defaultCreditUsage,
+  defaultUserProfile
 } from './default-data';
 import { runQualityCheck } from './qc-engine';
 
@@ -27,10 +29,13 @@ const STORAGE_KEYS = {
   CONTENT: 'dental_erp_content',
   FLYERS: 'dental_erp_flyers',
   ANALYTICS: 'dental_erp_analytics',
-  CREDITS: 'dental_erp_credits'
+  CREDITS: 'dental_erp_credits',
+  USER: 'dental_erp_user'
 };
 
 export function useERPStore() {
+  const [user, setUserState] = useState<UserProfile>(defaultUserProfile);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
   const [brand, setBrandState] = useState<BrandProfile>(defaultBrandProfile);
   const [calendar, setCalendarState] = useState<CalendarItem[]>(defaultCalendarItems);
   const [contentRecords, setContentRecordsState] = useState<ContentRecord[]>(defaultContentRecords);
@@ -148,6 +153,22 @@ export function useERPStore() {
           });
         } catch {
           setCreditUsageState(defaultCreditUsage);
+        }
+      }
+
+      const storedUser = localStorage.getItem(STORAGE_KEYS.USER);
+      if (storedUser) {
+        try {
+          const parsed = JSON.parse(storedUser);
+          if (parsed && parsed.email) {
+            setUserState(parsed);
+            setIsAuthenticated(true);
+          } else {
+            setIsAuthenticated(false);
+          }
+        } catch {
+          setUserState(defaultUserProfile);
+          setIsAuthenticated(true);
         }
       }
     } catch (e) {
@@ -298,9 +319,69 @@ export function useERPStore() {
     });
   };
 
+  // Authentication & Free Trial Handlers
+  const login = (options: { email: string; name?: string; provider?: 'gmail' | 'credentials' | 'apple' | 'sso'; clinicName?: string }) => {
+    const initials = (options.name || options.email.split('@')[0])
+      .split(' ')
+      .map(p => p[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2) || 'DR';
+
+    const newUser: UserProfile = {
+      id: `usr-${Date.now()}`,
+      name: options.name || (options.email.includes('dr') ? 'Dr. Priya Sharma' : 'Clinic Doctor'),
+      email: options.email,
+      clinicName: options.clinicName || brand.clinicName || 'Apex Smile Studio',
+      role: 'Clinic Owner & Lead Dentist',
+      isTrial: true,
+      trialDaysRemaining: 14,
+      provider: options.provider || 'gmail',
+      avatarInitials: initials
+    };
+    setUserState(newUser);
+    setIsAuthenticated(true);
+    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(newUser));
+  };
+
+  const logout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem(STORAGE_KEYS.USER);
+  };
+
+  const startFreeTrial = (data: { name: string; email: string; clinicName: string }) => {
+    const initials = data.name.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2) || 'DR';
+    const trialUser: UserProfile = {
+      id: `trial-${Date.now()}`,
+      name: data.name,
+      email: data.email,
+      clinicName: data.clinicName,
+      role: 'Clinic Director',
+      isTrial: true,
+      trialDaysRemaining: 14,
+      provider: 'credentials',
+      avatarInitials: initials
+    };
+    const trialCredits: CreditUsage = {
+      aiCopyCredits: { used: 0, total: 25 },
+      videoCredits: { used: 0, total: 5 },
+      graphicCredits: { used: 0, total: 10 },
+      storageGb: { used: 0.1, total: 2.0 },
+      planName: "14-Day Free Trial (Active)",
+      renewalDate: "November 1, 2026"
+    };
+    setUserState(trialUser);
+    setIsAuthenticated(true);
+    setCreditUsageState(trialCredits);
+    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(trialUser));
+    localStorage.setItem(STORAGE_KEYS.CREDITS, JSON.stringify(trialCredits));
+  };
+
   // Reset to default sample data
   const resetToDefaults = () => {
     localStorage.clear();
+    setUserState(defaultUserProfile);
+    setIsAuthenticated(true);
     setBrandState(defaultBrandProfile);
     setCalendarState(defaultCalendarItems);
     setContentRecordsState(defaultContentRecords);
@@ -311,6 +392,11 @@ export function useERPStore() {
 
   return {
     isLoaded,
+    user,
+    isAuthenticated,
+    login,
+    logout,
+    startFreeTrial,
     brand,
     calendar,
     contentRecords,

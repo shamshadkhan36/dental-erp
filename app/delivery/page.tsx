@@ -69,22 +69,17 @@ export default function DeliveryPage() {
 
   return (
     <div className="space-y-6">
-      {/* Top Banner */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <h2 className="text-lg font-bold text-[#333333]">Delivery & Multi-Channel Scheduling</h2>
-            <Badge variant="primary">Meta (IG, FB) & YouTube Connected</Badge>
-          </div>
-          <p className="text-xs text-slate-500">
-            Export approved copy, download visual assets, and schedule automated publishing across all clinic channels.
-          </p>
+      {/* Delivery Channels Toolbar */}
+      <div className="bg-white p-3 rounded-xl border border-slate-200/90 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-2 px-2">
+          <span className="text-xs font-bold text-[#333333]">Connected Channels:</span>
+          <Badge variant="primary">Meta (IG, FB) & YouTube Connected</Badge>
         </div>
 
-        <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl text-xs">
+        <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-lg text-xs">
           <button
             onClick={() => setActiveTab('bank')}
-            className={`px-4 py-2 font-semibold rounded-lg transition-all ${
+            className={`px-4 py-1.5 font-semibold rounded-md transition-all ${
               activeTab === 'bank'
                 ? 'bg-[#4f98db] text-white shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
@@ -94,7 +89,7 @@ export default function DeliveryPage() {
           </button>
           <button
             onClick={() => setActiveTab('scheduler')}
-            className={`px-4 py-2 font-semibold rounded-lg transition-all ${
+            className={`px-4 py-1.5 font-semibold rounded-md transition-all ${
               activeTab === 'scheduler'
                 ? 'bg-[#4f98db] text-white shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
@@ -112,7 +107,7 @@ export default function DeliveryPage() {
             <Card className="bg-[#f0f7fd] border-[#b9ddf7]">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <Badge variant="cta">CLINIC FLYERS READY</Badge>
+                  <Badge variant="primary">CLINIC FLYERS READY</Badge>
                   <h4 className="text-sm font-bold text-slate-900">Approved Promotional Flyers ({approvedFlyers.length})</h4>
                 </div>
                 <Link href="/creative?tab=flyers">
@@ -212,7 +207,7 @@ export default function DeliveryPage() {
 
                   <Button
                     size="sm"
-                    variant="cta"
+                    variant="primary"
                     className="w-full"
                     onClick={() => setScheduleModalRecord(post)}
                   >
@@ -304,7 +299,7 @@ export default function DeliveryPage() {
 
                   <Button
                     size="sm"
-                    variant="cta"
+                    variant="primary"
                     onClick={() => handlePublishNow(post.id)}
                   >
                     <Send className="w-3.5 h-3.5 mr-1" />
@@ -389,7 +384,7 @@ export default function DeliveryPage() {
               <Button type="button" variant="outline" onClick={() => setScheduleModalRecord(null)}>
                 Cancel
               </Button>
-              <Button type="submit" variant="cta">
+              <Button type="submit" variant="primary">
                 {scheduledSuccess ? "Added to Queue!" : "Confirm Multi-Platform Schedule"}
               </Button>
             </div>

@@ -34,34 +34,33 @@ export default function DashboardOverview() {
 
   return (
     <div className="space-y-8">
-      {/* Top Banner: Clinic Status with Client Visual Identity */}
-      <div className="bg-[#333333] text-white rounded-2xl p-6 shadow-xl relative overflow-hidden border border-black/20">
-        <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-64 h-64 bg-[#4f98db]/20 rounded-full blur-3xl"></div>
+      {/* Top Banner: Clinic Status with Brand Visual Identity (Clean White / Light aesthetic) */}
+      <div className="bg-white rounded-2xl p-6 shadow-sm relative overflow-hidden border border-slate-200/90">
+        <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-64 h-64 bg-[#4f98db]/10 rounded-full blur-3xl pointer-events-none"></div>
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full bg-[#4f98db]/20 text-[#4f98db] text-xs font-semibold border border-[#4f98db]/30">
+              <span className="px-2.5 py-0.5 rounded-full bg-[#f0f7fd] text-[#4f98db] text-xs font-semibold border border-[#4f98db]/30">
                 Active Clinic Workspace
               </span>
-              <span className="text-xs text-slate-300">• New York Dental Studio</span>
+              <span className="text-xs text-slate-500">• {brand.clinicName}</span>
             </div>
-            <h2 className="text-2xl font-extrabold tracking-tight text-white">{brand.clinicName}</h2>
-            <p className="text-xs text-slate-300 max-w-xl leading-relaxed">
-              Automated social media engine & creative operations pipeline. Empowering practice growth with on-brand AI copywriting, multi-platform publishing (IG, FB & YouTube), and doctor sign-off.
+            <h2 className="text-2xl font-extrabold tracking-tight text-[#333333]">Digital Marketing for Dentists</h2>
+            <p className="text-xs text-slate-500 max-w-xl leading-relaxed">
+              Automated social media engine & creative operations pipeline. Empowering practice growth with on-brand AI copywriting, multi-platform publishing (Instagram, Facebook & YouTube), and doctor sign-off.
             </p>
           </div>
 
           <div className="flex items-center gap-3 shrink-0">
-            {/* CTA Highlight Button #e97538 */}
             <Link href="/copywriter">
-              <Button variant="cta" size="md" className="shadow-lg shadow-[#e97538]/30">
+              <Button variant="primary" size="md">
                 <Sparkles className="w-4 h-4 mr-2" />
                 Launch AI Studio
               </Button>
             </Link>
             <Link href="/calendar">
-              <Button variant="outline" size="md" className="bg-white/10 hover:bg-white/20 text-white border-white/20">
-                <CalendarIcon className="w-4 h-4 mr-2" />
+              <Button variant="outline" size="md">
+                <CalendarIcon className="w-4 h-4 mr-2 text-[#4f98db]" />
                 Month Calendar
               </Button>
             </Link>
@@ -69,17 +68,17 @@ export default function DashboardOverview() {
         </div>
       </div>
 
-      {/* Requirement 5: CREDIT USAGE PANEL */}
-      <Card className="border-l-4 border-l-[#e97538] bg-white shadow-sm p-6">
+      {/* Credit Usage Panel */}
+      <Card className="border-l-4 border-l-[#4f98db] bg-white shadow-sm p-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#fdf2ec] text-[#e97538] flex items-center justify-center font-bold">
+            <div className="w-10 h-10 rounded-xl bg-[#f0f7fd] text-[#4f98db] flex items-center justify-center font-bold">
               <Zap className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-base font-bold text-[#333333]">Credit Usage & Generation Quotas</h3>
-                <Badge variant="cta" size="sm">{creditUsage.planName}</Badge>
+                <Badge variant="primary" size="sm">{creditUsage.planName}</Badge>
               </div>
               <p className="text-xs text-slate-500">
                 Usage renews automatically on {creditUsage.renewalDate}. Top-up credits anytime.
@@ -92,7 +91,7 @@ export default function DashboardOverview() {
               <CreditCard className="w-3.5 h-3.5 mr-1 text-slate-500" />
               Manage Billing
             </Button>
-            <Button size="sm" variant="cta" className="text-xs">
+            <Button size="sm" variant="primary" className="text-xs">
               <Plus className="w-3.5 h-3.5 mr-1" />
               Add More Credits
             </Button>
@@ -207,10 +206,10 @@ export default function DashboardOverview() {
           </div>
         </Card>
 
-        <Card hoverEffect className="border-l-4 border-l-[#e97538]">
+        <Card hoverEffect className="border-l-4 border-l-[#4f98db]">
           <div className="flex items-center justify-between text-slate-500 mb-1">
             <span className="text-xs font-semibold uppercase tracking-wider">Pending Doctor QC</span>
-            <AlertCircle className="w-4 h-4 text-[#e97538]" />
+            <AlertCircle className="w-4 h-4 text-[#4f98db]" />
           </div>
           <div className="text-2xl font-bold text-[#333333]">
             {pendingPosts.length + pendingFlyers.length} Items
@@ -251,7 +250,7 @@ export default function DashboardOverview() {
           <Card>
             <CardHeader>
               <CardTitle className="text-sm uppercase tracking-wider text-[#333333]">
-                DentiSync Operations Workflow
+                Marketing Pipeline & Workflow
               </CardTitle>
               <Badge variant="primary" size="sm">ERP Pipeline</Badge>
             </CardHeader>
@@ -289,7 +288,7 @@ export default function DashboardOverview() {
                 <CardTitle className="text-sm uppercase tracking-wider text-[#333333]">
                   Pending Approvals Queue
                 </CardTitle>
-                <Badge variant="cta">{pendingPosts.length + pendingFlyers.length} Awaiting</Badge>
+                <Badge variant="primary">{pendingPosts.length + pendingFlyers.length} Awaiting</Badge>
               </div>
               <Link href="/approvals" className="text-xs font-semibold text-[#4f98db] hover:underline flex items-center gap-1">
                 View All <ChevronRight className="w-3.5 h-3.5" />

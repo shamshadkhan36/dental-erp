@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { 
   Sparkles, 
@@ -10,18 +10,21 @@ import {
   Facebook,
   Youtube,
   Menu,
-  Bell
+  Bell,
+  LogIn
 } from 'lucide-react';
 import { Button } from './ui/Button';
 import { Badge } from './ui/Badge';
 import { useERPStore } from '../lib/store';
 import { useMobileNav } from './MobileNavContext';
+import { AuthModal } from './AuthModal';
 
 export function Header() {
   const router = useRouter();
   const pathname = usePathname();
-  const { brand, resetToDefaults } = useERPStore();
+  const { user, isAuthenticated, resetToDefaults } = useERPStore();
   const { toggle } = useMobileNav();
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   const getPageTitle = () => {
     switch (pathname) {
@@ -55,10 +58,10 @@ export function Header() {
         <div className="min-w-0">
           <div className="flex items-center gap-2">
             <h1 className="text-base sm:text-lg lg:text-xl font-bold text-[#333333] tracking-tight truncate">{title}</h1>
-            <Badge variant="primary" size="sm" className="hidden sm:inline-flex shrink-0 items-center gap-1.5">
+            <Badge variant="primary" size="sm" className="hidden sm:inline-flex shrink-0 items-center gap-1.5 font-bold">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/logo.png" alt="" className="w-3.5 h-3.5 object-contain" />
-              DentiSync ERP
+              Digital Marketing for Dentists
             </Badge>
           </div>
           <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5 line-clamp-1">{subtitle}</p>
@@ -82,7 +85,7 @@ export function Header() {
           </span>
         </div>
 
-        {/* Quick Highlight CTA Button (#e97538) */}
+        {/* Quick Highlight CTA Button (#e97538) - STRICTLY ONLY BUTTON IN ORANGE */}
         <Button
           size="sm"
           variant="cta"
@@ -98,20 +101,48 @@ export function Header() {
           size="sm"
           variant="outline"
           onClick={() => router.push('/creative?tab=flyers')}
-          className="hidden sm:inline-flex"
+          className="hidden sm:inline-flex text-[#333333] hover:text-[#4f98db]"
         >
           <Plus className="w-3.5 h-3.5 mr-1 text-slate-500" />
           New Flyer
         </Button>
 
-        {/* User Notification Bell & Avatar (matches reference image top-right) */}
-        <div className="flex items-center gap-1.5 pl-2 border-l border-slate-200">
-          <button className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-colors" title="Notifications">
+        {/* Free Trial Badge & User Avatar / Sign In */}
+        <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
+          <button 
+            className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-colors" 
+            title="Notifications"
+          >
             <Bell className="w-4 h-4" />
           </button>
-          <div className="w-8 h-8 rounded-full bg-[#f0f7fd] border border-[#b9ddf7] flex items-center justify-center font-bold text-xs text-[#4f98db] shrink-0">
-            JD
-          </div>
+
+          {isAuthenticated ? (
+            <div 
+              onClick={() => setIsAuthOpen(true)}
+              className="flex items-center gap-2 px-2 py-1 bg-slate-50 hover:bg-[#f0f7fd] border border-slate-200 hover:border-[#b9ddf7] rounded-xl cursor-pointer transition-all"
+              title="Click to view Account / Free Trial options"
+            >
+              <div className="w-7 h-7 rounded-full bg-[#f0f7fd] border border-[#b9ddf7] flex items-center justify-center font-bold text-xs text-[#4f98db] shrink-0">
+                {user?.avatarInitials || 'PS'}
+              </div>
+              <div className="hidden md:block text-left">
+                <div className="text-[11px] font-bold text-[#333333] leading-none">{user?.name || 'Dr. Priya'}</div>
+                <div className="text-[9px] text-[#4f98db] font-semibold mt-0.5">
+                  {user?.isTrial ? `${user.trialDaysRemaining}d Trial` : 'Active'}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <Button
+              size="sm"
+              variant="primary"
+              onClick={() => setIsAuthOpen(true)}
+              className="text-xs"
+            >
+              <LogIn className="w-3.5 h-3.5 mr-1" />
+              Sign In
+            </Button>
+          )}
         </div>
 
         {/* Reset Demo State Button */}
@@ -129,6 +160,9 @@ export function Header() {
           <RotateCcw className="w-3.5 h-3.5" />
         </Button>
       </div>
+
+      {/* Interactive Authentication & Free Trial Modal */}
+      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </header>
   );
 }

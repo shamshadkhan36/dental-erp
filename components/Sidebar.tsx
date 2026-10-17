@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
@@ -20,11 +20,13 @@ import {
 } from 'lucide-react';
 import { useERPStore } from '../lib/store';
 import { useMobileNav } from './MobileNavContext';
+import { AuthModal } from './AuthModal';
 
 export function Sidebar() {
   const pathname = usePathname();
-  const { contentRecords, flyers } = useERPStore();
+  const { contentRecords, flyers, user, isAuthenticated } = useERPStore();
   const { isOpen, close } = useMobileNav();
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   const pendingApprovalsCount = 
     (contentRecords || []).filter(r => r.status === 'pending_approval').length + 
@@ -99,10 +101,10 @@ export function Sidebar() {
             <img src="/logo.png" alt="DentiSync Logo" className="w-full h-full object-contain" />
           </div>
           <div>
-            <h1 className="font-extrabold text-[#333333] text-[15px] leading-tight tracking-tight">
-              DentiSync
+            <h1 className="font-extrabold text-[#333333] text-[14px] leading-tight tracking-tight">
+              Digital Marketing
             </h1>
-            <p className="text-[11px] text-[#4f98db] font-semibold">Dental Marketing ERP</p>
+            <p className="text-[11px] text-[#4f98db] font-bold">for Dentists</p>
           </div>
         </div>
 
@@ -227,17 +229,24 @@ export function Sidebar() {
         </div>
 
         {/* Doctor / User Profile Row */}
-        <div className="flex items-center justify-between px-2 hover:bg-slate-50 p-2 rounded-2xl cursor-pointer transition-colors">
+        <div 
+          onClick={() => setIsAuthOpen(true)}
+          className="flex items-center justify-between px-2 hover:bg-slate-50 p-2 rounded-2xl cursor-pointer transition-colors"
+          title="Account Login & Free Trial Options"
+        >
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="w-9 h-9 rounded-full bg-[#f0f7fd] border border-[#b9ddf7] flex items-center justify-center font-bold text-xs text-[#4f98db] shrink-0">
-              JD
+              {user?.avatarInitials || 'PS'}
             </div>
             <div className="min-w-0">
               <div className="text-xs font-bold text-[#333333] truncate">
-                Dr. Priya Sharma
+                {isAuthenticated ? (user?.name || 'Dr. Priya Sharma') : 'Guest User'}
               </div>
-              <div className="text-[11px] text-slate-400 truncate">
-                Clinic owner
+              <div className="text-[10px] text-[#4f98db] font-semibold truncate flex items-center gap-1">
+                <span className={`w-1.5 h-1.5 rounded-full ${isAuthenticated ? 'bg-emerald-500' : 'bg-amber-500'}`}></span>
+                {isAuthenticated 
+                  ? (user?.isTrial ? `Trial: ${user.trialDaysRemaining}d left` : 'Clinic Owner')
+                  : 'Click to Sign In / Trial'}
               </div>
             </div>
           </div>
@@ -270,6 +279,9 @@ export function Sidebar() {
           </div>
         </div>
       )}
+
+      {/* Interactive Authentication & Free Trial Modal */}
+      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </>
   );
 }

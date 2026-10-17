@@ -143,22 +143,20 @@ function CopywriterContent() {
 
   return (
     <div className="space-y-6">
-      {/* Top Banner */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-lg font-bold text-[#333333]">AI Copywriter & Creative Studio</h2>
-          <p className="text-xs text-slate-500">
-            Generate high-converting dental hooks, captions, carousels, and video reel scripts for IG, FB & YouTube.
-          </p>
+      {/* Frequency & Cadence Toolbar */}
+      <div className="bg-white p-4 rounded-xl border border-slate-200/90 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-bold text-[#333333]">Production Cadence:</span>
+          <span className="text-xs text-slate-500">Configure cadence for multi-platform AI generation</span>
         </div>
 
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-100 rounded-xl">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-100 rounded-lg">
           <span className="text-[10px] font-bold uppercase text-slate-400 px-2">Frequency:</span>
           {(['weekly', 'monthly', 'on_request'] as ProductionFrequency[]).map((mode) => (
             <button
               key={mode}
               onClick={() => setFrequencyMode(mode)}
-              className={`px-3 py-1.5 text-xs font-semibold rounded-lg capitalize transition-all ${
+              className={`px-3 py-1 text-xs font-semibold rounded-md capitalize transition-all ${
                 frequencyMode === mode
                   ? 'bg-[#4f98db] text-white shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
@@ -325,11 +323,11 @@ function CopywriterContent() {
                 />
               </div>
 
-              {/* Generate Trigger Button #e97538 */}
+              {/* Generate Trigger Button */}
               <Button
-                variant="cta"
+                variant="primary"
                 size="md"
-                className="w-full shadow-md"
+                className="w-full"
                 onClick={handleGenerate}
                 loading={isGenerating}
               >
@@ -389,7 +387,7 @@ function CopywriterContent() {
                     type="text"
                     value={currentRecord?.cta || ''}
                     onChange={(e) => setCurrentRecord(prev => prev ? { ...prev, cta: e.target.value } : null)}
-                    className="w-full px-3 py-2 border border-[#fbd3be] bg-[#fdf2ec] rounded-lg text-xs text-[#d6652a] font-medium"
+                    className="w-full px-3 py-2 border border-slate-200 bg-slate-50/70 rounded-lg text-xs text-[#333333] font-medium"
                   />
                 </div>
 
@@ -400,7 +398,7 @@ function CopywriterContent() {
                   </div>
 
                   <Button
-                    variant="cta"
+                    variant="primary"
                     size="md"
                     onClick={handleSaveAndSubmit}
                     disabled={submittedToApprovals}
@@ -517,7 +515,7 @@ class CopywriterErrorBoundary extends React.Component<
           <div className="pt-2">
             <button
               onClick={this.handleReset}
-              className="px-5 py-2.5 bg-[#e97538] text-white rounded-xl text-xs font-bold hover:bg-[#d6652a] transition-colors shadow-xs"
+              className="px-5 py-2.5 bg-[#4f98db] text-white rounded-xl text-xs font-bold hover:bg-[#3d82c2] transition-colors shadow-xs"
             >
               Update Cache & Launch Studio
             </button>

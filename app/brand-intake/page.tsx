@@ -92,17 +92,14 @@ export default function BrandIntakePage() {
 
   return (
     <div className="space-y-6">
-      {/* Header bar with Save button */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-        <div>
-          <h2 className="text-lg font-bold text-[#333333]">Client & Brand Intake Knowledge Base</h2>
-          <p className="text-xs text-slate-500">
-            Configure practice voice, brand persona, patient profiles (with age, objections & motivations), and treatment offers.
-          </p>
+      {/* Header toolbar with Save button */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200/90 shadow-xs">
+        <div className="flex items-center gap-2 px-1">
+          <Badge variant="primary">Practice Knowledge Base</Badge>
+          <span className="text-xs text-slate-500">Configure clinic voice, persona, patient profiles & treatments</span>
         </div>
         <div className="flex items-center gap-2">
-          {/* Client CTA Highlight Button #e97538 */}
-          <Button variant="cta" size="md" onClick={handleSave}>
+          <Button variant="primary" size="md" onClick={handleSave}>
             {saved ? (
               <>
                 <Check className="w-4 h-4 mr-1 text-white" />
@@ -350,7 +347,7 @@ export default function BrandIntakePage() {
             </div>
             <Button
               size="sm"
-              variant="cta"
+              variant="primary"
               onClick={() => {
                 const newIcp: ICPProfile = {
                   id: `icp-${Date.now()}`,
@@ -490,14 +487,14 @@ export default function BrandIntakePage() {
       {/* Tab 3: Treatments & Dedicated Offers Panel */}
       {activeTab === 'treatments' && (
         <div className="space-y-6">
-          {/* SECTION A: Dedicated Treatment Offers Panel (Client Requirement #2) */}
-          <Card className="border-l-4 border-l-[#e97538] bg-white p-5 shadow-sm space-y-4">
+          {/* SECTION A: Dedicated Treatment Offers Panel */}
+          <Card className="border-l-4 border-l-[#4f98db] bg-white p-5 shadow-sm space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
                 <div className="flex items-center gap-2">
-                  <Tag className="w-5 h-5 text-[#e97538]" />
+                  <Tag className="w-5 h-5 text-[#4f98db]" />
                   <h3 className="text-base font-bold text-[#333333]">Active Clinic Offers & Promotions Panel</h3>
-                  <Badge variant="cta">{formData.offers.length} Live Offers</Badge>
+                  <Badge variant="primary">{formData.offers.length} Live Offers</Badge>
                 </div>
                 <p className="text-xs text-slate-500 mt-0.5">
                   Special treatment discounts, vouchers, and consultation packages automatically woven into AI post hooks and CTAs.
@@ -506,7 +503,7 @@ export default function BrandIntakePage() {
 
               <Button
                 size="sm"
-                variant="cta"
+                variant="primary"
                 onClick={() => setShowAddOffer(true)}
               >
                 <Plus className="w-3.5 h-3.5 mr-1" /> Create New Offer
@@ -515,8 +512,8 @@ export default function BrandIntakePage() {
 
             {/* Inline Add Offer Form */}
             {showAddOffer && (
-              <form onSubmit={handleCreateOffer} className="p-4 bg-[#fdf2ec] border border-[#fbd3be] rounded-xl space-y-3 text-xs">
-                <div className="font-bold text-[#d6652a] text-sm">Add New Promotional Offer</div>
+              <form onSubmit={handleCreateOffer} className="p-4 bg-[#f0f7fd] border border-[#b9ddf7] rounded-xl space-y-3 text-xs">
+                <div className="font-bold text-[#1d528c] text-sm">Add New Promotional Offer</div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div className="sm:col-span-2">
                     <label className="font-semibold text-slate-700 block mb-1">Campaign Headline</label>
@@ -551,7 +548,7 @@ export default function BrandIntakePage() {
                       placeholder="$500 OFF"
                       value={newOffer.discountValue}
                       onChange={(e) => setNewOffer({ ...newOffer, discountValue: e.target.value })}
-                      className="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white font-bold text-[#e97538]"
+                      className="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white font-bold text-[#4f98db]"
                     />
                   </div>
                   <div>
@@ -580,7 +577,7 @@ export default function BrandIntakePage() {
                   <Button type="button" size="sm" variant="outline" onClick={() => setShowAddOffer(false)}>
                     Cancel
                   </Button>
-                  <Button type="submit" size="sm" variant="cta">
+                  <Button type="submit" size="sm" variant="primary">
                     Save Offer to Database
                   </Button>
                 </div>
@@ -593,7 +590,7 @@ export default function BrandIntakePage() {
                 <div key={offer.id} className="p-4 rounded-xl border border-slate-200 bg-slate-50 flex flex-col justify-between space-y-3">
                   <div>
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="px-2 py-0.5 rounded font-black text-xs bg-[#e97538] text-white">
+                      <span className="px-2 py-0.5 rounded font-black text-xs bg-[#4f98db] text-white">
                         {offer.discountValue}
                       </span>
                       <button

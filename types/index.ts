@@ -224,3 +224,15 @@ export interface AnalyticsSummary {
   }>;
   aiRecommendations: string[];
 }
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  clinicName: string;
+  role: string;
+  isTrial: boolean;
+  trialDaysRemaining: number;
+  provider: 'gmail' | 'credentials' | 'apple' | 'sso';
+  avatarInitials: string;
+}

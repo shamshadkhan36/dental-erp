@@ -1,11 +1,23 @@
-import { BrandProfile, CalendarItem, ContentRecord, FlyerRecord, AnalyticsSummary, CreditUsage } from '../types';
+import { BrandProfile, CalendarItem, ContentRecord, FlyerRecord, AnalyticsSummary, CreditUsage, UserProfile } from '../types';
+
+export const defaultUserProfile: UserProfile = {
+  id: "usr-1",
+  name: "Dr. Priya Sharma",
+  email: "dr.priya@apexdental.com",
+  clinicName: "Apex Smile Studio",
+  role: "Clinic Owner & Lead Dentist",
+  isTrial: true,
+  trialDaysRemaining: 14,
+  provider: "gmail",
+  avatarInitials: "PS"
+};
 
 export const defaultCreditUsage: CreditUsage = {
   aiCopyCredits: { used: 68, total: 100 },
   videoCredits: { used: 4, total: 15 },
   graphicCredits: { used: 32, total: 50 },
   storageGb: { used: 4.2, total: 15.0 },
-  planName: "DentiSync Growth Tier",
+  planName: "14-Day Free Trial (Growth Tier)",
   renewalDate: "November 1, 2026"
 };
 

@@ -75,20 +75,17 @@ function CreativeContent() {
 
   return (
     <div className="space-y-6">
-      {/* Top Banner with All Requested Tabs (Social, Reels, Story, Wallpaper, Flyers) */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-lg font-bold text-[#333333]">Creative Production Studio</h2>
-          <p className="text-xs text-slate-500">
-            Controlled visual branding for Instagram, Facebook & YouTube Shorts linked to Google Drive.
-          </p>
+      {/* Studio Format Tabs Toolbar */}
+      <div className="bg-white p-3 rounded-xl border border-slate-200/90 shadow-xs flex flex-wrap items-center justify-between gap-3">
+        <div className="text-xs font-bold text-[#333333] px-2 flex items-center gap-2">
+          <span>Creative Production Formats:</span>
         </div>
 
         {/* Tab navigation */}
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-100 rounded-xl">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-100 rounded-lg">
           <button
             onClick={() => setActiveTab('social')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-all ${
               activeTab === 'social'
                 ? 'bg-[#4f98db] text-white shadow-xs'
                 : 'text-slate-600 hover:text-[#333333]'
@@ -98,48 +95,48 @@ function CreativeContent() {
             Social Graphics
           </button>
 
-          {/* Client Requested: Reels Section */}
+          {/* Reels Section */}
           <button
             onClick={() => setActiveTab('reels')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-all ${
               activeTab === 'reels'
                 ? 'bg-[#4f98db] text-white shadow-xs'
                 : 'text-slate-600 hover:text-[#333333]'
             }`}
           >
-            <Film className="w-3.5 h-3.5 text-rose-500" />
+            <Film className="w-3.5 h-3.5" />
             Reels & Video
           </button>
 
-          {/* Client Requested: Story Tab */}
+          {/* Story Tab */}
           <button
             onClick={() => setActiveTab('story')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-all ${
               activeTab === 'story'
                 ? 'bg-[#4f98db] text-white shadow-xs'
                 : 'text-slate-600 hover:text-[#333333]'
             }`}
           >
-            <Smartphone className="w-3.5 h-3.5 text-purple-600" />
+            <Smartphone className="w-3.5 h-3.5" />
             Story
           </button>
 
-          {/* Client Requested: Wallpaper Tab */}
+          {/* Wallpaper Tab */}
           <button
             onClick={() => setActiveTab('wallpaper')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-all ${
               activeTab === 'wallpaper'
                 ? 'bg-[#4f98db] text-white shadow-xs'
                 : 'text-slate-600 hover:text-[#333333]'
             }`}
           >
-            <Monitor className="w-3.5 h-3.5 text-teal-600" />
+            <Monitor className="w-3.5 h-3.5" />
             Wallpaper
           </button>
 
           <button
             onClick={() => setActiveTab('flyers')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-all ${
               activeTab === 'flyers'
                 ? 'bg-[#4f98db] text-white shadow-xs'
                 : 'text-slate-600 hover:text-[#333333]'
@@ -261,7 +258,7 @@ function CreativeContent() {
                 </div>
 
                 <Button
-                  variant="cta"
+                  variant="primary"
                   className="w-full"
                   onClick={handleUpdateVisual}
                 >
@@ -350,12 +347,12 @@ function CreativeContent() {
                       onClick={() => setVideoSource('generate')}
                       className={`p-3 rounded-xl border text-left transition-all ${
                         videoSource === 'generate'
-                          ? 'border-[#e97538] bg-[#fdf2ec] ring-2 ring-[#e97538]/20'
+                          ? 'border-[#4f98db] bg-[#f0f7fd] ring-2 ring-[#4f98db]/20'
                           : 'border-slate-200 hover:border-slate-300'
                       }`}
                     >
                       <div className="flex items-center gap-2 font-bold text-slate-900 mb-1">
-                        <Sparkles className="w-4 h-4 text-[#e97538]" />
+                        <Sparkles className="w-4 h-4 text-[#4f98db]" />
                         2. Generate a Video
                       </div>
                       <div className="text-[11px] text-slate-500">
@@ -389,7 +386,7 @@ function CreativeContent() {
                     </div>
                   </div>
                 ) : (
-                  <div className="p-3 bg-[#fdf2ec]/50 rounded-xl border border-[#fbd3be] space-y-2">
+                  <div className="p-3 bg-[#f0f7fd]/60 rounded-xl border border-[#b9ddf7] space-y-2">
                     <label className="font-semibold text-slate-800 block">
                       AI Dental Video Generation Prompt
                     </label>
@@ -403,7 +400,7 @@ function CreativeContent() {
                       <span className="text-slate-500">Credits needed: 1 Video Render</span>
                       <Button
                         size="sm"
-                        variant="cta"
+                        variant="primary"
                         loading={isRenderingVideo}
                         onClick={() => {
                           setIsRenderingVideo(true);
@@ -446,12 +443,12 @@ function CreativeContent() {
                       onClick={() => setCaptionStyle('text_and_captions')}
                       className={`p-3 rounded-xl border text-left transition-all ${
                         captionStyle === 'text_and_captions'
-                          ? 'border-[#e97538] bg-[#fdf2ec] ring-2 ring-[#e97538]/20'
+                          ? 'border-[#4f98db] bg-[#f0f7fd] ring-2 ring-[#4f98db]/20'
                           : 'border-slate-200 hover:border-slate-300'
                       }`}
                     >
                       <div className="flex items-center gap-2 font-bold text-slate-900 mb-1">
-                        <Subtitles className="w-4 h-4 text-[#e97538]" />
+                        <Subtitles className="w-4 h-4 text-[#4f98db]" />
                         2. Text + Dynamic Captions
                       </div>
                       <div className="text-[11px] text-slate-500">

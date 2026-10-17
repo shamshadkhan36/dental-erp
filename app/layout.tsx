@@ -5,7 +5,7 @@ import { Header } from '../components/Header';
 import { MobileNavProvider } from '../components/MobileNavContext';
 
 export const metadata: Metadata = {
-  title: 'Dental ERP - Social Media & Creative Automation',
+  title: 'Digital Marketing for Dentists - Social Media & Creative Automation ERP',
   description: 'AI-Powered Creative Operations and Social Media Automation for Dental Practices',
 };
 

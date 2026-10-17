@@ -108,32 +108,19 @@ export default function ContentCalendarPage() {
 
   return (
     <div className="space-y-6">
-      {/* Calendar Header with Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+      {/* Calendar Toolbar with Month Navigation & View Switchers */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200/90 shadow-xs">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#f0f7fd] text-[#4f98db] flex items-center justify-center font-bold">
-            <CalendarIcon className="w-5 h-5" />
+          <div className="flex items-center gap-2 bg-[#f0f7fd] px-3.5 py-1.5 rounded-lg border border-[#b9ddf7]/70 text-xs font-bold text-[#1d528c]">
+            <CalendarIcon className="w-4 h-4 text-[#4f98db]" />
+            <span>October 2026</span>
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-lg font-bold text-[#333333]">October 2026 Editorial Calendar</h2>
-              <Badge variant="primary" size="sm">
-                {updateMode === 'monthly' ? 'Monthly Batch' : 'Weekly Cadence'}
-              </Badge>
-            </div>
-            <p className="text-xs text-slate-500">
-              Coordinated cross-platform content strategy across Instagram, Facebook & YouTube.
-            </p>
-          </div>
-        </div>
 
-        {/* Action Controls & View Switcher */}
-        <div className="flex flex-wrap items-center gap-2.5">
-          {/* Monthly vs Weekly Update toggle requested by client */}
-          <div className="flex items-center p-1 bg-slate-100 rounded-xl text-xs font-semibold">
+          {/* Monthly vs Weekly Cadence toggle */}
+          <div className="flex items-center p-1 bg-slate-100 rounded-lg text-xs font-semibold">
             <button
               onClick={() => setUpdateMode('monthly')}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
+              className={`px-3 py-1 rounded-md transition-all ${
                 updateMode === 'monthly' ? 'bg-[#4f98db] text-white shadow-xs' : 'text-slate-600 hover:text-[#333333]'
               }`}
             >
@@ -141,19 +128,22 @@ export default function ContentCalendarPage() {
             </button>
             <button
               onClick={() => setUpdateMode('weekly')}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
+              className={`px-3 py-1 rounded-md transition-all ${
                 updateMode === 'weekly' ? 'bg-[#4f98db] text-white shadow-xs' : 'text-slate-600 hover:text-[#333333]'
               }`}
             >
-              Weekly Update
+              Weekly Cadence
             </button>
           </div>
+        </div>
 
+        {/* Action Controls & View Switcher */}
+        <div className="flex items-center gap-2.5">
           {/* Month Grid vs Cards toggle */}
-          <div className="flex items-center p-1 bg-slate-100 rounded-xl text-xs font-semibold">
+          <div className="flex items-center p-1 bg-slate-100 rounded-lg text-xs font-semibold">
             <button
               onClick={() => setCalendarView('month_grid')}
-              className={`p-1.5 rounded-lg transition-all ${
+              className={`p-1.5 rounded-md transition-all ${
                 calendarView === 'month_grid' ? 'bg-white text-[#4f98db] shadow-xs' : 'text-slate-500 hover:text-[#333333]'
               }`}
               title="Full Month 31-Day Matrix View"
@@ -162,7 +152,7 @@ export default function ContentCalendarPage() {
             </button>
             <button
               onClick={() => setCalendarView('cards')}
-              className={`p-1.5 rounded-lg transition-all ${
+              className={`p-1.5 rounded-md transition-all ${
                 calendarView === 'cards' ? 'bg-white text-[#4f98db] shadow-xs' : 'text-slate-500 hover:text-[#333333]'
               }`}
               title="Post Cards View"
@@ -171,7 +161,7 @@ export default function ContentCalendarPage() {
             </button>
           </div>
 
-          <Button variant="cta" size="sm" onClick={() => setIsModalOpen(true)}>
+          <Button variant="primary" size="sm" onClick={() => setIsModalOpen(true)}>
             <Plus className="w-4 h-4 mr-1" />
             Plan Topic Slot
           </Button>
@@ -540,7 +530,7 @@ export default function ContentCalendarPage() {
             <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit" variant="cta">
+            <Button type="submit" variant="primary">
               Add to Calendar
             </Button>
           </div>
